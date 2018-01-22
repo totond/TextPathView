@@ -26,7 +26,7 @@ import android.view.animation.LinearInterpolator;
 
 public class TextPathView2 extends View implements View.OnClickListener {
     public static final String TAG = "TestView";
-    private Paint mTextPaint, mPaint;
+    private Paint mTextPaint;
     private Paint mDrawPaint;
     private Path mFontPath, mDst;
     private float mAnimatorValue = 0, mLength = 0;
