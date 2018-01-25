@@ -22,8 +22,8 @@ import android.view.animation.LinearInterpolator;
  * desc   :
  */
 
-public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback, View.OnClickListener{
-    public static final String TAG = "TextPathView3";
+public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback, View.OnClickListener {
+    public static final String TAG = "yjkTextPathView3";
     private Context mContext;
     private SurfaceHolder mSurfaceHolder;
     private DrawThread mDrawThread;
@@ -44,9 +44,9 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
     /**
      * 每ms绘画速度
      */
-    protected float speed = 0.2f;
+    protected int speed = 400;
 
-    private float mStart = 0,mStop = 0;
+    private float mStart = 0, mStop = 0;
 
     public TextPathView3(Context context) {
         super(context);
@@ -63,7 +63,7 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         this.setFocusable(true);
         this.mContext = context;
         //获取对象实例
@@ -75,7 +75,7 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
         initPaint();
     }
 
-    private void initPaint(){
+    private void initPaint() {
         setOnClickListener(this);
         mTextPaint = new Paint();
         mTextPaint.setTextSize(mTextSize);
@@ -86,8 +86,8 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
         mDrawPaint.setStyle(Paint.Style.STROKE);
         mFontPath = new Path();
         mText = "你个沙雕";
-        mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
-        mPathMeasure.setPath(mFontPath,false);
+        mTextPaint.getTextPath(mText, 0, mText.length(), 100, mTextPaint.getFontSpacing() + 100, mFontPath);
+        mPathMeasure.setPath(mFontPath, false);
         mLength = mPathMeasure.getLength();
         Log.d(TAG, "initPaint: " + mPathMeasure.getLength());
 
@@ -135,6 +135,7 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated: ");
+        mIsDrawing = true;
         mDrawThread.start();
     }
 
@@ -153,7 +154,7 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    private class DrawThread extends Thread{
+    private class DrawThread extends Thread {
         private Canvas mCanvas;
         private SurfaceHolder mSurfaceHolder;
 
@@ -164,14 +165,11 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
         @Override
         public void run() {
             super.run();
-            if (mIsDrawing){
-                if (mPathMeasure.nextContour()){
-                    mLength = mPathMeasure.getLength();
-                    Log.d(TAG, "time" + (mLength / speed));
-                    drawSomething();
-                }else {
-                    mIsDrawing = false;
-                }
+            while (mIsDrawing) {
+//                mPathMeasure.setPath(mFontPath, false);
+//                mLength = mPathMeasure.getLength();
+                Log.d(TAG, "time" + (mLength / speed));
+                drawSomething();
             }
         }
 
@@ -186,8 +184,8 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
                 getAnimatedValue();
                 Log.d(TAG, "mAnimatorValue: " + mAnimatorValue);
 
-                mPathMeasure.setPath(mFontPath,false);
-                sleep(5);
+                mPathMeasure.setPath(mFontPath, false);
+//                sleep(5);
 
                 while (mPathMeasure.nextContour()) {
                     mLength = mPathMeasure.getLength();
@@ -195,20 +193,21 @@ public class TextPathView3 extends SurfaceView implements SurfaceHolder.Callback
                     mPathMeasure.getSegment(0, mStop, mDst, true);
                 }
                 mCanvas.drawPath(mDst, mDrawPaint);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
-                if (mCanvas != null){
+            } finally {
+                if (mCanvas != null) {
                     //释放canvas对象并提交画布
                     mSurfaceHolder.unlockCanvasAndPost(mCanvas);
                 }
             }
         }
 
-        private void getAnimatedValue(){
-            if (mAnimatorValue <= 1){
-                mAnimatorValue += 0.005f;
-            }else {
+        private void getAnimatedValue() {
+            if (mAnimatorValue <= 1) {
+                mAnimatorValue += 0.003f;
+            } else {
+                Log.d(TAG, "getAnimatedValue: end");
                 mIsDrawing = false;
             }
         }

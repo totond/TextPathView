@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class TextPathView2 extends View implements View.OnClickListener {
     public static final String TAG = "TestView";
     private Paint mTextPaint;
     private Paint mDrawPaint;
-    private Path mFontPath, mDst;
+    private Path mFontPath, mDst, mPaintPath;
     private float mAnimatorValue = 0, mLength = 0;
     private PathMeasure mPathMeasure = new PathMeasure();
     private ValueAnimator mAnimator;
@@ -47,6 +48,7 @@ public class TextPathView2 extends View implements View.OnClickListener {
      */
     protected float speed = 0.2f;
 
+    private float[] mCurPos = new float[2];
 
     public TextPathView2(Context context) {
         super(context);
@@ -67,13 +69,15 @@ public class TextPathView2 extends View implements View.OnClickListener {
         setOnClickListener(this);
         mTextPaint = new Paint();
         mTextPaint.setTextSize(mTextSize);
+//        mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         mDrawPaint = new Paint();
         mDrawPaint.setAntiAlias(true);
         mDrawPaint.setColor(Color.BLACK);
         mDrawPaint.setStrokeWidth(2);
         mDrawPaint.setStyle(Paint.Style.STROKE);
         mFontPath = new Path();
-        mText = "你个沙雕";
+        mPaintPath = new Path();
+        mText = "GIEC";
         mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
@@ -89,11 +93,15 @@ public class TextPathView2 extends View implements View.OnClickListener {
 
                 mPathMeasure.setPath(mFontPath,false);
 
-
+                mPaintPath.reset();
                 while (mPathMeasure.nextContour()) {
                     mLength = mPathMeasure.getLength();
                     mStop = mLength * mAnimatorValue;
+                    mPathMeasure.getPosTan(mStop, mCurPos,null);
                     mPathMeasure.getSegment(0, mStop, mDst, true);
+
+                    mPaintPath.addCircle(mCurPos[0],mCurPos[1],3, Path.Direction.CCW);
+
                 }
 //                Log.d(TAG, "onAnimationUpdate: start" + mStart);
 //                mStart = mStop;
@@ -101,17 +109,27 @@ public class TextPathView2 extends View implements View.OnClickListener {
                 invalidate();
             }
         });
-        mAnimator.addListener(new AbstractAnimatorListener() {
+//        mAnimator.addListener(new AbstractAnimatorListener() {
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//                if (mPathMeasure.nextContour()){
+//                    mLength = mPathMeasure.getLength();
+//                    mAnimator.setDuration((long) (mLength / speed));
+//                    Log.d(TAG, "time" + (mLength / speed));
+//                    mAnimator.start();
+//                }else {
+//                    mAnimator.cancel();
+//                }
+//            }
+//        });
+        mAnimator.addListener(new AbstractAnimatorListener(){
             @Override
-            public void onAnimationRepeat(Animator animation) {
-                if (mPathMeasure.nextContour()){
-                    mLength = mPathMeasure.getLength();
-                    mAnimator.setDuration((long) (mLength / speed));
-                    Log.d(TAG, "time" + (mLength / speed));
-                    mAnimator.start();
-                }else {
-                    mAnimator.cancel();
-                }
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+//                mDrawPaint.setColor(Color.RED);
+//                mDrawPaint.setStyle(Paint.Style.FILL);
+//                mPathMeasure.setPath(mFontPath,true);
+//                postInvalidate();
             }
         });
         mAnimator.setDuration(2500);
@@ -138,7 +156,7 @@ public class TextPathView2 extends View implements View.OnClickListener {
 //        mDst.reset();
         // 硬件加速的BUG
 //        mDst.lineTo(0,0);
-
+        canvas.drawPath(mPaintPath,mDrawPaint);
         canvas.drawPath(mDst, mDrawPaint);
 
 //        canvas.drawPath(mPath, mPaint);

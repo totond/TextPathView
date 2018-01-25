@@ -35,6 +35,8 @@ public class TextPathView extends View implements View.OnClickListener {
     private float fraction = 0;
     private float mStart = 0,mStop = 0;
 
+    private float[] mCurPos = new float[2];
+
     /**
      * 要刻画的字符
      */
@@ -91,6 +93,10 @@ public class TextPathView extends View implements View.OnClickListener {
 //
 //                    mAnimator.start();
 //                }else {
+
+                mStop = mLength * mAnimatorValue;
+                mPathMeasure.getPosTan(mStop, mCurPos,null);
+                mPathMeasure.getSegment(mStart, mStop, mDst, true);
                     invalidate();
 //                }
             }
@@ -168,8 +174,8 @@ public class TextPathView extends View implements View.OnClickListener {
 //        mDst.reset();
         // 硬件加速的BUG
 //        mDst.lineTo(0,0);
-        mStop = mLength * mAnimatorValue;
-        mPathMeasure.getSegment(mStart, mStop, mDst, true);
+
+        canvas.drawCircle(mCurPos[0],mCurPos[1],5,mDrawPaint);
         canvas.drawPath(mDst, mDrawPaint);
         mStart = mStop;
 

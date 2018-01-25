@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="yanzhikai.textpathview.MainActivity">
 
-    <yanzhikai.textpath.TextPathView3
+    <yanzhikai.textpath.TextPathView2
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
