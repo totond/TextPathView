@@ -31,8 +31,6 @@ public class TextPathView extends View implements View.OnClickListener {
     private float mAnimatorValue = 0, mLength = 0;
     private PathMeasure mPathMeasure = new PathMeasure();
     private ValueAnimator mAnimator;
-    private PathEffect mEffect;
-    private float fraction = 0;
     private float mStart = 0,mStop = 0;
 
     private float[] mCurPos = new float[2];
@@ -46,7 +44,7 @@ public class TextPathView extends View implements View.OnClickListener {
     /**
      * 每ms绘画速度
      */
-    protected float speed = 0.2f;
+    protected float speed = 0.3f;
 
 
     public TextPathView(Context context) {
@@ -78,10 +76,10 @@ public class TextPathView extends View implements View.OnClickListener {
         mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
-        Log.d(TAG, "initPaint: " + mPathMeasure.getLength());
 
         mDst = new Path();
         mAnimator = ValueAnimator.ofFloat(0, 1);
+
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -114,48 +112,11 @@ public class TextPathView extends View implements View.OnClickListener {
                 }
             }
         });
-        mAnimator.setDuration(1000);
+//        mAnimator.setDuration(1000);
         mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mAnimator.start();
-    }
-
-    private void initDPaint(){
-//        mPath = new Path();
-//        mPath.reset();
-//        mPath.moveTo(100, 100);
-//        mPath.lineTo(100, 500);
-//        mPath.lineTo(400, 300);
-//        mPath.close();
-
-        mTextPaint = new Paint();
-        mTextPaint.setTextSize(84);
-        mPath = new Path();
-        mTextPaint.getTextPath("GG",0,1,100,mTextPaint.getFontSpacing()+ 100, mPath);
-
-        mPaint = new Paint();
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(5);
-
-        mPathMeasure = new PathMeasure(mPath, false);
-        final float length = mPathMeasure.getLength();
-
-        mAnimator = ValueAnimator.ofFloat(1, 0);
-        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        mAnimator.setDuration(10000);
-        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                fraction = (float) valueAnimator.getAnimatedValue();
-                mEffect = new DashPathEffect(new float[]{length, length}, fraction * length);
-                mPaint.setPathEffect(mEffect);
-                postInvalidate();
-            }
-        });
-//        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mAnimator.start();
 
     }
+
 
     private void nextOutline(){
         if (mPathMeasure.nextContour()){
@@ -186,6 +147,10 @@ public class TextPathView extends View implements View.OnClickListener {
     public void onClick(View v) {
         Log.d(TAG, "onClick: ");
         mAnimator.cancel();
-        initPaint();
+        mPathMeasure.setPath(mFontPath,false);
+        mLength = mPathMeasure.getLength();
+        mAnimator.setDuration((long) (mLength / speed));
+        mDst = new Path();
+        mAnimator.start();
     }
 }

@@ -6,9 +6,23 @@
     android:layout_height="match_parent"
     tools:context="yanzhikai.textpathview.MainActivity">
 
-    <yanzhikai.textpath.TextPathView2
+    <!--<yanzhikai.textpath.TextPathView2-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="300dp"-->
+        <!--android:id="@+id/tpv2"-->
+        <!--/>-->
+
+    <yanzhikai.textpath.TextPathView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/tpv"
+        />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sb_progress"
+        android:layout_alignParentBottom="true"
         />
 
 </RelativeLayout>

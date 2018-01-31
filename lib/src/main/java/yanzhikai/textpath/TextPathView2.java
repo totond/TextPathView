@@ -50,6 +50,8 @@ public class TextPathView2 extends View implements View.OnClickListener {
 
     private float[] mCurPos = new float[2];
 
+    private boolean showPaint = false;
+
     public TextPathView2(Context context) {
         super(context);
         initPaint();
@@ -77,7 +79,7 @@ public class TextPathView2 extends View implements View.OnClickListener {
         mDrawPaint.setStyle(Paint.Style.STROKE);
         mFontPath = new Path();
         mPaintPath = new Path();
-        mText = "GIEC";
+        mText = "GIEC asdas asdasgbgjut";
         mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
@@ -88,40 +90,11 @@ public class TextPathView2 extends View implements View.OnClickListener {
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mAnimatorValue = (float) valueAnimator.getAnimatedValue();
-                Log.d(TAG, "mAnimatorValue: " + mAnimatorValue);
-
-                mPathMeasure.setPath(mFontPath,false);
-
-                mPaintPath.reset();
-                while (mPathMeasure.nextContour()) {
-                    mLength = mPathMeasure.getLength();
-                    mStop = mLength * mAnimatorValue;
-                    mPathMeasure.getPosTan(mStop, mCurPos,null);
-                    mPathMeasure.getSegment(0, mStop, mDst, true);
-
-                    mPaintPath.addCircle(mCurPos[0],mCurPos[1],3, Path.Direction.CCW);
-
-                }
-//                Log.d(TAG, "onAnimationUpdate: start" + mStart);
-//                mStart = mStop;
-
-                invalidate();
+                drawPaths((Float) valueAnimator.getAnimatedValue());
             }
         });
-//        mAnimator.addListener(new AbstractAnimatorListener() {
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//                if (mPathMeasure.nextContour()){
-//                    mLength = mPathMeasure.getLength();
-//                    mAnimator.setDuration((long) (mLength / speed));
-//                    Log.d(TAG, "time" + (mLength / speed));
-//                    mAnimator.start();
-//                }else {
-//                    mAnimator.cancel();
-//                }
-//            }
-//        });
+
+
         mAnimator.addListener(new AbstractAnimatorListener(){
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -130,22 +103,44 @@ public class TextPathView2 extends View implements View.OnClickListener {
 //                mDrawPaint.setStyle(Paint.Style.FILL);
 //                mPathMeasure.setPath(mFontPath,true);
 //                postInvalidate();
+                showPaint = false;
+                drawPaths(1);
             }
         });
         mAnimator.setDuration(2500);
         mAnimator.setInterpolator(new LinearInterpolator());
 //        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mAnimator.start();
+//        mAnimator.start();
+        Log.d(TAG, "initPaint: ");
     }
 
+    public void drawPaths(float progress){
+        mAnimatorValue = progress;
+        Log.d(TAG, "mAnimatorValue: " + mAnimatorValue);
 
-    private void nextOutline(){
-        if (mPathMeasure.nextContour()){
+        mPathMeasure.setPath(mFontPath,false);
+        mDst.reset();
+        mPaintPath.reset();
+        while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
-            Log.d(TAG, "nextOutline: reset" + mAnimatorValue);
-            mAnimator.start();
+            mStop = mLength * mAnimatorValue;
+            mPathMeasure.getSegment(0, mStop, mDst, true);
+            if (showPaint) {
+                mPathMeasure.getPosTan(mStop, mCurPos, null);
+//                mPaintPath.addCircle(mCurPos[0], mCurPos[1], 3, Path.Direction.CCW);
+//                mPaintPath.moveTo(mCurPos[0],mCurPos[1]);
+//                mPaintPath.addCircle(0,0,3, Path.Direction.CCW);
+                drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
+            }
         }
+        postInvalidate();
     }
+
+    public void drawPaintPath(float x, float y, Path paintPath) {
+        paintPath.addCircle(x, y, 3, Path.Direction.CCW);
+        Log.d(TAG, "drawPaintPath: ");
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -165,8 +160,10 @@ public class TextPathView2 extends View implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Log.d(TAG, "onClick: ");
-        mAnimator.cancel();
-        initPaint();
+//        mAnimator.cancel();
+        showPaint = true;
+        mDst = new Path();
+        mAnimator.start();
     }
 }
 
