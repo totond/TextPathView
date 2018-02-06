@@ -127,9 +127,6 @@ public class TextPathView2 extends View implements View.OnClickListener {
             mPathMeasure.getSegment(0, mStop, mDst, true);
             if (showPaint) {
                 mPathMeasure.getPosTan(mStop, mCurPos, null);
-//                mPaintPath.addCircle(mCurPos[0], mCurPos[1], 3, Path.Direction.CCW);
-//                mPaintPath.moveTo(mCurPos[0],mCurPos[1]);
-//                mPaintPath.addCircle(0,0,3, Path.Direction.CCW);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
         }
