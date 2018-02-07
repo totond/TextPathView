@@ -33,9 +33,7 @@ public class TextPathView2 extends View implements View.OnClickListener {
     private float mAnimatorValue = 0, mLength = 0;
     private PathMeasure mPathMeasure = new PathMeasure();
     private ValueAnimator mAnimator;
-    private PathEffect mEffect;
-    private float fraction = 0;
-    private float mStart = 0,mStop = 0;
+    private float mStop = 0;
 
     /**
      * 要刻画的字符

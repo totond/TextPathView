@@ -4,12 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
-import yanzhikai.textpath.TextPathView;
+import yanzhikai.textpath.TextPathView1;
 
 public class MainActivity extends AppCompatActivity {
     private SeekBar sb_progress;
 //    private TextPathView2 tvp2;
-    private TextPathView tpv;
+    private TextPathView1 tpv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
