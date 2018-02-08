@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 
@@ -22,41 +23,17 @@ import java.util.ArrayList;
  * desc   : a view with paths of text
  */
 
-public class TextPathView1 extends View implements View.OnClickListener {
+public class TextPathView1 extends TextPathView implements View.OnClickListener {
     public static final String TAG = "TestView";
-    //用于获取文字的画笔
-    private Paint mTextPaint;
-    //路径的画笔
-    private Paint mDrawPaint;
-    //画笔特效的画笔
-    private Paint mPaint;
-    //文字装载路径、文字绘画路径、画笔特效路径
-    private Path mFontPath, mDst,mPaintPath;
-    //属性动画
-    private ValueAnimator mAnimator;
-    //动画进度值
-    private float mAnimatorValue = 0;
-    //绘画部分长度
-    private float mStop = 0;
-    //是否展示画笔
-    private boolean showPaint = false;
-    //当前绘画位置
-    private float[] mCurPos = new float[2];
-    private PathMeasure mPathMeasure = new PathMeasure();
 
-    /**
-     * 要刻画的字符
-     */
-    protected String mText;
-    protected int mTextSize = 144;
-
-    /**
-     * 每ms绘画速度
-     */
-    protected float speed = 0.3f;
 
     private ArrayList<Float> mTextLengthSumArray = new ArrayList<>();
     private float mLengthSum = 0;
+
+    protected VelocityCalculator mVelocityCalculator;
+
+    private float radius = 40;
+    private double angle = Math.PI / 6;
 
     public TextPathView1(Context context) {
         super(context);
@@ -74,25 +51,25 @@ public class TextPathView1 extends View implements View.OnClickListener {
     }
 
     private void initPaint(){
-        setOnClickListener(this);
+
         mTextPaint = new Paint();
         mTextPaint.setTextSize(mTextSize);
+
         mDrawPaint = new Paint();
         mDrawPaint.setAntiAlias(true);
         mDrawPaint.setColor(Color.BLACK);
-        mDrawPaint.setStrokeWidth(3);
+        mDrawPaint.setStrokeWidth(mTextStrokeWidth);
         mDrawPaint.setStyle(Paint.Style.STROKE);
 
         mPaintPath = new Path();
 
         mFontPath = new Path();
-        mText = "炎之铠";
-        mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
-        mPathMeasure.setPath(mFontPath,false);
 
         mDst = new Path();
 
         initTextPath();
+
+        mVelocityCalculator = new VelocityCalculator();
 
         mAnimator = ValueAnimator.ofFloat(0, 1);
 
@@ -125,13 +102,16 @@ public class TextPathView1 extends View implements View.OnClickListener {
             }
         });
 
-        mAnimator.setDuration(10000);
+        mAnimator.setDuration(mDuration);
+        mAnimator.setInterpolator(new LinearInterpolator());
 //        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
 
-
+        setOnClickListener(this);
     }
 
     private void initTextPath(){
+        mTextPaint.getTextPath(mText,0,mText.length(),0,mTextPaint.getFontSpacing(), mFontPath);
+        mPathMeasure.setPath(mFontPath,false);
         mTextLengthSumArray.clear();
         mLengthSum = mPathMeasure.getLength();
         mTextLengthSumArray.add(mLengthSum);
@@ -158,7 +138,7 @@ public class TextPathView1 extends View implements View.OnClickListener {
             }
         }
         if (showPaint) {
-            mPathMeasure.getPosTan(mStop, mCurPos, null);
+            mPathMeasure.getPosTan(mStop, mCurPos, mCurTan);
             drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
         }
         mPathMeasure.getSegment(0, mStop, mDst, true);
@@ -167,7 +147,7 @@ public class TextPathView1 extends View implements View.OnClickListener {
 
 
     public void drawPaintPath(float x, float y, Path paintPath) {
-        paintPath.addCircle(0, 0, 3, Path.Direction.CCW);
+//        paintPath.addCircle(0, 0, 3, Path.Direction.CCW);
 
 //        paintPath.moveTo(x,y);
 //        paintPath.lineTo(x + 20, y);
@@ -185,9 +165,49 @@ public class TextPathView1 extends View implements View.OnClickListener {
 //        paintPath.lineTo(120, -50);
 //        paintPath.lineTo(100,-70);
 //        paintPath.lineTo(0, -20);
-        paintPath.offset(x,y);
+//        paintPath.offset(x,y);
 
-        Log.d(TAG, "drawPaintPath: ");
+        mVelocityCalculator.calculate(x,y);
+//        float tan = mVelocityCalculator.getVelocityY() / mVelocityCalculator.getVelocityX();
+        double angleV = Math.atan2(mVelocityCalculator.getVelocityY(),mVelocityCalculator.getVelocityX());
+//        double angleV = Math.atan(tan);
+//        double angle0 = Math.atan(mCurTan[0]);
+//        double angle1 = Math.atan(mCurTan[1]);
+//        paintPath.lineTo((float) (x - 50 * Math.cos(angle0)),(float) (y - 50 * Math.sin(angle0)));
+        Log.d(TAG, "angleV: " + (angleV / Math.PI) * 180);
+        double delta = angleV - angle;
+        double sum = angleV + angle;
+        double rr = radius / (2 * Math.cos(angle));
+        float x1 = (float) (rr * Math.cos(sum));
+        float y1 = (float) (rr * Math.sin(sum));
+        float x2 = (float) (rr * Math.cos(delta));
+        float y2 = (float) (rr * Math.sin(delta));
+
+        paintPath.moveTo(x, y);
+        paintPath.lineTo(x - x1, y - y1);
+        paintPath.moveTo(x,y);
+        paintPath.lineTo(x - x2, y -y2);
+
+//        paintPath.lineTo((float) (x - radius * Math.cos(delta)), (float) (y - radius * Math.sin(delta)));
+
+//        if (mVelocityCalculator.getVelocityX() < 0) {
+//            paintPath.lineTo((float) (x + radius * Math.sin(angle) * Math.cos(delta)), (float) (y - radius * (1 - Math.sin(angle) * Math.sin(delta))));
+//        }else {
+//            paintPath.lineTo((float) (x - radius * Math.cos(angle) * Math.cos(delta)), (float) (y - radius * Math.sin(angle) * Math.sin(delta)));
+//        }
+//        paintPath.moveTo(x, y);
+
+//        paintPath.lineTo((float) (x - radius * Math.sin(delta)), (float) (y - radius * Math.cos(delta)));
+//        paintPath.lineTo((float) (x - 50 * Math.cos(angle1)),(float) (y + 50 * Math.sin(angle1)));
+//        if (mVelocityCalculator.getVelocityY() < 0){
+//            paintPath.lineTo((float) (x - radius * Math.sin(angle) * Math.cos(sum)), (float) (y - radius * (1 - Math.sin(angle) * Math.sin(delta))));
+//        }else {
+//            paintPath.lineTo((float) (x + radius * Math.sin(angle) * Math.sin(delta)), (float) (y - radius * Math.cos(angle) * Math.cos(delta)));
+//        }
+
+
+
+        Log.d(TAG, "drawPaintPath: " + mVelocityCalculator.getVelocityX());
     }
 
     @Override
@@ -216,5 +236,6 @@ public class TextPathView1 extends View implements View.OnClickListener {
         mDst = new Path();
         showPaint = true;
         mAnimator.start();
+        mVelocityCalculator.reset();
     }
 }
