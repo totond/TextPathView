@@ -13,9 +13,23 @@
         <!--/>-->
 
     <yanzhikai.textpath.TextPathView1
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:text="哈哈da"
+        app:duration="10000"
+        app:showPainter="true"
         android:id="@+id/tpv"
+        />
+
+    <yanzhikai.textpath.TextPathView2
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tpv"
+        app:text="是大法发？"
+        app:duration="6000"
+        android:id="@+id/tpv2"
         />
 
     <SeekBar

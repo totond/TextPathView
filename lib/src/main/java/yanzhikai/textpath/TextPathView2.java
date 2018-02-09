@@ -1,22 +1,11 @@
 package yanzhikai.textpath;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
-import android.graphics.PathMeasure;
-import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 
 /**
  * author : yany
@@ -30,92 +19,78 @@ public class TextPathView2 extends TextPathView implements View.OnClickListener 
     //分段路径长度
     private float mLength = 0;
 
-    private float[] mCurPos = new float[2];
-
-    private boolean showPaint = false;
+    private TextPathPainter mPainter;
 
     public TextPathView2(Context context) {
         super(context);
-        initPaint();
+        init();
     }
 
     public TextPathView2(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initPaint();
+        init();
     }
 
     public TextPathView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initPaint();
+        init();
     }
 
-    private void initPaint(){
+    protected void init(){
         setOnClickListener(this);
-        mTextPaint = new Paint();
-        mTextPaint.setTextSize(mTextSize);
-        mDrawPaint = new Paint();
-        mDrawPaint.setAntiAlias(true);
-        mDrawPaint.setColor(Color.BLACK);
-        mDrawPaint.setStrokeWidth(mTextStrokeWidth);
-        mDrawPaint.setStyle(Paint.Style.STROKE);
-        mFontPath = new Path();
-        mPaintPath = new Path();
-        mText = "GIEC asdas asdasgbgjut";
-        mTextPaint.getTextPath(mText,0,mText.length(),100,mTextPaint.getFontSpacing()+ 100, mFontPath);
+        initPaint();
+        initTextPath();
+        initAnimator(0,1);
+        if (mPainter != null){
+            mPainter.onInit();
+        }
+        if (mAutoStart) {
+            startAnimation(0,1);
+        }
+
+    }
+
+    //初始化文字路径
+    protected void initTextPath(){
+        mDst.reset();
+        mFontPath.reset();
+        mTextPaint.getTextPath(mText,0,mText.length(),0,mTextPaint.getTextSize(), mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
-        Log.d(TAG, "initPaint: " + mPathMeasure.getLength());
-
-        mDst = new Path();
-        mAnimator = ValueAnimator.ofFloat(0, 1);
-        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                drawPaths((Float) valueAnimator.getAnimatedValue());
-            }
-        });
-
-
-        mAnimator.addListener(new AbstractAnimatorListener(){
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-//                mDrawPaint.setColor(Color.RED);
-//                mDrawPaint.setStyle(Paint.Style.FILL);
-//                mPathMeasure.setPath(mFontPath,true);
-//                postInvalidate();
-                showPaint = false;
-                drawPaths(1);
-            }
-        });
-        mAnimator.setDuration(2500);
-        mAnimator.setInterpolator(new LinearInterpolator());
-//        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-//        mAnimator.start();
-        Log.d(TAG, "initPaint: ");
     }
 
-    public void drawPaths(float progress){
-        mAnimatorValue = progress;
-        Log.d(TAG, "mAnimatorValue: " + mAnimatorValue);
 
+    @Override
+    public void drawPath(float progress){
+        mAnimatorValue = progress;
+
+        //重置路径
         mPathMeasure.setPath(mFontPath,false);
         mDst.reset();
         mPaintPath.reset();
+
+        //根据进度获取路径
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
             mStop = mLength * mAnimatorValue;
             mPathMeasure.getSegment(0, mStop, mDst, true);
-            if (showPaint) {
+
+            //绘画画笔效果
+            if (canShowPainter) {
                 mPathMeasure.getPosTan(mStop, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
         }
+
+        //绘画路径
         postInvalidate();
     }
 
     public void drawPaintPath(float x, float y, Path paintPath) {
         paintPath.addCircle(x, y, 3, Path.Direction.CCW);
+        if (mPainter != null){
+            mPainter.onDrawPaintPath(x,y,paintPath);
+        }
     }
 
 
@@ -123,19 +98,30 @@ public class TextPathView2 extends TextPathView implements View.OnClickListener 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (showPaint) {
+        if (canShowPainter) {
             canvas.drawPath(mPaintPath, mDrawPaint);
         }
         canvas.drawPath(mDst, mDrawPaint);
 
     }
 
+    public void startAnimation(float start, float end){
+        initAnimator(start, end);
+        initTextPath();
+        canShowPainter = showPainter;
+        mAnimator.start();
+        if (mPainter != null){
+            mPainter.onStartAnimation();
+        }
+    }
+
+    public void setListener(TextPathPainter listener) {
+        this.mPainter = listener;
+    }
+
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "onClick: ");
-        showPaint = true;
-        mDst = new Path();
-        mAnimator.start();
+        startAnimation(0,1);
     }
 }
 

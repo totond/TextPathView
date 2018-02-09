@@ -4,8 +4,11 @@
         <attr name="textSize" format="dimension"/>
         <attr name="text" format="string"/>
         <attr name="duration" format="integer"/>
-        <attr name="showPaint" format="integer"/>
+        <attr name="showPainter" format="boolean"/>
         <attr name="textStrokeWidth" format="dimension"/>
+        <attr name="textStrokeColor" format="color"/>
         <attr name="paintStrokeWidth" format="dimension"/>
+        <attr name="paintStrokeColor" format="color"/>
+        <attr name="autoStart" format="boolean"/>
     </declare-styleable>
 </resources>
