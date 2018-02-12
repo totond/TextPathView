@@ -50,6 +50,7 @@ public class AsyncTextPathView extends TextPathView {
     }
 
     //初始化文字路径
+    @Override
     protected void initTextPath(){
         mDst.reset();
         mFontPath.reset();
@@ -61,6 +62,9 @@ public class AsyncTextPathView extends TextPathView {
 
     @Override
     public void drawPath(float progress){
+        if (!isProgressValid(progress)){
+            return;
+        }
         mAnimatorValue = progress;
 
         //重置路径
@@ -91,18 +95,46 @@ public class AsyncTextPathView extends TextPathView {
         }
     }
 
+    //设置文字内容
+    public void setText(String text) {
+        mText = text;
+        initTextPath();
+        clear();
+        requestLayout();
+    }
+
+    /**
+     * 开始绘制文字路径动画
+     * @param start 路径比例，范围0-1
+     * @param end 路径比例，范围0-1
+     */
     public void startAnimation(float start, float end){
+        if (!isProgressValid(start) || !isProgressValid(end)){
+            return;
+        }
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
         initAnimator(start, end);
         initTextPath();
         canShowPainter = showPainter;
         mAnimator.start();
     }
 
+    //设置画笔特效
     public void setTextPainter(AsyncTextPainter listener) {
         this.mPainter = listener;
     }
 
     public interface AsyncTextPainter extends TextPainter{
+        /**
+         * 绘画画笔特效时候执行
+         * @param x 当前绘画点x坐标
+         * @param y 当前绘画点y坐标
+         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
+         */
+        @Override
+        void onDrawPaintPath(float x, float y, Path paintPath);
     }
 }
 

@@ -49,8 +49,8 @@ public class SyncTextPathView extends TextPathView {
         }
     }
 
-
-    private void initTextPath() {
+    @Override
+    protected void initTextPath() {
         mDst.reset();
         mFontPath.reset();
         mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getTextSize(), mFontPath);
@@ -64,6 +64,10 @@ public class SyncTextPathView extends TextPathView {
 
     @Override
     public void drawPath(float progress) {
+        if (!isProgressValid(progress)){
+            return;
+        }
+        mAnimatorValue = progress;
         mStop = mLengthSum * progress;
 
         //重置路径
@@ -92,14 +96,14 @@ public class SyncTextPathView extends TextPathView {
     }
 
 
-    public void drawPaintPath(float x, float y, Path paintPath) {
+    private void drawPaintPath(float x, float y, Path paintPath) {
         if (mPainter != null) {
             mPainter.onDrawPaintPath(x, y, paintPath);
         }
 
     }
 
-
+    //设置文字内容
     public void setText(String text) {
         mText = text;
         initTextPath();
@@ -107,7 +111,15 @@ public class SyncTextPathView extends TextPathView {
         requestLayout();
     }
 
+    /**
+     * 开始绘制文字路径动画
+     * @param start 路径比例，范围0-1
+     * @param end 路径比例，范围0-1
+     */
     public void startAnimation(float start, float end) {
+        if (!isProgressValid(start) || !isProgressValid(end)){
+            return;
+        }
         if (mAnimator != null) {
             mAnimator.cancel();
         }
@@ -120,11 +132,22 @@ public class SyncTextPathView extends TextPathView {
         }
     }
 
+    //设置画笔特效
     public void setTextPainter(SyncTextPainter listener) {
         this.mPainter = listener;
     }
 
     public interface SyncTextPainter extends TextPainter {
+        //开始动画的时候执行
         void onStartAnimation();
+
+        /**
+         * 绘画画笔特效时候执行
+         * @param x 当前绘画点x坐标
+         * @param y 当前绘画点y坐标
+         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
+         */
+        @Override
+        void onDrawPaintPath(float x, float y, Path paintPath);
     }
 }

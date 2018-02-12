@@ -9,7 +9,7 @@ import yanzhikai.textpath.VelocityCalculator;
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/09
- * desc   :
+ * desc   : 箭头画笔特效，根据传入的当前点与上一个点之间的速度方向，来调整箭头方向
  */
 
 public class ArrowPainter implements SyncTextPathView.SyncTextPainter {

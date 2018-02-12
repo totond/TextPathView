@@ -21,7 +21,7 @@
             app:showPainter="true"
             app:text="2017"
             app:textInCenter="true"
-            app:textSize="70sp"
+            app:textSize="60sp"
             android:layout_weight="1"
             />
 
@@ -33,7 +33,7 @@
             app:showPainter="true"
             app:text="鸡年"
             app:textInCenter="true"
-            app:textSize="70sp"
+            app:textSize="60sp"
             android:layout_weight="1"
             />
 
@@ -54,7 +54,8 @@
             app:text="2018"
             app:textInCenter="true"
             app:textStrokeColor="@android:color/holo_red_light"
-            app:textSize="78sp"
+            app:paintStrokeColor="@android:color/holo_red_light"
+            app:textSize="70sp"
             android:layout_weight="1"
             />
 
@@ -67,7 +68,8 @@
             app:text="狗年"
             app:textInCenter="true"
             app:textStrokeColor="@android:color/holo_red_light"
-            app:textSize="78sp"
+            app:paintStrokeColor="@android:color/holo_red_light"
+            app:textSize="70sp"
             android:layout_weight="1"
             />
 
@@ -81,8 +83,9 @@
         app:showPainter="true"
         app:text="炎之铠"
         app:textStrokeColor="@android:color/holo_orange_light"
+        app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
-        app:textSize="70sp"
+        app:textSize="62sp"
         android:layout_gravity="center_horizontal"
         />
 
@@ -95,24 +98,38 @@
         app:text="祝大家"
         app:textInCenter="true"
         app:textStrokeColor="@android:color/holo_blue_light"
-        app:textSize="70sp"
+        app:paintStrokeColor="@android:color/holo_blue_light"
+        app:textSize="62sp"
         android:layout_gravity="center_horizontal"
         />
 
     <yanzhikai.textpath.AsyncTextPathView
         android:id="@+id/atpv_2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:duration="12000"
         app:showPainter="true"
         app:text="新春快乐"
         app:textInCenter="true"
-        app:textSize="70sp"
+        app:textSize="62sp"
         app:textStrokeColor="@color/colorAccent"
+        app:paintStrokeColor="@color/colorAccent"
         android:layout_gravity="center_horizontal"
         />
 
-
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_fortune"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="恭喜发财"
+        app:textInCenter="true"
+        app:textStrokeColor="@android:color/holo_red_dark"
+        app:paintStrokeColor="@android:color/black"
+        app:textSize="62sp"
+        android:layout_gravity="center_horizontal"
+        />
 
     <Button
         android:layout_width="match_parent"

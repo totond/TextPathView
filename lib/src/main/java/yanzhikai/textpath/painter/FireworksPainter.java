@@ -11,7 +11,7 @@ import yanzhikai.textpath.VelocityCalculator;
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/11
- * desc   :
+ * desc   : 火花特效，根据箭头引申变化而来，根据当前点与上一个点算出的速度方向来控制火花的方向
  */
 
 public class FireworksPainter implements SyncTextPathView.SyncTextPainter {

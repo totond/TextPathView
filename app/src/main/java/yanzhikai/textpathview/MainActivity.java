@@ -12,11 +12,12 @@ import yanzhikai.textpath.painter.ArrowPainter;
 import yanzhikai.textpath.painter.FireworksPainter;
 import yanzhikai.textpath.SyncTextPathView;
 import yanzhikai.textpath.AsyncTextPathView;
+import yanzhikai.textpath.painter.PenPainter;
 
 public class MainActivity extends AppCompatActivity {
     private SeekBar sb_progress;
     private AsyncTextPathView atpv1,atpv2;
-    private SyncTextPathView stpv_2017,stpv_2018,stpv_wish,stpv_chicken,stpv_dog;
+    private SyncTextPathView stpv_2017,stpv_2018,stpv_wish,stpv_chicken,stpv_dog,stpv_fortune;
     private Button btn_start;
 
     @Override
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         stpv_wish = findViewById(R.id.stpv_wish);
         stpv_chicken = findViewById(R.id.stpv_chicken);
         stpv_dog = findViewById(R.id.stpv_dog);
+        stpv_fortune = findViewById(R.id.stpv_fortune);
         btn_start = findViewById(R.id.btn_start);
 
 
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         stpv_dog.setTextPainter(new FireworksPainter());
         stpv_chicken.setTextPainter(new FireworksPainter());
         stpv_wish.setTextPainter(new ArrowPainter());
+        stpv_fortune.setTextPainter(new PenPainter());
 
         atpv2.setTextPainter(new AsyncTextPathView.AsyncTextPainter() {
             @Override
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 stpv_chicken.drawPath(progress / 1000f);
                 stpv_dog.drawPath(progress / 1000f);
                 stpv_wish.drawPath(progress / 1000f);
+                stpv_fortune.drawPath(progress / 1000f);
 
             }
 
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 stpv_chicken.startAnimation(1,0);
                 stpv_dog.startAnimation(0,1);
                 stpv_wish.startAnimation(0,1);
+                stpv_fortune.startAnimation(0,1);
             }
         });
     }

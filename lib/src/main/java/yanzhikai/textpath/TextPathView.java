@@ -40,7 +40,7 @@ public abstract class TextPathView extends View {
     //绘画部分长度
     protected float mStop = 0;
     //是否展示画笔
-    protected boolean showPainter = false, canShowPainter;
+    protected boolean showPainter = false, canShowPainter = false;
     //当前绘画位置
     protected float[] mCurPos = new float[2];
     //当前点tan值,暂时无用
@@ -67,6 +67,9 @@ public abstract class TextPathView extends View {
     protected boolean mTextInCenter = false;
     //文字是否一开始显示
     protected boolean mShowInStart = false;
+    //动画监听
+    protected TextPathAnimatorListener mAnimatorListener;
+
 
     public TextPathView(Context context) {
         super(context);
@@ -134,14 +137,10 @@ public abstract class TextPathView extends View {
                 drawPath(mAnimatorValue);
             }
         });
-        mAnimator.addListener(new AbstractAnimatorListener() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                canShowPainter = false;
-
-            }
-        });
+        if (mAnimatorListener == null){
+            mAnimatorListener = new TextPathAnimatorListener();
+        }
+        mAnimator.addListener(mAnimatorListener);
 
         mAnimator.setDuration(mDuration);
         mAnimator.setInterpolator(new LinearInterpolator());
@@ -152,6 +151,8 @@ public abstract class TextPathView extends View {
      * @param progress 绘画进度，0-1
      */
     public abstract void drawPath(float progress);
+
+    protected abstract void initTextPath();
 
     /**
      * 重写onMeasure方法使得WRAP_CONTENT生效
@@ -185,23 +186,27 @@ public abstract class TextPathView extends View {
             canvas.translate((getWidth() - mTextWidth) / 2, (getHeight() - mTextHeight) / 2);
         }
         if (canShowPainter) {
-            canvas.drawPath(mPaintPath, mDrawPaint);
+            canvas.drawPath(mPaintPath, mPaint);
         }
         canvas.drawPath(mDst, mDrawPaint);
 
     }
 
+    //获取绘画文字的画笔
     public Paint getDrawPaint() {
         return mDrawPaint;
     }
 
+    //获取绘画画笔特效的画笔
     public Paint getPaint() {
         return mPaint;
     }
 
+    //清除画面
     public void clear(){
         mDst.reset();
         mPaintPath.reset();
+        postInvalidate();
     }
 
     //设置能否显示画笔效果
@@ -210,7 +215,70 @@ public abstract class TextPathView extends View {
         canShowPainter = showPainter;
     }
 
+    //设置自定义动画监听
+    public void setAnimatorListener(TextPathAnimatorListener animatorListener) {
+        this.mAnimatorListener = animatorListener;
+    }
+
+    //设置文字内容
+    public void setText(String text) {
+        mText = text;
+        initTextPath();
+        clear();
+        requestLayout();
+    }
+
+    protected boolean isProgressValid(float progress){
+        if (progress < 0 || progress > 1){
+            try {
+                throw new Exception("Progress is invalid!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
     public interface TextPainter {
+        /**
+         * 绘画画笔特效时候执行
+         * @param x 当前绘画点x坐标
+         * @param y 当前绘画点y坐标
+         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
+         */
         void onDrawPaintPath(float x, float y, Path paintPath);
+    }
+
+    public class TextPathAnimatorListener implements Animator.AnimatorListener{
+        @Override
+        public void onAnimationStart(Animator animation, boolean isReverse) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation, boolean isReverse) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            canShowPainter = false;
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
     }
 }
