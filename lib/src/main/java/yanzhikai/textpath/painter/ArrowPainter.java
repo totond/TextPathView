@@ -1,6 +1,9 @@
-package yanzhikai.textpath;
+package yanzhikai.textpath.painter;
 
 import android.graphics.Path;
+
+import yanzhikai.textpath.SyncTextPathView;
+import yanzhikai.textpath.VelocityCalculator;
 
 /**
  * author : yany
@@ -9,10 +12,20 @@ import android.graphics.Path;
  * desc   :
  */
 
-public class ArrowPainter implements TextPathView.TextPathPainter {
+public class ArrowPainter implements SyncTextPathView.SyncTextPainter {
     private VelocityCalculator mVelocityCalculator = new VelocityCalculator();
-    private float radius = 40;
-    private double angle = Math.PI / 12;
+    //箭头长度
+    private float radius = 60;
+    //箭头夹角
+    private double angle = Math.PI / 8;
+
+    public ArrowPainter(){
+    }
+
+    public ArrowPainter(int radius,double angle){
+        this.radius = radius;
+        this.angle = angle;
+    }
 
     @Override
     public void onDrawPaintPath(float x, float y, Path paintPath) {
@@ -32,9 +45,20 @@ public class ArrowPainter implements TextPathView.TextPathPainter {
         paintPath.lineTo(x - x2, y - y2);
     }
 
-    @Override
-    public void onInit() {
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
 
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public float getRadius() {
+        return radius;
     }
 
     @Override

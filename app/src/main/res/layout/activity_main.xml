@@ -1,42 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="yanzhikai.textpathview.MainActivity">
 
-    <!--<yanzhikai.textpath.TextPathView2-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="300dp"-->
-        <!--android:id="@+id/tpv2"-->
-        <!--/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
 
-    <yanzhikai.textpath.TextPathView1
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_2017"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="2017"
+            app:textInCenter="true"
+            app:textSize="70sp"
+            android:layout_weight="1"
+            />
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_chicken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="鸡年"
+            app:textInCenter="true"
+            app:textSize="70sp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_2018"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="2018"
+            app:textInCenter="true"
+            app:textStrokeColor="@android:color/holo_red_light"
+            app:textSize="78sp"
+            android:layout_weight="1"
+            />
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_dog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="狗年"
+            app:textInCenter="true"
+            app:textStrokeColor="@android:color/holo_red_light"
+            app:textSize="78sp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        app:text="哈哈da"
-        app:duration="10000"
+        app:duration="12000"
         app:showPainter="true"
-        android:id="@+id/tpv"
+        app:text="炎之铠"
+        app:textStrokeColor="@android:color/holo_orange_light"
+        app:textInCenter="true"
+        app:textSize="70sp"
+        android:layout_gravity="center_horizontal"
         />
 
-    <yanzhikai.textpath.TextPathView2
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_wish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tpv"
-        app:text="是大法发？"
-        app:duration="6000"
-        android:id="@+id/tpv2"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="祝大家"
+        app:textInCenter="true"
+        app:textStrokeColor="@android:color/holo_blue_light"
+        app:textSize="70sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="新春快乐"
+        app:textInCenter="true"
+        app:textSize="70sp"
+        app:textStrokeColor="@color/colorAccent"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start"
+        android:id="@+id/btn_start"
         />
 
     <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/sb_progress"
-        android:layout_alignParentBottom="true"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+</LinearLayout>

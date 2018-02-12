@@ -2,50 +2,49 @@ package yanzhikai.textpath;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/01/10
- * desc   :
+ * desc   : 所有笔画异步一起绘画的TextPathView
  */
 
-public class TextPathView2 extends TextPathView implements View.OnClickListener {
-    public static final String TAG = "TestView";
+public class AsyncTextPathView extends TextPathView {
     //分段路径长度
     private float mLength = 0;
 
-    private TextPathPainter mPainter;
+    private AsyncTextPainter mPainter;
 
-    public TextPathView2(Context context) {
+    public AsyncTextPathView(Context context) {
         super(context);
         init();
     }
 
-    public TextPathView2(Context context, @Nullable AttributeSet attrs) {
+    public AsyncTextPathView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public TextPathView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AsyncTextPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     protected void init(){
-        setOnClickListener(this);
         initPaint();
         initTextPath();
-        initAnimator(0,1);
-        if (mPainter != null){
-            mPainter.onInit();
-        }
         if (mAutoStart) {
             startAnimation(0,1);
+        }
+        if (mShowInStart){
+            drawPath(1);
         }
 
     }
@@ -87,22 +86,9 @@ public class TextPathView2 extends TextPathView implements View.OnClickListener 
     }
 
     public void drawPaintPath(float x, float y, Path paintPath) {
-        paintPath.addCircle(x, y, 3, Path.Direction.CCW);
         if (mPainter != null){
             mPainter.onDrawPaintPath(x,y,paintPath);
         }
-    }
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (canShowPainter) {
-            canvas.drawPath(mPaintPath, mDrawPaint);
-        }
-        canvas.drawPath(mDst, mDrawPaint);
-
     }
 
     public void startAnimation(float start, float end){
@@ -110,18 +96,13 @@ public class TextPathView2 extends TextPathView implements View.OnClickListener 
         initTextPath();
         canShowPainter = showPainter;
         mAnimator.start();
-        if (mPainter != null){
-            mPainter.onStartAnimation();
-        }
     }
 
-    public void setListener(TextPathPainter listener) {
+    public void setTextPainter(AsyncTextPainter listener) {
         this.mPainter = listener;
     }
 
-    @Override
-    public void onClick(View v) {
-        startAnimation(0,1);
+    public interface AsyncTextPainter extends TextPainter{
     }
 }
 

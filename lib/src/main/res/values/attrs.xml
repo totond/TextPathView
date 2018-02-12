@@ -10,5 +10,7 @@
         <attr name="paintStrokeWidth" format="dimension"/>
         <attr name="paintStrokeColor" format="color"/>
         <attr name="autoStart" format="boolean"/>
+        <attr name="showInStart" format="boolean"/>
+        <attr name="textInCenter" format="boolean"/>
     </declare-styleable>
 </resources>
