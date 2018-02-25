@@ -60,6 +60,10 @@ public class AsyncTextPathView extends TextPathView {
     }
 
 
+    /**
+     * 绘画文字路径的方法
+     * @param progress 绘画进度，0-1
+     */
     @Override
     public void drawPath(float progress){
         if (!isProgressValid(progress)){

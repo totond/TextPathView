@@ -185,9 +185,11 @@ public abstract class TextPathView extends View {
         if (mTextInCenter){
             canvas.translate((getWidth() - mTextWidth) / 2, (getHeight() - mTextHeight) / 2);
         }
+        //画笔效果绘制
         if (canShowPainter) {
             canvas.drawPath(mPaintPath, mPaint);
         }
+        //文字路径绘制
         canvas.drawPath(mDst, mDrawPaint);
 
     }

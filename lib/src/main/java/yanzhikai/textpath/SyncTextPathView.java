@@ -56,12 +56,17 @@ public class SyncTextPathView extends TextPathView {
         mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getTextSize(), mFontPath);
         mPathMeasure.setPath(mFontPath, false);
         mLengthSum = mPathMeasure.getLength();
+        //获取所有路径的总长度
         while (mPathMeasure.nextContour()) {
             mLengthSum += mPathMeasure.getLength();
         }
     }
 
 
+    /**
+     * 绘画文字路径的方法
+     * @param progress 绘画进度，0-1
+     */
     @Override
     public void drawPath(float progress) {
         if (!isProgressValid(progress)){
@@ -80,10 +85,11 @@ public class SyncTextPathView extends TextPathView {
             mStop = mStop - mPathMeasure.getLength();
             mPathMeasure.getSegment(0, mPathMeasure.getLength(), mDst, true);
             if (!mPathMeasure.nextContour()) {
+                mPathMeasure.getSegment(0, mStop, mDst, true);
                 break;
             }
         }
-        mPathMeasure.getSegment(0, mStop, mDst, true);
+
 
         //绘画画笔效果
         if (canShowPainter) {
