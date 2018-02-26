@@ -20,6 +20,7 @@ public class AsyncTextPathView extends TextPathView {
     //分段路径长度
     private float mLength = 0;
 
+    //画笔特效
     private AsyncTextPainter mPainter;
 
     public AsyncTextPathView(Context context) {
@@ -93,7 +94,7 @@ public class AsyncTextPathView extends TextPathView {
         postInvalidate();
     }
 
-    public void drawPaintPath(float x, float y, Path paintPath) {
+    private void drawPaintPath(float x, float y, Path paintPath) {
         if (mPainter != null){
             mPainter.onDrawPaintPath(x,y,paintPath);
         }

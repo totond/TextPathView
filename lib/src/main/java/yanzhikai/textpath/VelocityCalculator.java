@@ -4,7 +4,7 @@ package yanzhikai.textpath;
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/08
- * desc   :
+ * desc   : 计算传入的当前点与上一个点之间的速度
  */
 
 public class VelocityCalculator {
@@ -16,6 +16,7 @@ public class VelocityCalculator {
     private float mVelocityX = 0;
     private float mVelocityY = 0;
 
+    //重置
     public void reset(){
         mLastX = 0;
         mLastY = 0;
@@ -23,12 +24,16 @@ public class VelocityCalculator {
         first = true;
     }
 
+    //计算速度
     public void calculate(float x, float y){
         long time = System.currentTimeMillis();
         if (!first){
-            float deltaTime = time - mLastTime;
-            mVelocityX = (x - mLastX) / deltaTime;
-            mVelocityY = (y - mLastY) / deltaTime;
+            //因为只需要方向，不需要具体速度值，所以默认deltaTime = 1，提高效率
+//            float deltaTime = time - mLastTime;
+//            mVelocityX = (x - mLastX) / deltaTime;
+//            mVelocityY = (y - mLastY) / deltaTime;
+            mVelocityX = x - mLastX;
+            mVelocityY = y - mLastY;
         }else {
             first = false;
         }

@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 public class SyncTextPathView extends TextPathView {
     public static final String TAG = "yjkTestView";
 
+    //画笔特效
     private SyncTextPainter mPainter;
 
     //路径长度总数
@@ -37,13 +38,18 @@ public class SyncTextPathView extends TextPathView {
 
     protected void init() {
 
+        //初始化画笔
         initPaint();
 
+        //初始化文字路径
         initTextPath();
 
+        //是否自动播放动画
         if (mAutoStart) {
             startAnimation(0,1);
         }
+
+        //是否一开始就显示出完整的文字路径
         if (mShowInStart){
             drawPath(1);
         }
@@ -85,11 +91,10 @@ public class SyncTextPathView extends TextPathView {
             mStop = mStop - mPathMeasure.getLength();
             mPathMeasure.getSegment(0, mPathMeasure.getLength(), mDst, true);
             if (!mPathMeasure.nextContour()) {
-                mPathMeasure.getSegment(0, mStop, mDst, true);
                 break;
             }
         }
-
+        mPathMeasure.getSegment(0, mStop, mDst, true);
 
         //绘画画笔效果
         if (canShowPainter) {
@@ -106,7 +111,6 @@ public class SyncTextPathView extends TextPathView {
         if (mPainter != null) {
             mPainter.onDrawPaintPath(x, y, paintPath);
         }
-
     }
 
     //设置文字内容
