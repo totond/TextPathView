@@ -142,6 +142,19 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 　　由上面可见，因为烟花和箭头画笔特效都需要记录上一个点的位置，所以只适合按顺序绘画的SyncTextPathView，而PenPainter就适合两种TextPathView。仔细看它的代码的话，会发现画起来都是很简单的哦。
 
+#### 自定义画笔特效
+　　自定义画笔特效也是非常简单的，原理就是在当前绘画点上加上一个附加的Path，实现SyncTextPainter和AsyncTextPainter之中的一个或者两个接口，重写里面的`onDrawPaintPath(float x, float y, Path paintPath)`方法就行了，如下面这个：
+
+```
+        atpv2.setTextPainter(new AsyncTextPathView.AsyncTextPainter() {
+            @Override
+            public void onDrawPaintPath(float x, float y, Path paintPath) {
+                paintPath.addCircle(x,y,3, Path.Direction.CCW);
+            }
+        });
+```
+![](https://i.imgur.com/fPeYF8f.gif)
+
 #### 动画监听
 
 ```
