@@ -2,6 +2,8 @@
 　　
 ![](https://i.imgur.com/rd3JUdQ.gif)
 
+ > 这里有[原理解析！](http://blog.csdn.net/totond/article/details/79375200)
+
 ## 介绍
 　　大家新年快乐，趁着还没过年把利用空闲时间，把之前的想法实现一部分，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图：
 
