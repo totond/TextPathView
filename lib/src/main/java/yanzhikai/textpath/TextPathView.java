@@ -143,7 +143,9 @@ public abstract class TextPathView extends View {
         });
         if (mAnimatorListener == null){
             mAnimatorListener = new TextPathAnimatorListener();
+            mAnimatorListener.setTarget(this);
         }
+        mAnimator.removeAllListeners();
         mAnimator.addListener(mAnimatorListener);
 
         mAnimator.setDuration(mDuration);
@@ -230,7 +232,7 @@ public abstract class TextPathView extends View {
         mAnimatorListener = animatorListener;
         mAnimatorListener.setTarget(this);
         if (mAnimator != null) {
-            mAnimator.removeAllUpdateListeners();
+            mAnimator.removeAllListeners();
             mAnimator.addListener(mAnimatorListener);
         }
     }

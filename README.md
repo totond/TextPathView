@@ -1,6 +1,6 @@
 # TextPathView
 　　
-![](https://i.imgur.com/rd3JUdQ.gif)
+![](https://i.imgur.com/l5o8XG5.gif)
 
  > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
 
@@ -13,7 +13,7 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.0.3'
+compile 'com.yanzhikai:TextPathView:0.0.5'
 ```
 
  > minSdkVersion 16
@@ -221,6 +221,7 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
         });
         stpv_wish.setCanShowPainter(true);
 ```
+![](https://i.imgur.com/Ziovoic.gif)
 
 #### 其他
 
@@ -241,7 +242,7 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 ## 更新
 
- - 2018/03/08 **version 0.0.4**:
+ - 2018/03/08 **version 0.0.5**:
      - 增加了`showFillColorText()`方法来设置直接显示填充好颜色了的全部文字。
      - 把TextPathAnimatorListener从TextPathView的内部类里面解放出来，之前使用太麻烦了。
      - 增加`showPainterActually`属性，设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动将它设置为false。因此它用处就是在不使用自带Animator的时候显示画笔特效。

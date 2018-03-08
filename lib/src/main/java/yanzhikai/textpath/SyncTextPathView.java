@@ -99,7 +99,6 @@ public class SyncTextPathView extends TextPathView {
         }
         mPathMeasure.getSegment(0, mStop, mDst, true);
 
-        Log.d(TAG, "drawPath: showPainterActually " + showPainterActually);
 
         //绘画画笔效果
         if (showPainterActually) {
