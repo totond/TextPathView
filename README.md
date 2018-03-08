@@ -2,10 +2,10 @@
 　　
 ![](https://i.imgur.com/rd3JUdQ.gif)
 
- > 这里有[原理解析！](http://blog.csdn.net/totond/article/details/79375200)
+ > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
 
 ## 介绍
-　　大家新年快乐，趁着还没过年把利用空闲时间，把之前的想法实现一部分，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图：
+　　大家新年快乐，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图：
 
 ## 使用
 　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。
@@ -15,6 +15,8 @@
 ```
 compile 'com.yanzhikai:TextPathView:0.0.3'
 ```
+
+ > minSdkVersion 16
 
 ### 使用方法
 　　TextPathView分为两种，一种是每个笔画按顺序刻画的SyncTextPathView，一种是每个笔画同时刻画的AsyncTextPathView，使用方法都是一样，在xml里面配置属性，然后直接在java里面调用startAnimation()方法就行了，具体的可以看例子和demo。下面是一个简单的例子：
@@ -82,6 +84,7 @@ java里面使用：
 |text      | 文字的具体内容     | String| Test|
 |duration | 动画的持续时间，单位ms   | integer| 10000|
 |showPainter | 在动画执行的时候是否执行画笔特效  | boolean| false|
+|showPainterActually**(新增) **| 在所有时候是否展示画笔特效| boolean| false|
 |textStrokeWidth | 文字刻画的线条粗细     | dimension| 5px|
 |textStrokeColor | 文字刻画的线条颜色   | color| Color.black|
 |paintStrokeWidth | 画笔特效刻画的线条粗细    | dimension| 3px|
@@ -89,6 +92,8 @@ java里面使用：
 |autoStart| 是否加载完后自动启动动画    | boolean| false|
 |showInStart| 是否一开始就把文字全部显示    | boolean| false|
 |textInCenter| 是否让文字内容处于控件中心    | boolean| false|
+
+ > PS:showPainterActually属性，由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false。因此最好用于使用非自带动画的时候。
 
 ### 方法
 
@@ -166,7 +171,6 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 ```
 　　TextPathAnimatorListener是实现了AnimatorListener接口的类，继承它的时候注意不要删掉super父类方法，因为里面可能有一些操作。
 
-
 #### 画笔获取
 
 ```
@@ -198,6 +202,26 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
     public void drawPath(float progress);
 ```
 
+#### 填充颜色
+
+```
+    //直接显示填充好颜色了的全部文字
+    public void showFillColorText();
+```
+　　由于正在绘画的时候文字路径不是封闭的，填充颜色会变得很混乱，所以这里给出`showFillColorText()`来设置直接显示填充好颜色了的全部文字，一般可以在动画结束后文字完全显示后过渡填充，如Demo里面的：
+
+```
+        //设置动画播放完后填充颜色
+        stpv_fortune.setAnimatorListener(new TextPathAnimatorListener(stpv_fortune){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                stpv_fortune.showFillColorText();
+            }
+        });
+        stpv_wish.setCanShowPainter(true);
+```
+
 #### 其他
 
 ```
@@ -207,15 +231,23 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
     //清除画面
     public void clear();
 
-    //设置能否显示画笔效果
-    public void setShowPainter(boolean showPainter);
+    //设置动画时能否显示画笔效果
+    public void setShowPainter(boolean showPainter)；
+
+    //设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false
+    public void setCanShowPainter(boolean canShowPainter)；
 
 ```
 
 ## 更新
+
+ - 2018/03/08 **version 0.0.4**:
+     - 增加了`showFillColorText()`方法来设置直接显示填充好颜色了的全部文字。
+     - 把TextPathAnimatorListener从TextPathView的内部类里面解放出来，之前使用太麻烦了。
+     - 增加`showPainterActually`属性，设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动将它设置为false。因此它用处就是在不使用自带Animator的时候显示画笔特效。
+
 　　后续将会往下面的方向努力：
 
- - 文字上色，目前只是画出轮廓，强行让画笔设置为填充会导致变成一坨，最近好像想到思路
  - 更多的特效，更多的动画，如果有什么想法和建议的欢迎issue提出来一起探讨。
  - 更好的性能，目前单个TextPathView在模拟器上运行动画时是不卡的，多个就有一点点卡顿了，在性能较好的真机多个也是没问题的，这个性能方面目前还没头绪。
 

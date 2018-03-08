@@ -99,6 +99,7 @@
         app:textInCenter="true"
         app:textStrokeColor="@android:color/holo_blue_light"
         app:paintStrokeColor="@android:color/holo_blue_light"
+        app:showPainterActually="true"
         app:textSize="62sp"
         android:layout_gravity="center_horizontal"
         />

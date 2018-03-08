@@ -39,7 +39,7 @@ publish {
     repoName = 'CustomViewRepository'
     groupId = 'com.yanzhikai'
     artifactId = 'TextPathView'
-    publishVersion = '0.0.3'
+    publishVersion = '0.0.4'
     desc = 'A View with text path animation!'
     website = 'https://github.com/totond/TextPathView'
 }

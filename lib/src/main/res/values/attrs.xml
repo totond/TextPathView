@@ -5,6 +5,7 @@
         <attr name="text" format="string"/>
         <attr name="duration" format="integer"/>
         <attr name="showPainter" format="boolean"/>
+        <attr name="showPainterActually" format="boolean"/>
         <attr name="textStrokeWidth" format="dimension"/>
         <attr name="textStrokeColor" format="color"/>
         <attr name="paintStrokeWidth" format="dimension"/>

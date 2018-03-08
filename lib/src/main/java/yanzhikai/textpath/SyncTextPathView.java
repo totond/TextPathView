@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * author : yany
@@ -81,6 +82,8 @@ public class SyncTextPathView extends TextPathView {
         mAnimatorValue = progress;
         mStop = mLengthSum * progress;
 
+        checkFill(progress);
+
         //重置路径
         mPathMeasure.setPath(mFontPath, false);
         mDst.reset();
@@ -96,8 +99,10 @@ public class SyncTextPathView extends TextPathView {
         }
         mPathMeasure.getSegment(0, mStop, mDst, true);
 
+        Log.d(TAG, "drawPath: showPainterActually " + showPainterActually);
+
         //绘画画笔效果
-        if (canShowPainter) {
+        if (showPainterActually) {
             mPathMeasure.getPosTan(mStop, mCurPos, null);
             drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
         }
@@ -135,7 +140,7 @@ public class SyncTextPathView extends TextPathView {
         }
         initAnimator(start, end);
         initTextPath();
-        canShowPainter = showPainter;
+        showPainterActually = showPainter;
         mAnimator.start();
         if (mPainter != null) {
             mPainter.onStartAnimation();

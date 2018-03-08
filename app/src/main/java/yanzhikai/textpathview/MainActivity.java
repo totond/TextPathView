@@ -1,5 +1,6 @@
 package yanzhikai.textpathview;
 
+import android.animation.Animator;
 import android.graphics.Path;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
+import yanzhikai.textpath.TextPathAnimatorListener;
 import yanzhikai.textpath.painter.ArrowPainter;
 import yanzhikai.textpath.painter.FireworksPainter;
 import yanzhikai.textpath.SyncTextPathView;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         btn_start = findViewById(R.id.btn_start);
 
 
+        //设置画笔特效
         stpv_2017.setTextPainter(new FireworksPainter());
         stpv_2018.setTextPainter(new FireworksPainter());
         stpv_dog.setTextPainter(new FireworksPainter());
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //设置拖拉进度条控制
         sb_progress.setMax(1000);
         sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -77,6 +81,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //设置动画播放完后填充颜色
+        stpv_fortune.setAnimatorListener(new TextPathAnimatorListener(){
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                stpv_fortune.showFillColorText();
+            }
+        });
+
+        //设置点击开始播放动画
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

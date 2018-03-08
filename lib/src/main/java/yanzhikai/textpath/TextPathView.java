@@ -1,6 +1,5 @@
 package yanzhikai.textpath;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -39,8 +38,10 @@ public abstract class TextPathView extends View {
 
     //绘画部分长度
     protected float mStop = 0;
-    //是否展示画笔
-    protected boolean showPainter = false, canShowPainter = false;
+    //是否展示画笔特效:
+    //showPainter代表动画绘画时是否展示
+    //showPainterActually代表所有时候是否展示，由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false
+    protected boolean showPainter = false, showPainterActually = false;
     //当前绘画位置
     protected float[] mCurPos = new float[2];
     //当前点tan值,暂时无用
@@ -67,6 +68,8 @@ public abstract class TextPathView extends View {
     protected boolean mTextInCenter = false;
     //文字是否一开始显示
     protected boolean mShowInStart = false;
+    //文字是否填充颜色
+    protected boolean mFillColor = false;
     //动画监听
     protected TextPathAnimatorListener mAnimatorListener;
 
@@ -94,6 +97,7 @@ public abstract class TextPathView extends View {
         mTextSize = typedArray.getDimensionPixelSize(R.styleable.TextPathView_textSize,mTextSize);
         mDuration = typedArray.getInteger(R.styleable.TextPathView_duration,mDuration);
         showPainter = typedArray.getBoolean(R.styleable.TextPathView_showPainter, showPainter);
+        showPainterActually = typedArray.getBoolean(R.styleable.TextPathView_showPainterActually,showPainterActually);
         mTextStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.TextPathView_textStrokeWidth,mTextStrokeWidth);
         mTextStrokeColor = typedArray.getColor(R.styleable.TextPathView_textStrokeColor,mTextStrokeColor);
         mPaintStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.TextPathView_paintStrokeWidth,mPaintStrokeWidth);
@@ -186,7 +190,7 @@ public abstract class TextPathView extends View {
             canvas.translate((getWidth() - mTextWidth) / 2, (getHeight() - mTextHeight) / 2);
         }
         //画笔效果绘制
-        if (canShowPainter) {
+        if (showPainterActually) {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
@@ -211,15 +215,24 @@ public abstract class TextPathView extends View {
         postInvalidate();
     }
 
-    //设置能否显示画笔效果
+    //设置动画时能否显示画笔效果
     public void setShowPainter(boolean showPainter) {
         this.showPainter = showPainter;
-        canShowPainter = showPainter;
+    }
+
+    //设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false
+    public void setShowPainterActually(boolean showPainterActually) {
+        this.showPainterActually = showPainterActually;
     }
 
     //设置自定义动画监听
     public void setAnimatorListener(TextPathAnimatorListener animatorListener) {
-        this.mAnimatorListener = animatorListener;
+        mAnimatorListener = animatorListener;
+        mAnimatorListener.setTarget(this);
+        if (mAnimator != null) {
+            mAnimator.removeAllUpdateListeners();
+            mAnimator.addListener(mAnimatorListener);
+        }
     }
 
     //设置文字内容
@@ -228,6 +241,20 @@ public abstract class TextPathView extends View {
         initTextPath();
         clear();
         requestLayout();
+    }
+
+    //直接显示填充好颜色了的全部文字
+    public void showFillColorText(){
+        mFillColor = true;
+        mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        drawPath(1);
+    }
+
+    protected void checkFill(float progress){
+        if (progress != 1 && mFillColor){
+            mFillColor = false;
+            mDrawPaint.setStyle(Paint.Style.STROKE);
+        }
     }
 
     protected boolean isProgressValid(float progress){
@@ -252,35 +279,5 @@ public abstract class TextPathView extends View {
         void onDrawPaintPath(float x, float y, Path paintPath);
     }
 
-    public class TextPathAnimatorListener implements Animator.AnimatorListener{
-        @Override
-        public void onAnimationStart(Animator animation, boolean isReverse) {
 
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation, boolean isReverse) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            canShowPainter = false;
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-    }
 }

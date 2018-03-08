@@ -1,13 +1,9 @@
 package yanzhikai.textpath;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 
 /**
  * author : yany
@@ -70,6 +66,9 @@ public class AsyncTextPathView extends TextPathView {
         if (!isProgressValid(progress)){
             return;
         }
+
+        checkFill(progress);
+
         mAnimatorValue = progress;
 
         //重置路径
@@ -84,7 +83,7 @@ public class AsyncTextPathView extends TextPathView {
             mPathMeasure.getSegment(0, mStop, mDst, true);
 
             //绘画画笔效果
-            if (canShowPainter) {
+            if (showPainterActually) {
                 mPathMeasure.getPosTan(mStop, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
@@ -122,7 +121,7 @@ public class AsyncTextPathView extends TextPathView {
         }
         initAnimator(start, end);
         initTextPath();
-        canShowPainter = showPainter;
+        showPainterActually = showPainter;
         mAnimator.start();
     }
 
