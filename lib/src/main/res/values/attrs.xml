@@ -13,5 +13,9 @@
         <attr name="autoStart" format="boolean"/>
         <attr name="showInStart" format="boolean"/>
         <attr name="textInCenter" format="boolean"/>
+        <attr name="repeat" format="enum">
+            <enum name="RESTART" value="1"/>
+            <enum name="REVERSE" value="2"/>
+        </attr>
     </declare-styleable>
 </resources>
