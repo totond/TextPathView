@@ -201,6 +201,8 @@ public abstract class TextPathView extends View {
      * Stop animation
      */
     public void stopAnimation() {
+        showPainterActually = false;
+        clear();
         mAnimator.cancel();
     }
 

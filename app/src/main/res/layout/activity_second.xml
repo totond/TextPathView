@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="yanzhikai.textpathview.SecondActivity">
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_laugh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:duration="5000"
+        app:showPainter="true"
+        app:repeat="RESTART"
+        app:text="O(∩_∩)O~"
+        app:textInCenter="true"
+        app:textStrokeColor="@android:color/holo_red_light"
+        app:paintStrokeColor="@android:color/holo_red_light"
+        app:textSize="70sp"
+        android:layout_weight="1"
+        />
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_totond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="2500"
+        app:repeat="REVERSE"
+        app:showPainter="true"
+        app:text="totond"
+        app:textStrokeColor="@android:color/holo_orange_light"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textInCenter="true"
+        app:textSize="62sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="start"
+            />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="stop"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pauseLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_pause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="pause"
+            />
+
+        <Button
+            android:id="@+id/btn_resume"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="resume"
+            />
+    </LinearLayout>
+
+</LinearLayout>

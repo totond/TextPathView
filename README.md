@@ -8,12 +8,12 @@
 　　大家新年快乐，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图：
 
 ## 使用
-　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。
+　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。想要自己控制绘画的进度也可以，详情见下面。
 
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.0.5'
+compile 'com.yanzhikai:TextPathView:0.0.6'
 ```
 
  > minSdkVersion 16
@@ -92,6 +92,14 @@ java里面使用：
 |autoStart| 是否加载完后自动启动动画    | boolean| false|
 |showInStart| 是否一开始就把文字全部显示    | boolean| false|
 |textInCenter| 是否让文字内容处于控件中心    | boolean| false|
+|repeat**(新增) **| 是否重复播放动画，重复类型| enum | NONE|
+
+|**repeat属性值**|**意义**|
+|--|--|
+|NONE|不重复播放|
+|RESTART|动画从头重复播放|
+|REVERSE|动画从尾重复播放|
+
 
  > PS:showPainterActually属性，由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false。因此最好用于使用非自带动画的时候。
 
@@ -200,6 +208,23 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
      * @param progress 绘画进度，0-1
      */
     public void drawPath(float progress);
+
+    /**
+     * Stop animation
+     */
+    public void stopAnimation();
+
+    /**
+     * Pause animation
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void pauseAnimation();
+
+    /**
+     * Resume animation
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void resumeAnimation();
 ```
 
 #### 填充颜色
@@ -247,11 +272,26 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
      - 把TextPathAnimatorListener从TextPathView的内部类里面解放出来，之前使用太麻烦了。
      - 增加`showPainterActually`属性，设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动将它设置为false。因此它用处就是在不使用自带Animator的时候显示画笔特效。
 
-　　后续将会往下面的方向努力：
+ - 2018/03/08 **version 0.0.6**:
+     - 增加了`stop(), pause(), resume()`方法来控制动画。之前是觉得让使用者自己用Animator实现就好了，现在一位外国友人toanvc提交的PR封装好了，我稍作修改，不过后两者使用时API要大于等于19。
+     - 增加了`repeat`属性，让动画支持重复播放，也是toanvc同学的PR。
+
+![](https://i.imgur.com/qQ55UrW.gif)
+
+ > Thanks for [toanvc](https://github.com/toanvc)'s contribution!
+
+
+
+#### 后续将会往下面的方向努力：
 
  - 更多的特效，更多的动画，如果有什么想法和建议的欢迎issue提出来一起探讨。
+ - 更多的输入，不单止局限于文字Path。
  - 更好的性能，目前单个TextPathView在模拟器上运行动画时是不卡的，多个就有一点点卡顿了，在性能较好的真机多个也是没问题的，这个性能方面目前还没头绪。
 
+## 贡献代码
+　　如果想为TextPathView的完善出一份力的同学，欢迎提交PR：
+ - 如果加入新的功能或者效果，请不要覆盖demo里面原来用于演示Activity代码，如FristActivity里面的实例，可以选择新增一个Activity做演示测试，或者不添加演示代码。
+ - 如果修改某些功能或者代码，请附上合理的依据和想法。
 
 ## 开源协议
 　　TextPathView遵循MIT协议。

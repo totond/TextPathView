@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="yanzhikai.textpathview.FirstActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_2017"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="2017"
+            app:textInCenter="true"
+            app:textSize="60sp"
+            android:layout_weight="1"
+            />
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_chicken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="abc"
+            app:textInCenter="true"
+            app:textSize="60sp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_2018"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="2018"
+            app:textInCenter="true"
+            app:textStrokeColor="@android:color/holo_red_light"
+            app:paintStrokeColor="@android:color/holo_red_light"
+            app:textSize="70sp"
+            android:layout_weight="1"
+            />
+
+        <yanzhikai.textpath.SyncTextPathView
+            android:id="@+id/stpv_dog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:duration="12000"
+            app:showPainter="true"
+            app:text="狗年"
+            app:textInCenter="true"
+            app:textStrokeColor="@android:color/holo_red_light"
+            app:paintStrokeColor="@android:color/holo_red_light"
+            app:textSize="70sp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="炎之铠"
+        app:textStrokeColor="@android:color/holo_orange_light"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textInCenter="true"
+        app:textSize="62sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_wish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="祝大家"
+        app:textInCenter="true"
+        app:textStrokeColor="@android:color/holo_blue_light"
+        app:paintStrokeColor="@android:color/holo_blue_light"
+        app:showPainterActually="true"
+        app:textSize="62sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="新春快乐"
+        app:textInCenter="true"
+        app:textSize="62sp"
+        app:textStrokeColor="@color/colorAccent"
+        app:paintStrokeColor="@color/colorAccent"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_fortune"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:duration="12000"
+        app:showPainter="true"
+        app:text="恭喜发财"
+        app:textInCenter="true"
+        app:textStrokeColor="@android:color/holo_red_dark"
+        app:paintStrokeColor="@android:color/black"
+        app:textSize="62sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="start"
+            />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="stop"
+            />
+
+
+    <SeekBar
+        android:layout_marginTop="10dp"
+        android:id="@+id/sb_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+

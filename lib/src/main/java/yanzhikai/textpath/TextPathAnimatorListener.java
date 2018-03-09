@@ -6,13 +6,14 @@ import android.animation.Animator;
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/08
- * desc   :
+ * desc   : a AnimatorListener for TextPathView]
  */
 
 public class TextPathAnimatorListener implements Animator.AnimatorListener {
     private TextPathView mTextPathView;
+    protected boolean isCancel = false;
 
-    public void setTarget(TextPathView textPathView) {
+    protected void setTarget(TextPathView textPathView) {
         this.mTextPathView = textPathView;
     }
 
@@ -33,7 +34,7 @@ public class TextPathAnimatorListener implements Animator.AnimatorListener {
 
     @Override
     public void onAnimationStart(Animator animation) {
-
+        isCancel = false;
     }
 
     @Override
@@ -43,6 +44,6 @@ public class TextPathAnimatorListener implements Animator.AnimatorListener {
 
     @Override
     public void onAnimationCancel(Animator animation) {
-
+        isCancel = true;
     }
 }
