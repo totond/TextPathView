@@ -1,5 +1,6 @@
 package yanzhikai.textpath;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
@@ -126,22 +127,9 @@ public class SyncTextPathView extends TextPathView {
         requestLayout();
     }
 
-    /**
-     * 开始绘制文字路径动画
-     * @param start 路径比例，范围0-1
-     * @param end 路径比例，范围0-1
-     */
-    public void startAnimation(float start, float end) {
-        if (!isProgressValid(start) || !isProgressValid(end)){
-            return;
-        }
-        if (mAnimator != null) {
-            mAnimator.cancel();
-        }
-        initAnimator(start, end);
-        initTextPath();
-        showPainterActually = showPainter;
-        mAnimator.start();
+    @Override
+    public void startAnimation(float start, float end, RepeatAnimation animationStyle, int repeatCount) {
+        super.startAnimation(start, end, animationStyle, repeatCount);
         if (mPainter != null) {
             mPainter.onStartAnimation();
         }

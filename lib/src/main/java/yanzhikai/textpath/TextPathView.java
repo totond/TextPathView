@@ -70,6 +70,8 @@ public abstract class TextPathView extends View {
     protected boolean mShowInStart = false;
     //文字是否填充颜色
     protected boolean mFillColor = false;
+
+    protected RepeatAnimation mRepeatStyle = RepeatAnimation.NONE;
     //动画监听
     protected TextPathAnimatorListener mAnimatorListener;
 
@@ -105,6 +107,17 @@ public abstract class TextPathView extends View {
         mAutoStart = typedArray.getBoolean(R.styleable.TextPathView_autoStart,mAutoStart);
         mTextInCenter = typedArray.getBoolean(R.styleable.TextPathView_textInCenter,mTextInCenter);
         mShowInStart = typedArray.getBoolean(R.styleable.TextPathView_showInStart,mShowInStart);
+        int repeatStyle = typedArray.getInt(R.styleable.TextPathView_repeat, 0);
+        switch (repeatStyle) {
+            case 1:
+                mRepeatStyle = RepeatAnimation.RESTART;
+                break;
+            case 2:
+                mRepeatStyle = RepeatAnimation.REVERSE;
+                break;
+            default:
+                mRepeatStyle = RepeatAnimation.NONE;
+        }
         typedArray.recycle();
     }
 
@@ -131,7 +144,7 @@ public abstract class TextPathView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
     }
 
-    public void initAnimator(float start, float end){
+    private void initAnimator(float start, float end, RepeatAnimation animationStyle, int repeatCount) {
         mAnimator = ValueAnimator.ofFloat(start, end);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -148,6 +161,35 @@ public abstract class TextPathView extends View {
 
         mAnimator.setDuration(mDuration);
         mAnimator.setInterpolator(new LinearInterpolator());
+        if (animationStyle == RepeatAnimation.RESTART) {
+            mAnimator.setRepeatMode(ValueAnimator.RESTART);
+            mAnimator.setRepeatCount(repeatCount);
+        } else if (animationStyle == RepeatAnimation.REVERSE) {
+            mAnimator.setRepeatMode(ValueAnimator.REVERSE);
+            mAnimator.setRepeatCount(repeatCount);
+        }
+    }
+
+    /**
+     * 开始绘制文字路径动画
+     * @param start 路径比例，范围0-1
+     * @param end 路径比例，范围0-1
+     */
+    public void startAnimation(float start, float end) {
+        startAnimation(start, end, mRepeatStyle, ValueAnimator.INFINITE);
+    }
+
+    public void startAnimation(float start, float end, RepeatAnimation animationStyle, int repeatCount) {
+        if (!isProgressValid(start) || !isProgressValid(end)){
+            return;
+        }
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
+        initAnimator(start, end, animationStyle, repeatCount);
+        initTextPath();
+        showPainterActually = showPainter;
+        mAnimator.start();
     }
 
     /**
@@ -279,5 +321,9 @@ public abstract class TextPathView extends View {
         void onDrawPaintPath(float x, float y, Path paintPath);
     }
 
+
+    public enum RepeatAnimation {
+        NONE, RESTART, REVERSE
+    }
 
 }
