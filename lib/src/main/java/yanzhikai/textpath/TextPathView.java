@@ -1,6 +1,7 @@
 package yanzhikai.textpath;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -8,7 +9,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -190,6 +193,29 @@ public abstract class TextPathView extends View {
         initTextPath();
         showPainterActually = showPainter;
         mAnimator.start();
+    }
+
+    /**
+     * Stop animation
+     */
+    public void stopAnimation() {
+        mAnimator.cancel();
+    }
+
+    /**
+     * Pause animation
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void pauseAnimation() {
+        mAnimator.pause();
+    }
+
+    /**
+     * Resume animation
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void resumeAnimation() {
+        mAnimator.resume();
     }
 
     /**

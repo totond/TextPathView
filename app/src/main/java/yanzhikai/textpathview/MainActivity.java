@@ -2,6 +2,8 @@ package yanzhikai.textpathview;
 
 import android.animation.Animator;
 import android.graphics.Path;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar sb_progress;
     private AsyncTextPathView atpv1,atpv2;
     private SyncTextPathView stpv_2017,stpv_2018,stpv_wish,stpv_chicken,stpv_dog,stpv_fortune;
-    private Button btn_start;
+    private Button btn_start, btn_stop, btn_pause, btn_resume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         stpv_dog = findViewById(R.id.stpv_dog);
         stpv_fortune = findViewById(R.id.stpv_fortune);
         btn_start = findViewById(R.id.btn_start);
+        btn_stop = findViewById(R.id.btn_stop);
+        btn_pause = findViewById(R.id.btn_pause);
+        btn_resume = findViewById(R.id.btn_resume);
 
 
         //设置画笔特效
@@ -104,5 +109,53 @@ public class MainActivity extends AppCompatActivity {
                 stpv_fortune.startAnimation(0,1);
             }
         });
+
+        btn_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                atpv1.stopAnimation();
+                atpv2.stopAnimation();
+                stpv_2017.stopAnimation();
+                stpv_2018.stopAnimation();
+                stpv_chicken.stopAnimation();
+                stpv_dog.stopAnimation();
+                stpv_wish.stopAnimation();
+                stpv_fortune.stopAnimation();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            btn_pause.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                @Override
+                public void onClick(View v) {
+                    atpv1.pauseAnimation();
+                    atpv2.pauseAnimation();
+                    stpv_2017.pauseAnimation();
+                    stpv_2018.pauseAnimation();
+                    stpv_chicken.pauseAnimation();
+                    stpv_dog.pauseAnimation();
+                    stpv_wish.pauseAnimation();
+                    stpv_fortune.pauseAnimation();
+                }
+            });
+            btn_resume.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                @Override
+                public void onClick(View v) {
+                    atpv1.resumeAnimation();
+                    atpv2.resumeAnimation();
+                    stpv_2017.resumeAnimation();
+                    stpv_2018.resumeAnimation();
+                    stpv_chicken.resumeAnimation();
+                    stpv_dog.resumeAnimation();
+                    stpv_wish.resumeAnimation();
+                    stpv_fortune.resumeAnimation();
+                }
+            });
+        } else {
+            findViewById(R.id.pauseLayout).setVisibility(View.GONE);
+        }
+
     }
 }

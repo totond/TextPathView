@@ -137,14 +137,51 @@
         android:layout_gravity="center_horizontal"
         />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="start"
-        android:id="@+id/btn_start"
-        />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="start"
+            />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="stop"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pauseLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_pause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="pause"
+            />
+
+        <Button
+            android:id="@+id/btn_resume"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="resume"
+            />
+    </LinearLayout>
 
     <SeekBar
+        android:layout_marginTop="10dp"
         android:id="@+id/sb_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
