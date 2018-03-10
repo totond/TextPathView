@@ -1,11 +1,16 @@
 # TextPathView
+
+
 　　
 ![](https://i.imgur.com/l5o8XG5.gif)
 
- > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
+ > [Go to the English README](https://github.com/totond/TextPathView/blob/master/README-en.md)
+
 
 ## 介绍
-　　大家新年快乐，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图：
+　　大家新年快乐，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图。
+
+ > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
 
 ## 使用
 　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。想要自己控制绘画的进度也可以，详情见下面。
@@ -290,6 +295,7 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 ## 贡献代码
 　　如果想为TextPathView的完善出一份力的同学，欢迎提交PR：
+ - 首先创建一个分支branch。
  - 如果加入新的功能或者效果，请不要覆盖demo里面原来用于演示Activity代码，如FristActivity里面的实例，可以选择新增一个Activity做演示测试，或者不添加演示代码。
  - 如果修改某些功能或者代码，请附上合理的依据和想法。
 

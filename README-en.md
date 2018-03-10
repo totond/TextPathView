@@ -2,7 +2,6 @@
 　　
 ![](https://i.imgur.com/l5o8XG5.gif)
 
- > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
 
 ## Introduction
 　　TextPathView is a view with text path animation!
