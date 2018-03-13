@@ -3,9 +3,7 @@ package yanzhikai.textpathview;
 import android.animation.Animator;
 import android.app.Activity;
 import android.graphics.Path;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +13,7 @@ import yanzhikai.textpath.AsyncTextPathView;
 import yanzhikai.textpath.SyncTextPathView;
 import yanzhikai.textpath.TextPathAnimatorListener;
 import yanzhikai.textpath.painter.ArrowPainter;
-import yanzhikai.textpath.painter.FireworksPainter;
+import yanzhikai.textpath.painter.FireworksPathPainter;
 import yanzhikai.textpath.painter.PenPainter;
 
 public class FirstActivity extends Activity {
@@ -44,10 +42,10 @@ public class FirstActivity extends Activity {
 
 
         //设置画笔特效
-        stpv_2017.setTextPainter(new FireworksPainter());
-        stpv_2018.setTextPainter(new FireworksPainter());
-        stpv_dog.setTextPainter(new FireworksPainter());
-        stpv_chicken.setTextPainter(new FireworksPainter());
+        stpv_2017.setTextPainter(new FireworksPathPainter());
+        stpv_2018.setTextPainter(new FireworksPathPainter());
+        stpv_dog.setTextPainter(new FireworksPathPainter());
+        stpv_chicken.setTextPainter(new FireworksPathPainter());
         stpv_wish.setTextPainter(new ArrowPainter());
         stpv_fortune.setTextPainter(new PenPainter());
 

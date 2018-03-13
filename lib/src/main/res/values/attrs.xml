@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="duration" format="integer"/>
+    <attr name="showPainter" format="boolean"/>
+    <attr name="showPainterActually" format="boolean"/>
+    <attr name="textStrokeWidth" format="dimension"/>
+    <attr name="textStrokeColor" format="color"/>
+    <attr name="paintStrokeWidth" format="dimension"/>
+    <attr name="paintStrokeColor" format="color"/>
+    <attr name="repeat" format="enum">
+        <enum name="RESTART" value="1"/>
+        <enum name="REVERSE" value="2"/>
+    </attr>
+
     <declare-styleable name="TextPathView">
         <attr name="textSize" format="dimension"/>
         <attr name="text" format="string"/>
-        <attr name="duration" format="integer"/>
-        <attr name="showPainter" format="boolean"/>
-        <attr name="showPainterActually" format="boolean"/>
-        <attr name="textStrokeWidth" format="dimension"/>
-        <attr name="textStrokeColor" format="color"/>
-        <attr name="paintStrokeWidth" format="dimension"/>
-        <attr name="paintStrokeColor" format="color"/>
         <attr name="autoStart" format="boolean"/>
         <attr name="showInStart" format="boolean"/>
         <attr name="textInCenter" format="boolean"/>
-        <attr name="repeat" format="enum">
-            <enum name="RESTART" value="1"/>
-            <enum name="REVERSE" value="2"/>
-        </attr>
+        <attr name="duration" />
+        <attr name="showPainter" />
+        <attr name="showPainterActually" />
+        <attr name="textStrokeWidth" />
+        <attr name="textStrokeColor" />
+        <attr name="paintStrokeWidth" />
+        <attr name="paintStrokeColor" />
+        <attr name="repeat" />
+    </declare-styleable>
+
+    <declare-styleable name="PathView">
+        <attr name="duration" />
+        <attr name="showPainter" />
+        <attr name="showPainterActually" />
+        <attr name="textStrokeWidth" />
+        <attr name="textStrokeColor" />
+        <attr name="paintStrokeWidth" />
+        <attr name="paintStrokeColor" />
+        <attr name="repeat" />
     </declare-styleable>
 </resources>
