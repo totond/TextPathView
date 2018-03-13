@@ -283,11 +283,14 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 
 
-### Follow-up：
+### To do：
 
  - More pianter effects, more types of animation! 
  - More input types, not just text.
  - Make it smoother and more efficient.
+
+　　such as this:
+![](https://i.imgur.com/Nk5ApAX.gif)
 
 ## Code contribution
 　　If it's a feature that you think would need to be discussed please open an issue first, otherwise, you can:

@@ -293,6 +293,9 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
  - 更多的输入，不单止局限于文字Path。
  - 更好的性能，目前单个TextPathView在模拟器上运行动画时是不卡的，多个就有一点点卡顿了，在性能较好的真机多个也是没问题的，这个性能方面目前还没头绪。
 
+![](https://i.imgur.com/Nk5ApAX.gif)
+　　如上面的效果，正在开发中。。。
+
 ## 贡献代码
 　　如果想为TextPathView的完善出一份力的同学，欢迎提交PR：
  - 首先创建一个分支branch。
