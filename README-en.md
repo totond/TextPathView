@@ -11,12 +11,14 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.0.6'
+compile 'com.yanzhikai:TextPathView:0.1.1'
 ```
 
  > minSdkVersion 16
 
 ### Usage
+
+#### TextPathView
 　　There are tow types of TextPathView:
  - SyncTextPathView, draw the text paths one by one.
  - AsyncTextPathView, draw the each text path in the same time.
@@ -77,22 +79,47 @@ Also you can use SeekBar to control the progess of TextPathView：
         }
 ```
 
+#### PathView
+　　PathView is a new class after version 0.1.1. It has three subclass:TextPathView, SyncPathView, AsyncPathView.The latter are used to play to animation of path.
+
+```
+public class TestPath extends Path {
+    public TestPath(){
+        init();
+    }
+
+    private void init() {
+        addCircle(350,300,150,Direction.CCW);
+        addCircle(350,300,100,Direction.CW);
+        addCircle(350,300,50,Direction.CCW);
+        moveTo(350,300);
+        lineTo(550,500);
+    }
+}
+```
+　　You must use `setPath()` before `startAnimation()`:
+```
+        aspv.setPath(new TestPath());
+        aspv.startAnimation(0,1);
+```
+![](https://i.imgur.com/YQMVBwz.gif)
+
 ### Attributes
 
 |**Attribute Name**|**Description**|**Type**|**Default**|
 |--|--|:--:|:--:|
 |textSize      | text size     | integer| 108 |
 |text      | text content      | String| Test|
-|duration | duration of animation(ms)   | integer| 10000|
-|showPainter | whether the Painter Effects can show while animating  | boolean| false|
-|showPainterActually| whether the Painter Effects can show while drawing.**It will be set to false when the animator finish.**| boolean| false|
-|textStrokeWidth | width of text stroke      | dimension| 5px|
-|textStrokeColor | color of text stroke    | color| Color.black|
-|paintStrokeWidth |width of paint effect stroke     | dimension| 3px|
-|paintStrokeColor | color of paint effect stroke   | color| Color.black|
 |autoStart| start animation from 0 to 1 at the beginning    | boolean| false|
 |showInStart| show the text path at the beginning    | boolean| false|
 |textInCenter| make the text in the center    | boolean| false|
+|duration | duration of animation(ms)   | integer| 10000|
+|showPainter | whether the Painter Effects can show while animating  | boolean| false|
+|showPainterActually| whether the Painter Effects can show while drawing.**It will be set to false when the animator finish.**| boolean| false|
+||~~textStrokeWidth~~ strokeWidth  |the stroke width of path      | dimension| 5px|
+|~~textStrokeColor~~ paintStrokeColor | the stroke color of path     | color| Color.black|
+|paintStrokeWidth |width of paint effect stroke     | dimension| 3px|
+|paintStrokeColor | color of paint effect stroke   | color| Color.black|
 |repeat**(新增) **| repeat type of animation| enum | NONE|
 
 |repeat|Description|
@@ -109,50 +136,52 @@ Also you can use SeekBar to control the progess of TextPathView：
 
 ```
     //设置画笔特效
-    public void setTextPainter(SyncTextPainter listener);
+    public void setPainter(SyncPathPainter listener);
+    //设置画笔特效
+    public void setPainter(AsyncPathPainter listener);
 ```
-　　There are types of TextPainter：
+　　There are types of PathPainter：
 
 ```
-    public interface SyncTextPainter extends TextPainter {
+    public interface SyncPathPainter extends PathPainter {
         //开始动画的时候执行
         void onStartAnimation();
 
         /**
-         * 绘画画笔特效时候执行:do when animation start
+         * 绘画画笔特效时候执行
          * @param x 当前绘画点x坐标
          * @param y 当前绘画点y坐标
-         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效: darw the paint effects here
+         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
          */
         @Override
         void onDrawPaintPath(float x, float y, Path paintPath);
     }
 
-    public interface AsyncTextPainter extends TextPainter{
+    public interface AsyncPathPainter extends PathPainter {
         /**
-         * 绘画画笔特效时候执行:do when animation start
+         * 绘画画笔特效时候执行
          * @param x 当前绘画点x坐标
          * @param y 当前绘画点y坐标
-         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效: darw the paint effects here
+         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
          */
         @Override
         void onDrawPaintPath(float x, float y, Path paintPath);
     }
 ```
-　　You can extend one of these TextPainter to draw your custom paint effects.
+　　You can extend one of these PathPainter to draw your custom paint effects.
  
 　　There are three paint effects in TextPathView's code:
 
 ```
 
-//箭头画笔特效，根据传入的当前点与上一个点之间的速度方向，来调整箭头方向: an arrow point ahead
-public class ArrowPainter implements SyncTextPathView.SyncTextPainter{}
+//an arrow point ahead
+public class ArrowPainter implements SyncPathPainter {
 
-//一支笔的画笔特效，就是在绘画点旁边画多一支笔: a simple shape of pen
-public class PenPainter implements SyncTextPathView.SyncTextPainter,AsyncTextPathView.AsyncTextPainter {}
+//a simple shape of pen
+public class PenPainter implements SyncPathPainter,AsyncPathPainter {
 
-//火花特效，根据箭头引申变化而来，根据当前点与上一个点算出的速度方向来控制火花的方向: a firework effec
-public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
+//a firework effec
+public class FireworksPainter implements SyncPathPainter {
 
 ```
 
@@ -162,10 +191,10 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 　　Making custom effect is very easy. You can override `onDrawPaintPath(float x, float y, Path paintPath)`：
 
 ```
-        atpv2.setTextPainter(new AsyncTextPathView.AsyncTextPainter() {
+        atpv2.setPathPainter(new AsyncPathPainter() {
             @Override
             public void onDrawPaintPath(float x, float y, Path paintPath) {
-                paintPath.addCircle(x,y,3, Path.Direction.CCW);
+                paintPath.addCircle(x,y,6, Path.Direction.CCW);
             }
         });
 ```
@@ -175,15 +204,15 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 ```
     //设置自定义动画监听
-    public void setAnimatorListener(TextPathAnimatorListener animatorListener);
+    public void setAnimatorListener(PathAnimatorListener animatorListener);
   
 ```
-　　TextPathAnimatorListener implements AnimatorListener and we can use to listen the text path animation.
+　　PathAnimatorListener implements AnimatorListener and we can use to listen the text path animation.
 
 #### Getting the Paint
 
 ```
-    //获取绘画文字的画笔:get the paint of text path 
+    //获取绘画文字的画笔:get the paint of path 
     public Paint getDrawPaint() {
         return mDrawPaint;
     }
@@ -238,7 +267,7 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
 
 ```
         //设置动画播放完后填充颜色
-        stpv_fortune.setAnimatorListener(new TextPathAnimatorListener(stpv_fortune){
+        stpv_fortune.setAnimatorListener(new PathAnimatorListener(stpv_fortune){
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -255,6 +284,9 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
     //设置文字内容
     public void setText(String text)；
 
+    //设置路径，必须先设置好路径在startAnimation()，不然会报错！
+    public void setPath(Path path) ；
+
     //清除画面
     public void clear();
 
@@ -264,33 +296,50 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter{}
     //设置所有时候是否显示画笔效果,由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false:Here to set whether the Painter Effects can show while drawing.It will be set to false when the animator finish.
     public void setCanShowPainter(boolean canShowPainter)；
 
+    //设置动画持续时间
+    public void setDuration(int duration);
+
+    //设置重复方式
+    public void setRepeatStyle(int repeatStyle);
+
 ```
 
 ## Update
 
  - 2018/03/08 **version 0.0.5**:
      - add `showFillColorText()`
-     - 把TextPathAnimatorListener从TextPathView的内部类里面解放出来，之前使用太麻烦了。
+     - 把PathAnimatorListener从PathView的内部类里面解放出来，之前使用太麻烦了。
      - add `showPainterActually` to control whether the Painter Effects can show while drawing.It will be set to false when the animator finish.
 
  - 2018/03/08 **version 0.0.6**:
      - add `stop(), pause(), resume()`,API version >= 19.
      - add `repeat`，API version >= 19.
+     - Thanks for [toanvc](https://github.com/toanvc)'s contribution!
 
-![](https://i.imgur.com/qQ55UrW.gif)
+ - 2018/03/18 **version 0.1.0**:
+     -  Made a reconstruction，add Class :SyncPathView and AsyncPathView，and their superclass PathView.
+     -  Add `setDuration()`、`setRepeatStyle()`
+     -  Changed names：
 
- > Thanks for [toanvc](https://github.com/toanvc)'s contribution!
+|Old Name|New Name|
+|---|---|
+|TextPathPainter|TextPathPainter|
+|SyncTextPainter|SyncPathPainter|
+|AsyncTextPainter|AsyncPathPainter|
+|TextAnimatorListener|PathAnimatorListener|
+
+
+
 
 
 
 ### To do：
 
  - More pianter effects, more types of animation! 
- - More input types, not just text.
  - Make it smoother and more efficient.
+ - Word wrap support.
 
-　　such as this:
-![](https://i.imgur.com/Nk5ApAX.gif)
+
 
 ## Code contribution
 　　If it's a feature that you think would need to be discussed please open an issue first, otherwise, you can:

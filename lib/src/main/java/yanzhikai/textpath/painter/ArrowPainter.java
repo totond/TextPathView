@@ -12,7 +12,7 @@ import yanzhikai.textpath.VelocityCalculator;
  * desc   : 箭头画笔特效，根据传入的当前点与上一个点之间的速度方向，来调整箭头方向
  */
 
-public class ArrowPainter implements SyncTextPathView.SyncTextPainter {
+public class ArrowPainter implements SyncPathPainter {
     private VelocityCalculator mVelocityCalculator = new VelocityCalculator();
     //箭头长度
     private float radius = 60;
@@ -22,7 +22,7 @@ public class ArrowPainter implements SyncTextPathView.SyncTextPainter {
     public ArrowPainter(){
     }
 
-    public ArrowPainter(int radius,double angle){
+    public ArrowPainter(int radius, double angle){
         this.radius = radius;
         this.angle = angle;
     }

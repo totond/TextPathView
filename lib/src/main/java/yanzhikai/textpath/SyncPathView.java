@@ -10,71 +10,31 @@ import yanzhikai.textpath.painter.SyncPathPainter;
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
- * time   : 2018/01/08
- * desc   : 所有笔画按顺序绘画的TextPathView
+ * time   : 2018/03/13
+ * desc   : 所有路径按顺序绘画
  */
 
-public class SyncTextPathView extends TextPathView {
-    public static final String TAG = "yjkTestView";
-
+public class SyncPathView extends PathView {
     //画笔特效
     private SyncPathPainter mPainter;
 
     //路径长度总数
     private float mLengthSum = 0;
-
-    public SyncTextPathView(Context context) {
+    public SyncPathView(Context context) {
         super(context);
         init();
     }
 
-    public SyncTextPathView(Context context, @Nullable AttributeSet attrs) {
+    public SyncPathView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public SyncTextPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SyncPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    protected void init() {
-
-        //初始化画笔
-        initPaint();
-
-        //初始化文字路径
-        initPath();
-
-        //是否自动播放动画
-        if (mAutoStart) {
-            startAnimation(0,1);
-        }
-
-        //是否一开始就显示出完整的文字路径
-        if (mShowInStart){
-            drawPath(1);
-        }
-    }
-
-    @Override
-    protected void initPath() {
-        mDst.reset();
-        mFontPath.reset();
-        mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getTextSize(), mFontPath);
-        mPathMeasure.setPath(mFontPath, false);
-        mLengthSum = mPathMeasure.getLength();
-        //获取所有路径的总长度
-        while (mPathMeasure.nextContour()) {
-            mLengthSum += mPathMeasure.getLength();
-        }
-    }
-
-
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
     public void drawPath(float progress) {
         if (!isProgressValid(progress)){
@@ -86,7 +46,7 @@ public class SyncTextPathView extends TextPathView {
         checkFill(progress);
 
         //重置路径
-        mPathMeasure.setPath(mFontPath, false);
+        mPathMeasure.setPath(mPath, false);
         mDst.reset();
         mPaintPath.reset();
 
@@ -111,19 +71,36 @@ public class SyncTextPathView extends TextPathView {
         postInvalidate();
     }
 
-
     private void drawPaintPath(float x, float y, Path paintPath) {
         if (mPainter != null) {
             mPainter.onDrawPaintPath(x, y, paintPath);
         }
     }
 
-    //设置文字内容
-    public void setText(String text) {
-        mText = text;
-        initPath();
-        clear();
-        requestLayout();
+    @Override
+    protected void initPath() throws Exception {
+        if (mPath == null){
+            throw new Exception("PathView can't work without setting a path!");
+        }
+        mDst.reset();
+
+
+        mPathMeasure.setPath(mPath, false);
+        mLengthSum = mPathMeasure.getLength();
+        //获取所有路径的总长度
+        while (mPathMeasure.nextContour()) {
+            mLengthSum += mPathMeasure.getLength();
+        }
+    }
+
+    protected void init() {
+
+        //初始化画笔
+        initPaint();
+
+        //初始化路径
+//        initPath();
+
     }
 
     @Override
@@ -135,8 +112,9 @@ public class SyncTextPathView extends TextPathView {
     }
 
     //设置画笔特效
-    public void setPathPainter(SyncPathPainter listener) {
-        this.mPainter = listener;
+    public void setPathPainter(SyncPathPainter painter) {
+        this.mPainter = painter;
     }
+
 
 }

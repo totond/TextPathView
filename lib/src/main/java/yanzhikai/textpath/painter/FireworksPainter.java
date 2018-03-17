@@ -4,6 +4,7 @@ import android.graphics.Path;
 
 import java.util.Random;
 
+import yanzhikai.textpath.SyncPathView;
 import yanzhikai.textpath.SyncTextPathView;
 import yanzhikai.textpath.VelocityCalculator;
 
@@ -14,7 +15,7 @@ import yanzhikai.textpath.VelocityCalculator;
  * desc   : 火花特效，根据箭头引申变化而来，根据当前点与上一个点算出的速度方向来控制火花的方向
  */
 
-public class FireworksPainter implements SyncTextPathView.SyncTextPainter {
+public class FireworksPainter implements SyncPathPainter {
     private VelocityCalculator mVelocityCalculator = new VelocityCalculator();
     private Random random = new Random();
     //箭头长度
@@ -28,9 +29,10 @@ public class FireworksPainter implements SyncTextPathView.SyncTextPainter {
 
 
     public FireworksPainter(){
+
     }
 
-    public FireworksPainter(int radius,double angle){
+    public FireworksPainter(int radius, double angle){
         this.radius = radius;
         this.angle = angle;
     }

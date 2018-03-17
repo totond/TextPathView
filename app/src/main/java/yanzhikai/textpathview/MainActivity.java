@@ -1,26 +1,13 @@
 package yanzhikai.textpathview;
 
-import android.animation.Animator;
 import android.content.Intent;
-import android.graphics.Path;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
-
-import yanzhikai.textpath.TextPathAnimatorListener;
-import yanzhikai.textpath.painter.ArrowPainter;
-import yanzhikai.textpath.painter.FireworksPainter;
-import yanzhikai.textpath.SyncTextPathView;
-import yanzhikai.textpath.AsyncTextPathView;
-import yanzhikai.textpath.painter.PenPainter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private Button btn_first,btn_second;
+    private Button btn_first,btn_second,btn_third;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +15,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         btn_first = findViewById(R.id.btn_first);
         btn_second = findViewById(R.id.btn_second);
+        btn_third = findViewById(R.id.btn_third);
         btn_first.setOnClickListener(this);
         btn_second.setOnClickListener(this);
+        btn_third.setOnClickListener(this);
     }
 
     @Override
@@ -40,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_second:
                 startActivity(new Intent(this,SecondActivity.class));
+                break;
+            case R.id.btn_third:
+                startActivity(new Intent(this,ThirdActivity.class));
                 break;
         }
     }

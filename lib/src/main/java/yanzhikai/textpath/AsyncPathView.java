@@ -10,52 +10,50 @@ import yanzhikai.textpath.painter.AsyncPathPainter;
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
- * time   : 2018/01/10
- * desc   : 所有笔画异步一起绘画的TextPathView
+ * time   : 2018/03/14
+ * desc   : 所有路径一起绘画
  */
 
-public class AsyncTextPathView extends TextPathView {
+public class AsyncPathView extends PathView {
     //分段路径长度
     private float mLength = 0;
 
     //画笔特效
     private AsyncPathPainter mPainter;
 
-    public AsyncTextPathView(Context context) {
+    public AsyncPathView(Context context) {
         super(context);
         init();
     }
 
-    public AsyncTextPathView(Context context, @Nullable AttributeSet attrs) {
+    public AsyncPathView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public AsyncTextPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AsyncPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     protected void init(){
         initPaint();
-        initPath();
-        if (mAutoStart) {
-            startAnimation(0,1);
-        }
-        if (mShowInStart){
-            drawPath(1);
+        try {
+            initPath();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
     //初始化文字路径
     @Override
-    protected void initPath(){
+    protected void initPath() throws Exception {
+        if (mPath == null){
+            throw new Exception("PathView can't work without setting a path!");
+        }
         mDst.reset();
-        mFontPath.reset();
-        mTextPaint.getTextPath(mText,0,mText.length(),0,mTextPaint.getTextSize(), mFontPath);
-        mPathMeasure.setPath(mFontPath,false);
-        mLength = mPathMeasure.getLength();
+        mPathMeasure.setPath(mPath, false);
     }
 
 
@@ -74,7 +72,7 @@ public class AsyncTextPathView extends TextPathView {
         mAnimatorValue = progress;
 
         //重置路径
-        mPathMeasure.setPath(mFontPath,false);
+        mPathMeasure.setPath(mPath,false);
         mDst.reset();
         mPaintPath.reset();
 
@@ -101,17 +99,10 @@ public class AsyncTextPathView extends TextPathView {
         }
     }
 
-    //设置文字内容
-    public void setText(String text) {
-        mText = text;
-        initPath();
-        clear();
-        requestLayout();
-    }
 
     //设置画笔特效
-    public void setPathPainter(AsyncPathPainter listener) {
-        this.mPainter = listener;
+    public void setPainter(AsyncPathPainter painter) {
+        this.mPainter = painter;
     }
 
 

@@ -3,18 +3,17 @@ package yanzhikai.textpathview;
 import android.animation.Animator;
 import android.app.Activity;
 import android.graphics.Path;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
 import yanzhikai.textpath.AsyncTextPathView;
+import yanzhikai.textpath.PathAnimatorListener;
 import yanzhikai.textpath.SyncTextPathView;
-import yanzhikai.textpath.TextPathAnimatorListener;
 import yanzhikai.textpath.painter.ArrowPainter;
+import yanzhikai.textpath.painter.AsyncPathPainter;
 import yanzhikai.textpath.painter.FireworksPainter;
 import yanzhikai.textpath.painter.PenPainter;
 
@@ -44,19 +43,20 @@ public class FirstActivity extends Activity {
 
 
         //设置画笔特效
-        stpv_2017.setTextPainter(new FireworksPainter());
-        stpv_2018.setTextPainter(new FireworksPainter());
-        stpv_dog.setTextPainter(new FireworksPainter());
-        stpv_chicken.setTextPainter(new FireworksPainter());
-        stpv_wish.setTextPainter(new ArrowPainter());
-        stpv_fortune.setTextPainter(new PenPainter());
+        stpv_2017.setPathPainter(new FireworksPainter());
+        stpv_2018.setPathPainter(new FireworksPainter());
+        stpv_dog.setPathPainter(new FireworksPainter());
+        stpv_chicken.setPathPainter(new FireworksPainter());
+        stpv_wish.setPathPainter(new ArrowPainter());
+        stpv_fortune.setPathPainter(new PenPainter());
 
-        atpv2.setTextPainter(new AsyncTextPathView.AsyncTextPainter() {
+        atpv2.setPathPainter(new AsyncPathPainter() {
             @Override
             public void onDrawPaintPath(float x, float y, Path paintPath) {
                 paintPath.addCircle(x,y,6, Path.Direction.CCW);
             }
         });
+
 
         //设置拖拉进度条控制
         sb_progress.setMax(1000);
@@ -87,7 +87,7 @@ public class FirstActivity extends Activity {
         });
 
         //设置动画播放完后填充颜色
-        stpv_fortune.setAnimatorListener(new TextPathAnimatorListener(){
+        stpv_fortune.setAnimatorListener(new PathAnimatorListener(){
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -96,6 +96,7 @@ public class FirstActivity extends Activity {
                 }
             }
         });
+
 
         //设置点击开始播放动画
         btn_start.setOnClickListener(new View.OnClickListener() {
