@@ -18,16 +18,6 @@ public class PathAnimatorListener implements Animator.AnimatorListener {
     }
 
     @Override
-    public void onAnimationStart(Animator animation, boolean isReverse) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animation, boolean isReverse) {
-
-    }
-
-    @Override
     public void onAnimationRepeat(Animator animation) {
 
     }

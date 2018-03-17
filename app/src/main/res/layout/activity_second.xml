@@ -16,10 +16,9 @@
         app:repeat="RESTART"
         app:text="O(∩_∩)O~"
         app:textInCenter="true"
-        app:textStrokeColor="@android:color/holo_red_light"
+        app:pathStrokeColor="@android:color/holo_red_light"
         app:paintStrokeColor="@android:color/holo_red_light"
         app:textSize="70sp"
-        android:layout_weight="1"
         />
 
     <yanzhikai.textpath.AsyncTextPathView
@@ -30,7 +29,7 @@
         app:repeat="REVERSE"
         app:showPainter="true"
         app:text="totond"
-        app:textStrokeColor="@android:color/holo_orange_light"
+        app:pathStrokeColor="@android:color/holo_orange_light"
         app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
         app:textSize="62sp"

@@ -15,10 +15,10 @@ public class TestPath extends Path {
     }
 
     private void init() {
-        addCircle(300,300,150,Direction.CCW);
-        addCircle(300,300,100,Direction.CW);
-        addCircle(300,300,50,Direction.CCW);
-        moveTo(300,300);
-        lineTo(400,400);
+        addCircle(350,300,150,Direction.CCW);
+        addCircle(350,300,100,Direction.CW);
+        addCircle(350,300,50,Direction.CCW);
+        moveTo(350,300);
+        lineTo(550,500);
     }
 }

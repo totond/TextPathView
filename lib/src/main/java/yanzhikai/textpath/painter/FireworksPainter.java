@@ -15,7 +15,7 @@ import yanzhikai.textpath.VelocityCalculator;
  * desc   : 火花特效，根据箭头引申变化而来，根据当前点与上一个点算出的速度方向来控制火花的方向
  */
 
-public class FireworksPathPainter implements SyncTextPathView.SyncTextPainter, SyncPathView.SyncPathPainter {
+public class FireworksPainter implements SyncPathPainter {
     private VelocityCalculator mVelocityCalculator = new VelocityCalculator();
     private Random random = new Random();
     //箭头长度
@@ -28,11 +28,11 @@ public class FireworksPathPainter implements SyncTextPathView.SyncTextPainter, S
     private static final int cutCount = 9;
 
 
-    public FireworksPathPainter(){
+    public FireworksPainter(){
 
     }
 
-    public FireworksPathPainter(int radius, double angle){
+    public FireworksPainter(int radius, double angle){
         this.radius = radius;
         this.angle = angle;
     }

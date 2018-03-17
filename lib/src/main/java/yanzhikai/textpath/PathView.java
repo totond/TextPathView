@@ -8,26 +8,39 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.RectF;
 import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
- * desc   :
+ * desc   : 所有路径动画自定义View的父类
  */
 
 public abstract class PathView extends View {
     public static final String TAG = "yjkTextPathView";
-    //用于获取文字的画笔
-    protected Paint mPathPaint;
+
+    public static final int NONE = 0;
+    public static final int RESTART = 1;
+    public static final int REVERSE = 2;
+
+    @IntDef({NONE, RESTART, REVERSE})
+    @Retention(RetentionPolicy.SOURCE)
+    public  @interface Repeat {}
+    @Repeat
+    protected int mRepeatStyle = NONE;
+
     //路径的画笔
     protected Paint mDrawPaint;
     //画笔特效的画笔
@@ -49,29 +62,30 @@ public abstract class PathView extends View {
     protected float[] mCurPos = new float[2];
     //当前点tan值,暂时无用
 //    protected float[] mCurTan = new float[2];
-    //文本宽高
-    protected float mTextWidth = 0, mTextHeight = 0;
+    //路径宽高
+    protected float mPathWidth = 0, mPathHeight = 0;
 
     protected int mDuration = 6000;
 
     protected PathMeasure mPathMeasure = new PathMeasure();
 
-    //要刻画的字符
-    protected String mText;
     //要绘画的路径
     protected Path mPath;
 
     //文字路径的粗细，画笔粗细
-    protected int mTextStrokeWidth = 5, mPaintStrokeWidth = 3;
+    protected int mPathStrokeWidth = 5, mPaintStrokeWidth = 3;
     //文字路径的颜色，画笔路径颜色
     protected int mTextStrokeColor = Color.BLACK, mPaintStrokeColor = Color.BLACK;
 
+    //文字填充颜色,后面会初始化默认为mTextStrokeColor
+//    protected int mFillColor = Color.BLACK;
     //文字是否填充颜色
-    protected boolean mFillColor = false;
+    protected boolean mShouldFill = false;
 
-    protected TextPathView.RepeatAnimation mRepeatStyle = TextPathView.RepeatAnimation.NONE;
     //动画监听
     protected PathAnimatorListener mAnimatorListener;
+
+    protected boolean nullPath = true;
 
 
     public PathView(Context context) {
@@ -90,28 +104,14 @@ public abstract class PathView extends View {
 
     protected void initAttr(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PathView);
-        mText = typedArray.getString(R.styleable.TextPathView_text);
-        if (mText == null) {
-            mText = "Test";
-        }
         mDuration = typedArray.getInteger(R.styleable.PathView_duration, mDuration);
         showPainter = typedArray.getBoolean(R.styleable.PathView_showPainter, showPainter);
         showPainterActually = typedArray.getBoolean(R.styleable.PathView_showPainterActually, showPainterActually);
-        mTextStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PathView_textStrokeWidth, mTextStrokeWidth);
-        mTextStrokeColor = typedArray.getColor(R.styleable.PathView_textStrokeColor, mTextStrokeColor);
+        mPathStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PathView_pathStrokeWidth, mPathStrokeWidth);
+        mTextStrokeColor = typedArray.getColor(R.styleable.PathView_pathStrokeColor, mTextStrokeColor);
         mPaintStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PathView_paintStrokeWidth, mPaintStrokeWidth);
         mPaintStrokeColor = typedArray.getColor(R.styleable.PathView_paintStrokeColor, mPaintStrokeColor);
-        int repeatStyle = typedArray.getInt(R.styleable.PathView_repeat, 0);
-        switch (repeatStyle) {
-            case 1:
-                mRepeatStyle = TextPathView.RepeatAnimation.RESTART;
-                break;
-            case 2:
-                mRepeatStyle = TextPathView.RepeatAnimation.REVERSE;
-                break;
-            default:
-                mRepeatStyle = TextPathView.RepeatAnimation.NONE;
-        }
+        mRepeatStyle = typedArray.getInt(R.styleable.PathView_repeat, mRepeatStyle);
         typedArray.recycle();
     }
 
@@ -119,12 +119,11 @@ public abstract class PathView extends View {
      * 初始化画笔
      */
     protected void initPaint() {
-        mPathPaint = new Paint();
 
         mDrawPaint = new Paint();
         mDrawPaint.setAntiAlias(true);
         mDrawPaint.setColor(mTextStrokeColor);
-        mDrawPaint.setStrokeWidth(mTextStrokeWidth);
+        mDrawPaint.setStrokeWidth(mPathStrokeWidth);
         mDrawPaint.setStyle(Paint.Style.STROKE);
 
         mPaint = new Paint();
@@ -134,9 +133,8 @@ public abstract class PathView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
     }
 
-    private void initAnimator(float start, float end, TextPathView.RepeatAnimation animationStyle, int repeatCount) {
+    protected void initAnimator(float start, float end, int animationStyle, int repeatCount) {
         mAnimator = ValueAnimator.ofFloat(start, end);
-        Log.d(TAG, "initAnimator: " + (mAnimator == null));
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -154,10 +152,10 @@ public abstract class PathView extends View {
 
         mAnimator.setDuration(mDuration);
         mAnimator.setInterpolator(new LinearInterpolator());
-        if (animationStyle == TextPathView.RepeatAnimation.RESTART) {
+        if (animationStyle == RESTART) {
             mAnimator.setRepeatMode(ValueAnimator.RESTART);
             mAnimator.setRepeatCount(repeatCount);
-        } else if (animationStyle == TextPathView.RepeatAnimation.REVERSE) {
+        } else if (animationStyle == REVERSE) {
             mAnimator.setRepeatMode(ValueAnimator.REVERSE);
             mAnimator.setRepeatCount(repeatCount);
         }
@@ -173,7 +171,7 @@ public abstract class PathView extends View {
         startAnimation(start, end, mRepeatStyle, ValueAnimator.INFINITE);
     }
 
-    public void startAnimation(float start, float end, TextPathView.RepeatAnimation animationStyle, int repeatCount) {
+    public void startAnimation(float start, float end, int animationStyle, int repeatCount) {
         if (!isProgressValid(start) || !isProgressValid(end)) {
             return;
         }
@@ -196,7 +194,9 @@ public abstract class PathView extends View {
     public void stopAnimation() {
         showPainterActually = false;
         clear();
-        mAnimator.cancel();
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
     }
 
     /**
@@ -204,7 +204,9 @@ public abstract class PathView extends View {
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void pauseAnimation() {
-        mAnimator.pause();
+        if (mAnimator != null) {
+            mAnimator.pause();
+        }
     }
 
     /**
@@ -212,7 +214,9 @@ public abstract class PathView extends View {
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void resumeAnimation() {
-        mAnimator.resume();
+        if (mAnimator != null) {
+            mAnimator.resume();
+        }
     }
 
     /**
@@ -225,7 +229,7 @@ public abstract class PathView extends View {
     protected abstract void initPath() throws Exception;
 
     /**
-     * 重写onMeasure方法使得WRAP_CONTENT生效
+     * 重写onMeasure方法使得WRAP_CONTENT生效，未成功
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -237,14 +241,11 @@ public abstract class PathView extends View {
         int width = wSpeSize;
         int height = hSpeSize;
 
-        mTextWidth = TextUtil.getTextWidth(mPathPaint, mText);
-        mTextHeight = mPathPaint.getFontSpacing() + 1;
-
-        if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            width = (int) mTextWidth;
+        if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT && !nullPath) {
+            width = (int) mPathWidth;
         }
-        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            height = (int) mTextHeight;
+        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT && !nullPath) {
+            height = (int) mPathHeight;
         }
         setMeasuredDimension(width, height);
     }
@@ -271,11 +272,19 @@ public abstract class PathView extends View {
         return mPaint;
     }
 
+    //设置路径，必须先设置好路径在startAnimation()，不然会报错！
     public void setPath(Path path) {
         this.mPath = path;
         try {
             initPath();
+            //ToDo 这里的设置只能获取Path非空白部分的宽高，不能获取整个Path的宽高，后面再寻找方法
+            RectF rectF = new RectF();
+            mPath.computeBounds(rectF,false);
+            mPathWidth = rectF.width();
+            mPathHeight = rectF.height();
+            nullPath = false;
         } catch (Exception e) {
+            nullPath = true;
             e.printStackTrace();
         }
     }
@@ -307,24 +316,27 @@ public abstract class PathView extends View {
         }
     }
 
-//    //设置文字内容
-//    public void setText(String text) {
-//        mText = text;
-//        initPath();
-//        clear();
-//        requestLayout();
-//    }
 
     //直接显示填充好颜色了的全部文字
     public void showFillColorText() {
-        mFillColor = true;
+        mShouldFill = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         drawPath(1);
     }
 
+    //设置动画持续时间
+    public void setDuration(int duration) {
+        this.mDuration = duration;
+    }
+
+    //设置重复方式
+    public void setRepeatStyle(int repeatStyle) {
+        this.mRepeatStyle = repeatStyle;
+    }
+
     protected void checkFill(float progress) {
-        if (progress != 1 && mFillColor) {
-            mFillColor = false;
+        if (progress != 1 && mShouldFill) {
+            mShouldFill = false;
             mDrawPaint.setStyle(Paint.Style.STROKE);
         }
     }
@@ -341,19 +353,6 @@ public abstract class PathView extends View {
         return true;
     }
 
-    public interface Painter {
-        /**
-         * 绘画画笔特效时候执行
-         *
-         * @param x         当前绘画点x坐标
-         * @param y         当前绘画点y坐标
-         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
-         */
-        void onDrawPaintPath(float x, float y, Path paintPath);
-    }
 
 
-    public enum RepeatAnimation {
-        NONE, RESTART, REVERSE
-    }
 }

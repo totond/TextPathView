@@ -12,7 +12,7 @@ import yanzhikai.textpath.SyncTextPathView;
  * desc   : 一支笔的画笔特效，就是在绘画点旁边画多一支笔
  */
 
-public class PenPainter implements SyncTextPathView.SyncTextPainter,AsyncTextPathView.AsyncTextPainter {
+public class PenPainter implements SyncPathPainter,AsyncPathPainter {
     private static final float r_nib = 30,r_pen = 100;
 
     @Override

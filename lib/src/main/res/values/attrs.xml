@@ -3,10 +3,11 @@
     <attr name="duration" format="integer"/>
     <attr name="showPainter" format="boolean"/>
     <attr name="showPainterActually" format="boolean"/>
-    <attr name="textStrokeWidth" format="dimension"/>
-    <attr name="textStrokeColor" format="color"/>
+    <attr name="pathStrokeWidth" format="dimension"/>
+    <attr name="pathStrokeColor" format="color"/>
     <attr name="paintStrokeWidth" format="dimension"/>
     <attr name="paintStrokeColor" format="color"/>
+    <attr name="fillColor" format="color"/>
     <attr name="repeat" format="enum">
         <enum name="RESTART" value="1"/>
         <enum name="REVERSE" value="2"/>
@@ -21,8 +22,8 @@
         <attr name="duration" />
         <attr name="showPainter" />
         <attr name="showPainterActually" />
-        <attr name="textStrokeWidth" />
-        <attr name="textStrokeColor" />
+        <attr name="pathStrokeWidth" />
+        <attr name="pathStrokeColor" />
         <attr name="paintStrokeWidth" />
         <attr name="paintStrokeColor" />
         <attr name="repeat" />
@@ -32,8 +33,8 @@
         <attr name="duration" />
         <attr name="showPainter" />
         <attr name="showPainterActually" />
-        <attr name="textStrokeWidth" />
-        <attr name="textStrokeColor" />
+        <attr name="pathStrokeWidth" />
+        <attr name="pathStrokeColor" />
         <attr name="paintStrokeWidth" />
         <attr name="paintStrokeColor" />
         <attr name="repeat" />

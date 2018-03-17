@@ -9,10 +9,15 @@
 
     <yanzhikai.textpath.SyncPathView
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="250dp"
         android:id="@+id/spv"
         />
 
+    <yanzhikai.textpath.AsyncPathView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/aspv"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

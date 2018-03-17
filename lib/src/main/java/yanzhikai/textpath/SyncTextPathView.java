@@ -1,11 +1,11 @@
 package yanzhikai.textpath;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
+
+import yanzhikai.textpath.painter.SyncPathPainter;
 
 /**
  * author : yany
@@ -18,7 +18,7 @@ public class SyncTextPathView extends TextPathView {
     public static final String TAG = "yjkTestView";
 
     //画笔特效
-    private SyncTextPainter mPainter;
+    private SyncPathPainter mPainter;
 
     //路径长度总数
     private float mLengthSum = 0;
@@ -44,7 +44,7 @@ public class SyncTextPathView extends TextPathView {
         initPaint();
 
         //初始化文字路径
-        initTextPath();
+        initPath();
 
         //是否自动播放动画
         if (mAutoStart) {
@@ -58,7 +58,7 @@ public class SyncTextPathView extends TextPathView {
     }
 
     @Override
-    protected void initTextPath() {
+    protected void initPath() {
         mDst.reset();
         mFontPath.reset();
         mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getTextSize(), mFontPath);
@@ -121,13 +121,13 @@ public class SyncTextPathView extends TextPathView {
     //设置文字内容
     public void setText(String text) {
         mText = text;
-        initTextPath();
+        initPath();
         clear();
         requestLayout();
     }
 
     @Override
-    public void startAnimation(float start, float end, RepeatAnimation animationStyle, int repeatCount) {
+    public void startAnimation(float start, float end, int animationStyle, int repeatCount) {
         super.startAnimation(start, end, animationStyle, repeatCount);
         if (mPainter != null) {
             mPainter.onStartAnimation();
@@ -135,21 +135,8 @@ public class SyncTextPathView extends TextPathView {
     }
 
     //设置画笔特效
-    public void setTextPainter(SyncTextPainter listener) {
+    public void setPathPainter(SyncPathPainter listener) {
         this.mPainter = listener;
     }
 
-    public interface SyncTextPainter extends TextPainter {
-        //开始动画的时候执行
-        void onStartAnimation();
-
-        /**
-         * 绘画画笔特效时候执行
-         * @param x 当前绘画点x坐标
-         * @param y 当前绘画点y坐标
-         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
-         */
-        @Override
-        void onDrawPaintPath(float x, float y, Path paintPath);
-    }
 }

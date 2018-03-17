@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import yanzhikai.textpath.AsyncPathView;
 import yanzhikai.textpath.SyncPathView;
-import yanzhikai.textpath.painter.FireworksPathPainter;
+import yanzhikai.textpath.painter.FireworksPainter;
 
 public class ThirdActivity extends Activity {
     private Button btn_start, btn_stop;
     private SyncPathView spv;
+    private AsyncPathView aspv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,9 +21,13 @@ public class ThirdActivity extends Activity {
         btn_start = findViewById(R.id.btn_start);
         btn_stop = findViewById(R.id.btn_stop);
         spv = findViewById(R.id.spv);
+        aspv = findViewById(R.id.aspv);
+
+        //必须先调用setPath设置路径
+        aspv.setPath(new TestPath());
 
         spv.setPath(new TestPath());
-        spv.setPathPainter(new FireworksPathPainter());
+        spv.setPathPainter(new FireworksPainter());
 
 
 
@@ -30,6 +36,7 @@ public class ThirdActivity extends Activity {
             @Override
             public void onClick(View v) {
                 spv.startAnimation(1,0);
+                aspv.startAnimation(0,1);
             }
         });
 
@@ -37,6 +44,7 @@ public class ThirdActivity extends Activity {
             @Override
             public void onClick(View v) {
                 spv.stopAnimation();
+                aspv.stopAnimation();
             }
         });
     }

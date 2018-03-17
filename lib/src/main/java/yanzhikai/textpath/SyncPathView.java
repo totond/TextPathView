@@ -5,11 +5,13 @@ import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import yanzhikai.textpath.painter.SyncPathPainter;
+
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
- * desc   :
+ * desc   : 所有路径按顺序绘画
  */
 
 public class SyncPathView extends PathView {
@@ -102,7 +104,7 @@ public class SyncPathView extends PathView {
     }
 
     @Override
-    public void startAnimation(float start, float end, TextPathView.RepeatAnimation animationStyle, int repeatCount) {
+    public void startAnimation(float start, float end, int animationStyle, int repeatCount) {
         super.startAnimation(start, end, animationStyle, repeatCount);
         if (mPainter != null) {
             mPainter.onStartAnimation();
@@ -110,21 +112,9 @@ public class SyncPathView extends PathView {
     }
 
     //设置画笔特效
-    public void setPathPainter(SyncPathPainter listener) {
-        this.mPainter = listener;
+    public void setPathPainter(SyncPathPainter painter) {
+        this.mPainter = painter;
     }
 
-    public interface SyncPathPainter extends Painter {
-        //开始动画的时候执行
-        void onStartAnimation();
 
-        /**
-         * 绘画画笔特效时候执行
-         * @param x 当前绘画点x坐标
-         * @param y 当前绘画点y坐标
-         * @param paintPath 画笔Path对象，在这里画出想要的画笔特效
-         */
-        @Override
-        void onDrawPaintPath(float x, float y, Path paintPath);
-    }
 }
