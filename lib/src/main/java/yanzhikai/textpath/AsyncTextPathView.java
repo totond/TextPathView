@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
@@ -53,7 +54,7 @@ public class AsyncTextPathView extends TextPathView {
     protected void initPath(){
         mDst.reset();
         mFontPath.reset();
-        mTextPaint.getTextPath(mText,0,mText.length(),0,mTextPaint.getTextSize(), mFontPath);
+        mTextPaint.getTextPath(mText,0,mText.length(),0f,mTextPaint.getFontSpacing(), mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
     }
@@ -74,14 +75,17 @@ public class AsyncTextPathView extends TextPathView {
         mAnimatorValue = progress;
 
         //重置路径
-        mPathMeasure.setPath(mFontPath,false);
+        mPathMeasure.setPath(mFontPath,true);
         mDst.reset();
         mPaintPath.reset();
 
         //根据进度获取路径
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
+//            Log.d(TAG, "drawPath: length:" + mLength);
             mStop = mLength * mAnimatorValue;
+//            Log.d(TAG, "drawPath: stop:" + mStop);
+//            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
             mPathMeasure.getSegment(0, mStop, mDst, true);
 
             //绘画画笔效果

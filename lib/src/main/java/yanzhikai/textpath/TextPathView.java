@@ -5,8 +5,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
+import android.text.Layout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 
 /**
@@ -19,7 +23,7 @@ import android.view.ViewGroup;
 public abstract class TextPathView extends PathView {
     public static final String TAG = "yjkTextPathView";
     //用于获取文字的画笔
-    protected Paint mTextPaint;
+    protected TextPaint mTextPaint;
     //文字装载路径;
     protected Path mFontPath = new Path();
     //文本宽高
@@ -37,6 +41,8 @@ public abstract class TextPathView extends PathView {
     protected boolean mShowInStart = false;
     //文字是否填充颜色
     protected boolean mFillColor = false;
+    //字体
+    protected Typeface mTypeface = null;
 
 
 
@@ -82,11 +88,17 @@ public abstract class TextPathView extends PathView {
     @Override
     protected void initPaint(){
         super.initPaint();
-        mTextPaint = new Paint();
+        mTextPaint = new TextPaint();
+//        TextPaint textPaint = new TextPaint(mTextPaint);
+//        mTextPaint.setTypeface();
+
         mTextPaint.setTextSize(mTextSize);
 
         if (mTextInCenter){
             mDrawPaint.setTextAlign(Paint.Align.CENTER);
+        }
+        if (mTypeface != null){
+            mTextPaint.setTypeface(mTypeface);
         }
 
     }
@@ -105,9 +117,10 @@ public abstract class TextPathView extends PathView {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        mTextWidth = TextUtil.getTextWidth(mTextPaint,mText);
-//        mTextWidth = Layout.getDesiredWidth(mText,new TextPaint(mTextPaint));
-        mTextHeight = mTextPaint.getFontSpacing() + mPathStrokeWidth;
+//        mTextWidth = TextUtil.getTextWidth(mTextPaint,mText);
+        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
+        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+        mTextHeight = metrics.bottom - metrics.top;
 
         if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
             width = (int) mTextWidth;
@@ -120,6 +133,7 @@ public abstract class TextPathView extends PathView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (mTextInCenter){
             canvas.translate((getWidth() - mTextWidth) / 2, (getHeight() - mTextHeight) / 2);
         }
@@ -128,7 +142,11 @@ public abstract class TextPathView extends PathView {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
-        canvas.drawPath(mDst, mDrawPaint);
+        if (mAnimatorValue < 1) {
+            canvas.drawPath(mDst, mDrawPaint);
+        }else {
+            canvas.drawPath(mFontPath, mDrawPaint);
+        }
 
     }
 
@@ -154,6 +172,11 @@ public abstract class TextPathView extends PathView {
         }
         clear();
         requestLayout();
+    }
+
+    public void setTypeface(Typeface typeface){
+        mTypeface = typeface;
+        initPaint();
     }
 
     //直接显示填充好颜色了的全部文字
