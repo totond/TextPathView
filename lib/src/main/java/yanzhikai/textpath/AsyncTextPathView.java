@@ -54,7 +54,7 @@ public class AsyncTextPathView extends TextPathView {
     protected void initPath(){
         mDst.reset();
         mFontPath.reset();
-        mTextPaint.getTextPath(mText,0,mText.length(),0f,mTextPaint.getFontSpacing(), mFontPath);
+        mTextPaint.getTextPath(mText,0,mText.length(),0f,mTextPaint.getTextSize(), mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
     }

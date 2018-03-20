@@ -123,10 +123,10 @@ public abstract class TextPathView extends PathView {
         mTextHeight = metrics.bottom - metrics.top;
 
         if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
-            width = (int) mTextWidth;
+            width = (int) mTextWidth + 1;
         }
         if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
-            height = (int) mTextHeight;
+            height = (int) mTextHeight + 1;
         }
         setMeasuredDimension(width,height);
     }

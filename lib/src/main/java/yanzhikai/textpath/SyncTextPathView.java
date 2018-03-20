@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import yanzhikai.textpath.painter.SyncPathPainter;
 
@@ -61,7 +62,7 @@ public class SyncTextPathView extends TextPathView {
     protected void initPath() {
         mDst.reset();
         mFontPath.reset();
-        mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getFontSpacing(), mFontPath);
+        mTextPaint.getTextPath(mText, 0, mText.length(), 0, mTextPaint.getTextSize(), mFontPath);
         mPathMeasure.setPath(mFontPath, false);
         mLengthSum = mPathMeasure.getLength();
         //获取所有路径的总长度

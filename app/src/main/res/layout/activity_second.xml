@@ -46,7 +46,7 @@
         app:pathStrokeColor="@android:color/black"
         app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
-        app:textSize="60sp"
+        app:textSize="40sp"
         android:layout_gravity="center_horizontal"
         />
 
@@ -60,7 +60,7 @@
         app:pathStrokeColor="@android:color/black"
         app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
-        app:textSize="60sp"
+        app:textSize="40sp"
         android:layout_gravity="center_horizontal"
         app:showInStart="true"
         />
@@ -75,7 +75,7 @@
         app:pathStrokeColor="@android:color/black"
         app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
-        app:textSize="60sp"
+        app:textSize="40sp"
         android:layout_gravity="center_horizontal"
         />
     <LinearLayout
