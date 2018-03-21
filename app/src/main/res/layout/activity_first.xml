@@ -21,7 +21,7 @@
             app:showPainter="true"
             app:text="2017"
             app:textInCenter="true"
-            app:textSize="60sp"
+            app:textSize="55sp"
             android:layout_weight="1"
             />
 
@@ -33,7 +33,7 @@
             app:showPainter="true"
             app:text="abc"
             app:textInCenter="true"
-            app:textSize="60sp"
+            app:textSize="55sp"
             android:layout_weight="1"
             />
 
@@ -55,7 +55,7 @@
             app:textInCenter="true"
             app:pathStrokeColor="@android:color/holo_red_light"
             app:paintStrokeColor="@android:color/holo_red_light"
-            app:textSize="70sp"
+            app:textSize="64sp"
             android:layout_weight="1"
             />
 
@@ -69,7 +69,7 @@
             app:textInCenter="true"
             app:pathStrokeColor="@android:color/holo_red_light"
             app:paintStrokeColor="@android:color/holo_red_light"
-            app:textSize="70sp"
+            app:textSize="64sp"
             android:layout_weight="1"
             />
 
@@ -85,7 +85,7 @@
         app:pathStrokeColor="@android:color/holo_orange_light"
         app:paintStrokeColor="@android:color/holo_orange_light"
         app:textInCenter="true"
-        app:textSize="62sp"
+        app:textSize="55sp"
         android:layout_gravity="center_horizontal"
         />
 
@@ -100,7 +100,7 @@
         app:pathStrokeColor="@android:color/holo_blue_light"
         app:paintStrokeColor="@android:color/holo_blue_light"
         app:showPainterActually="true"
-        app:textSize="62sp"
+        app:textSize="55sp"
         android:layout_gravity="center_horizontal"
         />
 
@@ -112,7 +112,7 @@
         app:showPainter="true"
         app:text="新春快乐"
         app:textInCenter="true"
-        app:textSize="62sp"
+        app:textSize="55sp"
         app:pathStrokeColor="@color/colorAccent"
         app:paintStrokeColor="@color/colorAccent"
         android:layout_gravity="center_horizontal"
@@ -128,7 +128,7 @@
         app:textInCenter="true"
         app:pathStrokeColor="@android:color/holo_red_dark"
         app:paintStrokeColor="@android:color/black"
-        app:textSize="62sp"
+        app:textSize="55sp"
         android:layout_gravity="center_horizontal"
         />
 

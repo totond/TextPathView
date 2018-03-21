@@ -1,10 +1,14 @@
 package yanzhikai.textpath;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
+
+import java.util.LinkedList;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
@@ -54,9 +58,16 @@ public class AsyncTextPathView extends TextPathView {
     protected void initPath(){
         mDst.reset();
         mFontPath.reset();
-        mTextPaint.getTextPath(mText,0,mText.length(),0f,mTextPaint.getTextSize(), mFontPath);
+
+        //获取宽高
+        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
+        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+        mTextHeight = metrics.bottom - metrics.top;
+
+        mTextPaint.getTextPath(mText,0,mText.length(),0f, -metrics.ascent, mFontPath);
         mPathMeasure.setPath(mFontPath,false);
         mLength = mPathMeasure.getLength();
+
     }
 
 

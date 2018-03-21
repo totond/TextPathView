@@ -5,9 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -43,7 +43,10 @@ public abstract class TextPathView extends PathView {
     protected boolean mFillColor = false;
     //字体
     protected Typeface mTypeface = null;
-
+    //测量Path具体范围
+    private RectF mPathBounds = new RectF();
+    //Height是否处于wrap_content
+    private boolean wrapWidth = false, wrapHeight = false;
 
 
     public TextPathView(Context context) {
@@ -52,32 +55,32 @@ public abstract class TextPathView extends PathView {
 
     public TextPathView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initAttr(context,attrs);
+        initAttr(context, attrs);
     }
 
     public TextPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initAttr(context,attrs);
+        initAttr(context, attrs);
     }
 
     @Override
-    protected void initAttr(Context context, AttributeSet attrs){
-        TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.TextPathView);
+    protected void initAttr(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TextPathView);
         mText = typedArray.getString(R.styleable.TextPathView_text);
-        if (mText == null){
+        if (mText == null) {
             mText = "Test";
         }
-        mTextSize = typedArray.getDimensionPixelSize(R.styleable.TextPathView_textSize,mTextSize);
-        mDuration = typedArray.getInteger(R.styleable.TextPathView_duration,mDuration);
+        mTextSize = typedArray.getDimensionPixelSize(R.styleable.TextPathView_textSize, mTextSize);
+        mDuration = typedArray.getInteger(R.styleable.TextPathView_duration, mDuration);
         showPainter = typedArray.getBoolean(R.styleable.TextPathView_showPainter, showPainter);
-        showPainterActually = typedArray.getBoolean(R.styleable.TextPathView_showPainterActually,showPainterActually);
+        showPainterActually = typedArray.getBoolean(R.styleable.TextPathView_showPainterActually, showPainterActually);
         mPathStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.TextPathView_pathStrokeWidth, mPathStrokeWidth);
-        mTextStrokeColor = typedArray.getColor(R.styleable.TextPathView_pathStrokeColor,mTextStrokeColor);
-        mPaintStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.TextPathView_paintStrokeWidth,mPaintStrokeWidth);
-        mPaintStrokeColor = typedArray.getColor(R.styleable.TextPathView_paintStrokeColor,mPaintStrokeColor);
-        mAutoStart = typedArray.getBoolean(R.styleable.TextPathView_autoStart,mAutoStart);
-        mTextInCenter = typedArray.getBoolean(R.styleable.TextPathView_textInCenter,mTextInCenter);
-        mShowInStart = typedArray.getBoolean(R.styleable.TextPathView_showInStart,mShowInStart);
+        mTextStrokeColor = typedArray.getColor(R.styleable.TextPathView_pathStrokeColor, mTextStrokeColor);
+        mPaintStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.TextPathView_paintStrokeWidth, mPaintStrokeWidth);
+        mPaintStrokeColor = typedArray.getColor(R.styleable.TextPathView_paintStrokeColor, mPaintStrokeColor);
+        mAutoStart = typedArray.getBoolean(R.styleable.TextPathView_autoStart, mAutoStart);
+        mTextInCenter = typedArray.getBoolean(R.styleable.TextPathView_textInCenter, mTextInCenter);
+        mShowInStart = typedArray.getBoolean(R.styleable.TextPathView_showInStart, mShowInStart);
         mRepeatStyle = typedArray.getInt(R.styleable.TextPathView_repeat, 0);
         typedArray.recycle();
     }
@@ -86,7 +89,7 @@ public abstract class TextPathView extends PathView {
      * 初始化画笔
      */
     @Override
-    protected void initPaint(){
+    protected void initPaint() {
         super.initPaint();
         mTextPaint = new TextPaint();
 //        TextPaint textPaint = new TextPaint(mTextPaint);
@@ -94,10 +97,10 @@ public abstract class TextPathView extends PathView {
 
         mTextPaint.setTextSize(mTextSize);
 
-        if (mTextInCenter){
+        if (mTextInCenter) {
             mDrawPaint.setTextAlign(Paint.Align.CENTER);
         }
-        if (mTypeface != null){
+        if (mTypeface != null) {
             mTextPaint.setTypeface(mTypeface);
         }
 
@@ -118,24 +121,50 @@ public abstract class TextPathView extends PathView {
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
 //        mTextWidth = TextUtil.getTextWidth(mTextPaint,mText);
-        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
-        mTextHeight = metrics.bottom - metrics.top;
 
-        if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
-            width = (int) mTextWidth + 1;
+        if (mTextWidth > width) {
+            handleNewLines(width);
+            mTextWidth = width;
         }
-        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+
+        if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            if (mTextWidth <= width) {
+                width = (int) mTextWidth + 1;
+            } else {
+                handleNewLines(width);
+                mTextWidth = width;
+            }
+            wrapWidth = true;
+        } else {
+            wrapWidth = false;
+        }
+
+        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
             height = (int) mTextHeight + 1;
+            wrapHeight = true;
+        } else {
+            wrapHeight = false;
         }
-        setMeasuredDimension(width,height);
+
+        setMeasuredDimension(width, height);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mFontPath.computeBounds(mPathBounds, true);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
 
-        if (mTextInCenter){
-            canvas.translate((getWidth() - mTextWidth) / 2, (getHeight() - mTextHeight) / 2);
+        if (mTextInCenter) {
+            if (!wrapWidth) {
+                canvas.translate((getWidth() - mPathBounds.width()) / 2, 0);
+            }
+            if (!wrapHeight) {
+                canvas.translate(0, (getHeight() - mPathBounds.height()) / 2);
+            }
         }
         //画笔效果绘制
         if (showPainterActually) {
@@ -144,23 +173,48 @@ public abstract class TextPathView extends PathView {
         //文字路径绘制
         if (mAnimatorValue < 1) {
             canvas.drawPath(mDst, mDrawPaint);
-        }else {
+        } else {
             canvas.drawPath(mFontPath, mDrawPaint);
         }
 
     }
 
+    //处理换行：拆分字符串，分别获取它们的path，再拼接
+    protected void handleNewLines(float outerWidth) {
+        float[] widths = new float[mText.length()];
+        mTextPaint.getTextWidths(mText, widths);
 
+        float widthSum = 0;
+        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+        float ascent = -mTextPaint.getFontMetrics().ascent;
+        float height = metrics.descent + ascent;
+        int start = 0, count = 0;
+        mFontPath.reset();
+        for (int i = 0; i < widths.length; i++) {
+            float width = widths[i];
+            widthSum += width;
+//            Log.d(TAG, "handleNewLines: width " + width + " i: " + i);
+            if (widthSum > outerWidth) {
+                String text = mText.substring(start, i);
+                widthSum = width;
+                start = i;
+                Path path = new Path();
+                mTextPaint.getTextPath(text, 0, text.length(), 0, ascent, path);
+                mFontPath.addPath(path, 0, height * count);
+//                Log.d(TAG, "handleNewLines text: " + text);
+                count++;
+            }
+        }
+        if (start < widths.length) {
+            String text = mText.substring(start, widths.length);
+//            Log.d(TAG, "handleNewLines text: " + text);
+            Path path = new Path();
+            mTextPaint.getTextPath(text, 0, text.length(), 0, ascent, path);
+            mFontPath.addPath(path, 0, height * count);
+        }
+        mTextHeight = height * ++count;
+    }
 
-//    //设置自定义动画监听
-//    public void setAnimatorListener(PathAnimatorListener animatorListener) {
-//        mAnimatorListener = animatorListener;
-//        mAnimatorListener.setTarget(this);
-//        if (mAnimator != null) {
-//            mAnimator.removeAllListeners();
-//            mAnimator.addListener(mAnimatorListener);
-//        }
-//    }
 
     //设置文字内容
     public void setText(String text) {
@@ -174,27 +228,28 @@ public abstract class TextPathView extends PathView {
         requestLayout();
     }
 
-    public void setTypeface(Typeface typeface){
+    //设置字体样式
+    public void setTypeface(Typeface typeface) {
         mTypeface = typeface;
         initPaint();
     }
 
     //直接显示填充好颜色了的全部文字
-    public void showFillColorText(){
+    public void showFillColorText() {
         mFillColor = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         drawPath(1);
     }
 
-    protected void checkFill(float progress){
-        if (progress != 1 && mFillColor){
+    protected void checkFill(float progress) {
+        if (progress != 1 && mFillColor) {
             mFillColor = false;
             mDrawPaint.setStyle(Paint.Style.STROKE);
         }
     }
 
-    protected boolean isProgressValid(float progress){
-        if (progress < 0 || progress > 1){
+    protected boolean isProgressValid(float progress) {
+        if (progress < 0 || progress > 1) {
             try {
                 throw new Exception("Progress is invalid!");
             } catch (Exception e) {
@@ -204,8 +259,6 @@ public abstract class TextPathView extends PathView {
         }
         return true;
     }
-
-
 
 
 }

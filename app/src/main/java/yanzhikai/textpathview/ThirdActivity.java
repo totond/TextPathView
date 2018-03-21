@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import yanzhikai.textpath.AsyncPathView;
 import yanzhikai.textpath.SyncPathView;
@@ -30,7 +29,7 @@ public class ThirdActivity extends Activity {
         spv.setPath(new TestPath());
         spv.setPathPainter(new FireworksPainter());
 
-//        TextView
+
 
         //设置点击开始播放动画
         btn_start.setOnClickListener(new View.OnClickListener() {

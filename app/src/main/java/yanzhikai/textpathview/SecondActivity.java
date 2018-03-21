@@ -53,6 +53,9 @@ public class SecondActivity extends Activity {
             public void onClick(View v) {
                 stpv_laugh.stopAnimation();
                 atpv_totond.stopAnimation();
+                atpv_type1.stopAnimation();
+                atpv_type2.stopAnimation();
+                stpv_type3.stopAnimation();
             }
         });
 

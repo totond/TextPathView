@@ -18,7 +18,7 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.1.1'
+compile 'com.yanzhikai:TextPathView:0.1.2'
 ```
 
  > minSdkVersion 16
@@ -294,6 +294,9 @@ public class FireworksPainter implements SyncPathPainter {
     //设置路径，必须先设置好路径在startAnimation()，不然会报错！
     public void setPath(Path path) ；
 
+    //设置字体样式
+    public void setTypeface(Typeface typeface)；
+
     //清除画面
     public void clear();
 
@@ -334,13 +337,21 @@ public class FireworksPainter implements SyncPathPainter {
 |AsyncTextPainter|AsyncPathPainter|
 |TextAnimatorListener|PathAnimatorListener|
 
+ - 2018/03/21 **version 0.1.2**:
+     - 修复高度warp_content时候内容有可能显示不全
+     - 原来PathMeasure获取文字Path时候，最后会有大概一个像素的缺失，现在只能在onDraw判断progress是否为1来显示完全路径
+     - 增加字体设置
+     - 支持自动换行
+
+![](https://i.imgur.com/5wHvQvD.gif)
+
 
 
 #### 后续将会往下面的方向努力：
 
- - 更多的特效，更多的动画，更多的字体，如果有什么想法和建议的欢迎issue提出来一起探讨，还可以提交PR出一份力。
+ - 更多的特效，更多的动画，如果有什么想法和建议的欢迎issue提出来一起探讨，还可以提交PR出一份力。
  - 更好的性能，目前单个TextPathView在模拟器上运行动画时是不卡的，多个就有一点点卡顿了，在性能较好的真机多个也是没问题的，这个性能方面目前还没头绪。
- - 文字换行符支持，和自动换行支持。
+ - 文字换行符支持。
  - Path的宽高测量（包含空白，从坐标(0,0)开始）
 
 
