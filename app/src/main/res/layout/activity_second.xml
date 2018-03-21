@@ -36,7 +36,46 @@
         android:layout_gravity="center_horizontal"
         />
 
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_type1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="4000"
+        app:showPainter="true"
+        app:text="字体SANS_SERIF"
+        app:pathStrokeColor="@android:color/black"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textInCenter="true"
+        app:textSize="40sp"
+        android:layout_gravity="center_horizontal"
+        />
 
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_type2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="4000"
+        app:showPainter="true"
+        app:text="字体MONOSPACE"
+        app:pathStrokeColor="@android:color/black"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textSize="40sp"
+        android:layout_gravity="center_horizontal"
+        app:showInStart="true"
+        />
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv_type3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="4000"
+        app:showPainter="true"
+        app:text="字体DEFAULT_BOLD"
+        app:pathStrokeColor="@android:color/black"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textSize="40sp"
+        android:layout_gravity="center_horizontal"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

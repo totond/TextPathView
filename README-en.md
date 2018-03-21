@@ -11,7 +11,7 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.1.1'
+compile 'com.yanzhikai:TextPathView:0.1.2'
 ```
 
  > minSdkVersion 16
@@ -285,7 +285,11 @@ public class FireworksPainter implements SyncPathPainter {
     public void setText(String text)；
 
     //设置路径，必须先设置好路径在startAnimation()，不然会报错！
+    //It must be used before startAnimation().
     public void setPath(Path path) ；
+
+    //设置字体样式
+    public void setTypeface(Typeface typeface)；
 
     //清除画面
     public void clear();
@@ -328,6 +332,12 @@ public class FireworksPainter implements SyncPathPainter {
 |AsyncTextPainter|AsyncPathPainter|
 |TextAnimatorListener|PathAnimatorListener|
 
+ - 2018/03/21 **version 0.1.2**:
+     - Fixed: It will not completely display when warp_content.
+     - TextPathView can use `setTypeface()` now.
+     - Suppurted word wrap.
+
+![](https://i.imgur.com/5wHvQvD.gif)
 
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="yanzhikai.textpathview.ForthActivity">
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv_totond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:duration="2500"
+        app:showPainter="true"
+        app:text="测试自动换行(abcdefghijk(lmnopqrst)uvwxyz)"
+        app:pathStrokeColor="@android:color/holo_orange_light"
+        app:paintStrokeColor="@android:color/holo_orange_light"
+        app:textSize="64sp"
+        app:autoStart="true"
+        android:layout_gravity="center_horizontal"
+        />
+
+</android.support.constraint.ConstraintLayout>

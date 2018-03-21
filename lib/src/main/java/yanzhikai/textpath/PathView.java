@@ -179,11 +179,11 @@ public abstract class PathView extends View {
             mAnimator.cancel();
         }
         initAnimator(start, end, animationStyle, repeatCount);
-        try {
-            initPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            initPath();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         showPainterActually = showPainter;
         mAnimator.start();
     }
@@ -291,6 +291,7 @@ public abstract class PathView extends View {
 
     //清除画面
     public void clear() {
+        mAnimatorValue = 0;
         mDst.reset();
         mPaintPath.reset();
         postInvalidate();
