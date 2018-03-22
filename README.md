@@ -122,12 +122,12 @@ public class TestPath extends Path {
 |textInCenter| 是否让文字内容处于控件中心    | boolean| false|
 |duration | 动画的持续时间，单位ms   | integer| 10000|
 |showPainter | 在动画执行的时候是否执行画笔特效  | boolean| false|
-|showPainterActually**(新增) **| 在所有时候是否展示画笔特效| boolean| false|
+|showPainterActually| 在所有时候是否展示画笔特效| boolean| false|
 |~~textStrokeWidth~~ strokeWidth | 路径刻画的线条粗细     | dimension| 5px|
 |~~textStrokeColor~~ paintStrokeColor| 路径刻画的线条颜色   | color| Color.black|
 |paintStrokeWidth | 画笔特效刻画的线条粗细    | dimension| 3px|
 |paintStrokeColor | 画笔特效刻画的线条颜色   | color| Color.black|
-|repeat**(新增) **| 是否重复播放动画，重复类型| enum | NONE|
+|repeat| 是否重复播放动画，重复类型| enum | NONE|
 
 |**repeat属性值**|**意义**|
 |--|--|
@@ -332,7 +332,7 @@ public class FireworksPainter implements SyncPathPainter {
 
 |Old Name|New Name|
 |---|---|
-|TextPathPainter|TextPathPainter|
+|TextPathPainter|PathPainter|
 |SyncTextPainter|SyncPathPainter|
 |AsyncTextPainter|AsyncPathPainter|
 |TextAnimatorListener|PathAnimatorListener|

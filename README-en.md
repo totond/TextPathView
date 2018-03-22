@@ -120,7 +120,7 @@ public class TestPath extends Path {
 |~~textStrokeColor~~ paintStrokeColor | the stroke color of path     | color| Color.black|
 |paintStrokeWidth |width of paint effect stroke     | dimension| 3px|
 |paintStrokeColor | color of paint effect stroke   | color| Color.black|
-|repeat**(新增) **| repeat type of animation| enum | NONE|
+|repeat| repeat type of animation| enum | NONE|
 
 |repeat|Description|
 |--|--|
@@ -327,7 +327,7 @@ public class FireworksPainter implements SyncPathPainter {
 
 |Old Name|New Name|
 |---|---|
-|TextPathPainter|TextPathPainter|
+|TextPathPainter|PathPainter|
 |SyncTextPainter|SyncPathPainter|
 |AsyncTextPainter|AsyncPathPainter|
 |TextAnimatorListener|PathAnimatorListener|
