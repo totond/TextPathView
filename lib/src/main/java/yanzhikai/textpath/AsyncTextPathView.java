@@ -42,6 +42,8 @@ public class AsyncTextPathView extends TextPathView {
     }
 
     protected void init(){
+        setLayerType(LAYER_TYPE_SOFTWARE,null);
+
         initPaint();
         initPath();
         if (mAutoStart) {

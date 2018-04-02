@@ -42,6 +42,8 @@ public class SyncTextPathView extends TextPathView {
     }
 
     protected void init() {
+        //关闭硬件加速
+        setLayerType(LAYER_TYPE_SOFTWARE,null);
 
         //初始化画笔
         initPaint();
