@@ -22,6 +22,7 @@ compile 'com.yanzhikai:TextPathView:0.1.2'
 ```
 
  > minSdkVersion 16
+ > 如果遇到播放完后消失的问题，请关闭硬件加速，可能是硬件加速对`drawPath()`方法不支持
 
 ### 使用方法
 
@@ -339,7 +340,7 @@ public class FireworksPainter implements SyncPathPainter {
 
  - 2018/03/21 **version 0.1.2**:
      - 修复高度warp_content时候内容有可能显示不全
-     - 原来PathMeasure获取文字Path时候，最后会有大概一个像素的缺失，现在只能在onDraw判断progress是否为1来显示完全路径
+     - 原来PathMeasure获取文字Path时候，最后会有大概一个像素的缺失，现在只能在onDraw判断progress是否为1来显示完全路径（但是这样可能会导致硬件加速上显示不出来，需要手动关闭这个View的硬件加速）
      - 增加字体设置
      - 支持自动换行
 
