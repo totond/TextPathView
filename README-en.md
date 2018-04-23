@@ -16,6 +16,8 @@ compile 'com.yanzhikai:TextPathView:0.1.2'
 
  > minSdkVersion 16
 
+ > Hardware acceleration may cause some problems when using version 0.1.2.
+
 ### Usage
 
 #### TextPathView

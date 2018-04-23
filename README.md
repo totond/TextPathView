@@ -22,6 +22,7 @@ compile 'com.yanzhikai:TextPathView:0.1.2'
 ```
 
  > minSdkVersion 16
+
  > 如果遇到播放完后消失的问题，请关闭硬件加速，可能是硬件加速对`drawPath()`方法不支持
 
 ### 使用方法
