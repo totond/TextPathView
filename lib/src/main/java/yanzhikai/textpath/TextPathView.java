@@ -171,10 +171,10 @@ public abstract class TextPathView extends PathView {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
-        if (mAnimatorValue < 1) {
-            canvas.drawPath(mDst, mDrawPaint);
-        } else {
+        if (mAnimatorValue >= 1) {
             canvas.drawPath(mFontPath, mDrawPaint);
+        } else {
+            canvas.drawPath(mDst, mDrawPaint);
         }
 
     }
@@ -241,6 +241,10 @@ public abstract class TextPathView extends PathView {
         drawPath(1);
     }
 
+    /**
+     * 检查当前进度是否需要填充颜色
+     * @param progress 输入进度值
+     */
     protected void checkFill(float progress) {
         if (progress != 1 && mFillColor) {
             mFillColor = false;

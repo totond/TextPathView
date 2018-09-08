@@ -272,7 +272,9 @@ public abstract class PathView extends View {
         return mPaint;
     }
 
-    //设置路径，必须先设置好路径在startAnimation()，不然会报错！
+    /**
+     * 设置路径，必须先设置好路径在startAnimation()，不然会报错！
+     */
     public void setPath(Path path) {
         this.mPath = path;
         try {
@@ -292,8 +294,12 @@ public abstract class PathView extends View {
     //清除画面
     public void clear() {
         mAnimatorValue = 0;
-        mDst.reset();
-        mPaintPath.reset();
+        if (mDst != null) {
+            mDst.reset();
+        }
+        if (mPaintPath != null) {
+            mPaintPath.reset();
+        }
         postInvalidate();
     }
 
@@ -354,6 +360,10 @@ public abstract class PathView extends View {
         return true;
     }
 
-
+    @Override
+    protected void onDetachedFromWindow() {
+        stopAnimation();
+        super.onDetachedFromWindow();
+    }
 
 }

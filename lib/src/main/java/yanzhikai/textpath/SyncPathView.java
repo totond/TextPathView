@@ -38,7 +38,11 @@ public class SyncPathView extends PathView {
     @Override
     public void drawPath(float progress) {
         if (!isProgressValid(progress)){
-            return;
+            if (progress > 1){
+                progress = 1;
+            }else {
+                return;
+            }
         }
         mAnimatorValue = progress;
         mStop = mLengthSum * progress;
