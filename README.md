@@ -18,7 +18,7 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.1.2'
+compile 'com.yanzhikai:TextPathView:0.1.3'
 ```
 
  > minSdkVersion 16
@@ -347,6 +347,10 @@ public class FireworksPainter implements SyncPathPainter {
 
 ![](https://i.imgur.com/5wHvQvD.gif)
 
+ - 2018/09/09 **version 0.1.3**:
+     - 默认关闭此控件的硬件加速
+     - 加入内存泄漏控制
+     - 准备后续优化
 
 
 #### 后续将会往下面的方向努力：
