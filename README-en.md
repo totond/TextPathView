@@ -1,5 +1,7 @@
 # TextPathView
 　　
+![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
+
 ![](https://i.imgur.com/l5o8XG5.gif)
 
 
@@ -119,7 +121,7 @@ public class TestPath extends Path {
 |showPainter | whether the Painter Effects can show while animating  | boolean| false|
 |showPainterActually| whether the Painter Effects can show while drawing.**It will be set to false when the animator finish.**| boolean| false|
 ||~~textStrokeWidth~~ strokeWidth  |the stroke width of path      | dimension| 5px|
-|~~textStrokeColor~~ paintStrokeColor | the stroke color of path     | color| Color.black|
+|~~textStrokeColor~~ pathStrokeColor | the stroke color of path     | color| Color.black|
 |paintStrokeWidth |width of paint effect stroke     | dimension| 3px|
 |paintStrokeColor | color of paint effect stroke   | color| Color.black|
 |repeat| repeat type of animation| enum | NONE|

@@ -1,14 +1,14 @@
 # TextPathView
 
+![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
 
-　　
 ![](https://i.imgur.com/l5o8XG5.gif)
 
  > [Go to the English README](https://github.com/totond/TextPathView/blob/master/README-en.md)
 
 
 ## 介绍
-　　大家新年快乐，TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图。
+　　TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图。
 
  > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
 
@@ -126,7 +126,7 @@ public class TestPath extends Path {
 |showPainter | 在动画执行的时候是否执行画笔特效  | boolean| false|
 |showPainterActually| 在所有时候是否展示画笔特效| boolean| false|
 |~~textStrokeWidth~~ strokeWidth | 路径刻画的线条粗细     | dimension| 5px|
-|~~textStrokeColor~~ paintStrokeColor| 路径刻画的线条颜色   | color| Color.black|
+|~~textStrokeColor~~ pathStrokeColor| 路径刻画的线条颜色   | color| Color.black|
 |paintStrokeWidth | 画笔特效刻画的线条粗细    | dimension| 3px|
 |paintStrokeColor | 画笔特效刻画的线条颜色   | color| Color.black|
 |repeat| 是否重复播放动画，重复类型| enum | NONE|
