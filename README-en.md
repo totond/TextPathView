@@ -2,7 +2,7 @@
 　　
 ![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
 
-![](https://i.imgur.com/l5o8XG5.gif)
+![](https://i.imgur.com/kiXquFj.gif)
 
 
 ## Introduction
