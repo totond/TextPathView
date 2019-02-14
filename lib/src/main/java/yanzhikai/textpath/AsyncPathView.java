@@ -84,7 +84,7 @@ public class AsyncPathView extends PathView {
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
             mStop = mLength * mAnimatorValue;
-            mPathMeasure.getSegment(0, mStop, mDst, true);
+            mPathMeasure.getSegment(mStart, mStop, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {

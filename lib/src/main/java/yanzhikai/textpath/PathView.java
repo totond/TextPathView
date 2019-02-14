@@ -52,8 +52,13 @@ public abstract class PathView extends View {
     //动画进度值
     protected float mAnimatorValue = 0;
 
-    //绘画部分长度
+    //绘画部分终点
     protected float mStop = 0;
+
+    //绘画部分起点
+    protected float mStart = 0;
+
+
     //是否展示画笔特效:
     //showPainter代表动画绘画时是否展示
     //showPainterActually代表所有时候是否展示，由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false
