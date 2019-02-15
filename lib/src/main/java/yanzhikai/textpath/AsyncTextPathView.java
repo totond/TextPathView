@@ -101,6 +101,9 @@ public class AsyncTextPathView extends TextPathView {
             mLength = mPathMeasure.getLength();
 //            Log.d(TAG, "drawPath: length:" + mLength);
             mStop = mLength * mAnimatorValue;
+            float start = mAnimatorValue - 0.4f;
+            start = start < 0 ? 0 : start;
+            mStart = mLength * (start);
 //            Log.d(TAG, "drawPath: stop:" + mStop);
 //            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
             mPathMeasure.getSegment(mStart, mStop, mDst, true);

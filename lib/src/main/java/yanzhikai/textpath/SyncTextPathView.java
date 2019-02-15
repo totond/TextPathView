@@ -98,7 +98,11 @@ public class SyncTextPathView extends TextPathView {
         }
         mAnimatorValue = progress;
         mStop = mLengthSum * progress;
+        float start = progress - 0.4f;
+        start = start < 0 ? 0 : start;
+        mStart = mLengthSum * (start);
 
+        Log.i(TAG, "drawPath mStart: " + mStart);
         checkFill(progress);
 
         //重置路径
@@ -107,14 +111,33 @@ public class SyncTextPathView extends TextPathView {
         mPaintPath.reset();
 
         //根据进度获取路径
-        while (mStop > mPathMeasure.getLength()) {
-            mStop = mStop - mPathMeasure.getLength();
-            mPathMeasure.getSegment(0, mPathMeasure.getLength(), mDst, true);
-            if (!mPathMeasure.nextContour()) {
-                break;
+        float segmentLength = mPathMeasure.getLength();
+        boolean findStart = false;
+        if (mStop <= segmentLength) {
+            mPathMeasure.getSegment(mStart, mStop, mDst, true);
+        }else {
+            while (mStop > segmentLength) {
+                mStop = mStop - segmentLength;
+                if (findStart) {
+                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
+                }else {
+                    if (mStart <= segmentLength) {
+                        mPathMeasure.getSegment(mStart, segmentLength, mDst, true);
+                        findStart = true;
+                    } else {
+                        mStart -= segmentLength;
+                    }
+                }
+
+                if (!mPathMeasure.nextContour()) {
+                    break;
+                } else {
+                    segmentLength = mPathMeasure.getLength();
+                }
             }
+            Log.i(TAG, "mPathMeasure mStart: " + mStart + " mStop:" + mStop);
+            mPathMeasure.getSegment(0, mStop, mDst, true);
         }
-        mPathMeasure.getSegment(mStart, mStop, mDst, true);
 
 
         //绘画画笔效果

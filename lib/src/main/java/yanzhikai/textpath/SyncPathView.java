@@ -56,8 +56,7 @@ public class SyncPathView extends PathView {
 
         //根据进度获取路径
         float currentStart = 0;
-        float segmentLength = 0;
-        segmentLength = mPathMeasure.getLength();
+        float segmentLength = mPathMeasure.getLength();
         while (mStop > segmentLength) {
             mStop = mStop - segmentLength;
             if (mStart <= currentStart) {
@@ -72,7 +71,7 @@ public class SyncPathView extends PathView {
                 segmentLength = mPathMeasure.getLength();
             }
         }
-        mPathMeasure.getSegment(mStart, mStop, mDst, true);
+        mPathMeasure.getSegment(0, mStop, mDst, true);
 
 
         //绘画画笔效果
