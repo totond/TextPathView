@@ -98,9 +98,7 @@ public class SyncTextPathView extends TextPathView {
         }
         mAnimatorValue = progress;
         mStop = mLengthSum * progress;
-        float start = progress - 0.4f;
-        start = start < 0 ? 0 : start;
-        mStart = mLengthSum * (start);
+
 
         Log.i(TAG, "drawPath mStart: " + mStart);
         checkFill(progress);
@@ -110,8 +108,9 @@ public class SyncTextPathView extends TextPathView {
         mDst.reset();
         mPaintPath.reset();
 
-        //根据进度获取路径
+        //每个片段的长度
         float segmentLength = mPathMeasure.getLength();
+        //是否已经确定起点位置
         boolean findStart = false;
         if (mStop <= segmentLength) {
             mPathMeasure.getSegment(mStart, mStop, mDst, true);
@@ -119,12 +118,15 @@ public class SyncTextPathView extends TextPathView {
             while (mStop > segmentLength) {
                 mStop = mStop - segmentLength;
                 if (findStart) {
+                    //已经确定起点
                     mPathMeasure.getSegment(0, segmentLength, mDst, true);
                 }else {
                     if (mStart <= segmentLength) {
+                        //确定起点操作
                         mPathMeasure.getSegment(mStart, segmentLength, mDst, true);
                         findStart = true;
                     } else {
+                        //未确定起点
                         mStart -= segmentLength;
                     }
                 }
@@ -132,10 +134,11 @@ public class SyncTextPathView extends TextPathView {
                 if (!mPathMeasure.nextContour()) {
                     break;
                 } else {
+                    //获取下一段path长度
                     segmentLength = mPathMeasure.getLength();
                 }
             }
-            Log.i(TAG, "mPathMeasure mStart: " + mStart + " mStop:" + mStop);
+            //已经确认终点
             mPathMeasure.getSegment(0, mStop, mDst, true);
         }
 

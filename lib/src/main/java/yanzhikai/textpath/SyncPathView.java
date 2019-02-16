@@ -20,6 +20,7 @@ public class SyncPathView extends PathView {
 
     //路径长度总数
     private float mLengthSum = 0;
+
     public SyncPathView(Context context) {
         super(context);
         init();
@@ -37,15 +38,19 @@ public class SyncPathView extends PathView {
 
     @Override
     public void drawPath(float progress) {
-        if (!isProgressValid(progress)){
-            if (progress > 1){
+        if (!isProgressValid(progress)) {
+            if (progress > 1) {
                 progress = 1;
-            }else {
+            } else {
                 return;
             }
         }
         mAnimatorValue = progress;
         mStop = mLengthSum * progress;
+
+        float start = mAnimatorValue - 0.1f;
+        start = start < 0 ? 0 : start;
+        mStart = mLengthSum * (start);
 
         checkFill(progress);
 
@@ -54,24 +59,39 @@ public class SyncPathView extends PathView {
         mDst.reset();
         mPaintPath.reset();
 
-        //根据进度获取路径
-        float currentStart = 0;
+//每个片段的长度
         float segmentLength = mPathMeasure.getLength();
-        while (mStop > segmentLength) {
-            mStop = mStop - segmentLength;
-            if (mStart <= currentStart) {
-                mPathMeasure.getSegment(mStart, mPathMeasure.getLength(), mDst, true);
-            }else {
-                currentStart += segmentLength;
-            }
+        //是否已经确定起点位置
+        boolean findStart = false;
+        if (mStop <= segmentLength) {
+            mPathMeasure.getSegment(mStart, mStop, mDst, true);
+        } else {
+            while (mStop > segmentLength) {
+                mStop = mStop - segmentLength;
+                if (findStart) {
+                    //已经确定起点
+                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
+                } else {
+                    if (mStart <= segmentLength) {
+                        //确定起点操作
+                        mPathMeasure.getSegment(mStart, segmentLength, mDst, true);
+                        findStart = true;
+                    } else {
+                        //未确定起点
+                        mStart -= segmentLength;
+                    }
+                }
 
-            if (!mPathMeasure.nextContour()) {
-                break;
-            }else {
-                segmentLength = mPathMeasure.getLength();
+                if (!mPathMeasure.nextContour()) {
+                    break;
+                } else {
+                    //获取下一段path长度
+                    segmentLength = mPathMeasure.getLength();
+                }
             }
+            //已经确认终点
+            mPathMeasure.getSegment(0, mStop, mDst, true);
         }
-        mPathMeasure.getSegment(0, mStop, mDst, true);
 
 
         //绘画画笔效果
@@ -92,7 +112,7 @@ public class SyncPathView extends PathView {
 
     @Override
     protected void initPath() throws Exception {
-        if (mPath == null){
+        if (mPath == null) {
             throw new Exception("PathView can't work without setting a path!");
         }
         mDst.reset();
