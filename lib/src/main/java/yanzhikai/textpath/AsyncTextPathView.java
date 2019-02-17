@@ -69,21 +69,12 @@ public class AsyncTextPathView extends TextPathView {
 
     }
 
-
     @Override
-    public void drawPath(float progress) {
-        drawPath(0, progress);
-    }
-
-    @Override
-    public void drawPath(float start, float stop) {
+    public void drawPath(float start, float end) {
         mStart = validateProgress(start);
-        mStop = validateProgress(stop);
+        mStop = validateProgress(end);
 
-        mStartValue = mLength * mStart;
-        mStopValue = mLength * mStop;
-
-        checkFill(stop);
+        checkFill(end);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);
@@ -99,14 +90,17 @@ public class AsyncTextPathView extends TextPathView {
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
 //            Log.d(TAG, "drawPath: length:" + mLength);
-            mStopValue = mLength * mStop;
-//            Log.d(TAG, "drawPath: stop:" + mStopValue);
+
+            mStartValue = mLength * mStart;
+            mEndValue = mLength * mStop;
+
+//            Log.d(TAG, "drawPath: stop:" + mEndValue);
 //            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
-            mPathMeasure.getSegment(mStartValue, mStopValue, mDst, true);
+            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {
-                mPathMeasure.getPosTan(mStopValue, mCurPos, null);
+                mPathMeasure.getPosTan(mEndValue, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
         }

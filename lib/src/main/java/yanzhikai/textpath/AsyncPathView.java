@@ -56,20 +56,13 @@ public class AsyncPathView extends PathView {
         mPathMeasure.setPath(mPath, false);
     }
 
-    @Override
-    public void drawPath(float progress) {
-        drawPath(0, progress);
-    }
 
     @Override
-    public void drawPath(float start, float stop) {
+    public void drawPath(float start, float end) {
         mStart = validateProgress(start);
-        mStop = validateProgress(stop);
+        mStop = validateProgress(end);
 
-        mStartValue = mLength * mStart;
-        mStopValue = mLength * mStop;
-
-        checkFill(stop);
+        checkFill(end);
 
         //重置路径
         mPathMeasure.setPath(mPath,false);
@@ -79,12 +72,13 @@ public class AsyncPathView extends PathView {
         //根据进度获取路径
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
-            mStopValue = mLength * mStop;
-            mPathMeasure.getSegment(mStartValue, mStopValue, mDst, true);
+            mStartValue = mLength * mStart;
+            mEndValue = mLength * mStop;
+            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {
-                mPathMeasure.getPosTan(mStopValue, mCurPos, null);
+                mPathMeasure.getPosTan(mEndValue, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
         }

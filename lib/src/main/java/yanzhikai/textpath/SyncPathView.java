@@ -37,19 +37,14 @@ public class SyncPathView extends PathView {
     }
 
     @Override
-    public void drawPath(float progress) {
-        drawPath(0, progress);
-    }
-
-    @Override
-    public void drawPath(float start, float stop) {
+    public void drawPath(float start, float end) {
         mStart = validateProgress(start);
-        mStop = validateProgress(stop);
+        mStop = validateProgress(end);
 
         mStartValue = mLengthSum * mStart;
-        mStopValue = mLengthSum * mStop;
+        mEndValue = mLengthSum * mStop;
 
-        checkFill(stop);
+        checkFill(end);
 
         //重置路径
         mPathMeasure.setPath(mPath, false);
@@ -60,11 +55,11 @@ public class SyncPathView extends PathView {
         float segmentLength = mPathMeasure.getLength();
         //是否已经确定起点位置
         boolean findStart = false;
-        if (mStopValue <= segmentLength) {
-            mPathMeasure.getSegment(mStartValue, mStopValue, mDst, true);
+        if (mEndValue <= segmentLength) {
+            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
         } else {
-            while (mStopValue > segmentLength) {
-                mStopValue = mStopValue - segmentLength;
+            while (mEndValue > segmentLength) {
+                mEndValue = mEndValue - segmentLength;
                 if (findStart) {
                     //已经确定起点
                     mPathMeasure.getSegment(0, segmentLength, mDst, true);
@@ -87,13 +82,13 @@ public class SyncPathView extends PathView {
                 }
             }
             //已经确认终点
-            mPathMeasure.getSegment(0, mStopValue, mDst, true);
+            mPathMeasure.getSegment(0, mEndValue, mDst, true);
         }
 
 
         //绘画画笔效果
         if (showPainterActually) {
-            mPathMeasure.getPosTan(mStopValue, mCurPos, null);
+            mPathMeasure.getPosTan(mEndValue, mCurPos, null);
             drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
         }
 

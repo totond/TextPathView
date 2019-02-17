@@ -22,6 +22,10 @@ import android.view.animation.LinearInterpolator;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import yanzhikai.textpath.calculator.DefaultCalculator;
+import yanzhikai.textpath.calculator.MidCalculator;
+import yanzhikai.textpath.calculator.PathCalculator;
+
 /**
  * author : yany
  * e-mail : yanzhikai_yjk@qq.com
@@ -54,7 +58,7 @@ public abstract class PathView extends View {
     protected float mStart = 0, mStop = 0;
 
     //绘画部分终点
-    protected float mStopValue = 0;
+    protected float mEndValue = 0;
 
     //绘画部分起点
     protected float mStartValue = 0;
@@ -92,6 +96,8 @@ public abstract class PathView extends View {
     protected PathAnimatorListener mAnimatorListener;
 
     protected boolean nullPath = true;
+
+    protected PathCalculator mCalculator = new MidCalculator();
 
 
     public PathView(Context context) {
@@ -230,14 +236,17 @@ public abstract class PathView extends View {
      *
      * @param progress 绘画进度，0-1
      */
-    public abstract void drawPath(float progress);
+    public void drawPath(float progress){
+        mCalculator.calculate(validateProgress(progress));
+        drawPath(mCalculator.start, mCalculator.end);
+    }
 
     /**
      * 绘画文字路径的方法
      * @param start 路径开始点百分比
-     * @param stop 路径结束点百分比
+     * @param end 路径结束点百分比
      */
-    public void drawPath(float start, float stop){};
+    public abstract void drawPath(float start, float end);
 
     protected abstract void initPath() throws Exception;
 
@@ -352,6 +361,11 @@ public abstract class PathView extends View {
     //设置重复方式
     public void setRepeatStyle(int repeatStyle) {
         this.mRepeatStyle = repeatStyle;
+    }
+
+    //设置Path开始结束取值的计算器
+    public void setCalculator(PathCalculator calculator) {
+        mCalculator = calculator;
     }
 
     protected void checkFill(float progress) {

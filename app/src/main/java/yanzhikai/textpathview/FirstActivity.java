@@ -63,13 +63,14 @@ public class FirstActivity extends Activity {
         sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                atpv1.drawPath(progress / 1000f);
-                atpv2.drawPath(progress / 1000f);
-                stpv_2017.drawPath(progress / 1000f);
-                stpv_2018.drawPath(progress / 1000f);
-                stpv_chicken.drawPath(progress / 1000f);
-                stpv_dog.drawPath(progress / 1000f);
-                stpv_wish.drawPath(progress / 1000f);
+                float pf = progress / 1000f;
+//                atpv1.drawPath(progress / 1000f);
+//                atpv2.drawPath(progress / 1000f);
+//                stpv_2017.drawPath(progress / 1000f);
+//                stpv_2018.drawPath(progress / 1000f);
+//                stpv_chicken.drawPath(progress / 1000f);
+//                stpv_dog.drawPath(progress / 1000f);
+//                stpv_wish.drawPath(progress / 1000f);
                 stpv_fortune.drawPath(progress / 1000f);
 
             }
