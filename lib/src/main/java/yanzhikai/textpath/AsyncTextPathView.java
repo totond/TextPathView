@@ -6,9 +6,6 @@ import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.util.AttributeSet;
-import android.util.Log;
-
-import java.util.LinkedList;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
@@ -73,23 +70,25 @@ public class AsyncTextPathView extends TextPathView {
     }
 
 
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
-    public void drawPath(float progress){
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
+    public void drawPath(float progress) {
+        drawPath(0, progress);
+    }
 
-        checkFill(progress);
+    @Override
+    public void drawPath(float start, float stop) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(stop);
 
-        mAnimatorValue = progress;
+        mStartValue = mLength * mStart;
+        mStopValue = mLength * mStop;
+
+        checkFill(stop);
+
+        //重置路径
+        mPathMeasure.setPath(mFontPath, false);
+        mDst.reset();
+        mPaintPath.reset();
 
         //重置路径
         mPathMeasure.setPath(mFontPath,true);
@@ -100,14 +99,14 @@ public class AsyncTextPathView extends TextPathView {
         while (mPathMeasure.nextContour()) {
             mLength = mPathMeasure.getLength();
 //            Log.d(TAG, "drawPath: length:" + mLength);
-            mStop = mLength * mAnimatorValue;
-//            Log.d(TAG, "drawPath: stop:" + mStop);
+            mStopValue = mLength * mStop;
+//            Log.d(TAG, "drawPath: stop:" + mStopValue);
 //            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
-            mPathMeasure.getSegment(mStart, mStop, mDst, true);
+            mPathMeasure.getSegment(mStartValue, mStopValue, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {
-                mPathMeasure.getPosTan(mStop, mCurPos, null);
+                mPathMeasure.getPosTan(mStopValue, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
         }

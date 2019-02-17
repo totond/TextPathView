@@ -14,6 +14,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -49,14 +50,14 @@ public abstract class PathView extends View {
     protected Path mDst = new Path(), mPaintPath = new Path();
     //属性动画
     protected ValueAnimator mAnimator;
-    //动画进度值
-    protected float mAnimatorValue = 0;
+    //路径开始、结束百分比
+    protected float mStart = 0, mStop = 0;
 
     //绘画部分终点
-    protected float mStop = 0;
+    protected float mStopValue = 0;
 
     //绘画部分起点
-    protected float mStart = 0;
+    protected float mStartValue = 0;
 
 
     //是否展示画笔特效:
@@ -144,8 +145,8 @@ public abstract class PathView extends View {
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mAnimatorValue = (float) valueAnimator.getAnimatedValue();
-                drawPath(mAnimatorValue);
+                mStop = (float) valueAnimator.getAnimatedValue();
+                drawPath(mStop);
             }
         });
         if (mAnimatorListener == null){
@@ -225,11 +226,18 @@ public abstract class PathView extends View {
     }
 
     /**
-     * 绘画文字路径的方法
+     * 从起点开始，绘画文字路径的方法
      *
      * @param progress 绘画进度，0-1
      */
     public abstract void drawPath(float progress);
+
+    /**
+     * 绘画文字路径的方法
+     * @param start 路径开始点百分比
+     * @param stop 路径结束点百分比
+     */
+    public void drawPath(float start, float stop){};
 
     protected abstract void initPath() throws Exception;
 
@@ -298,7 +306,7 @@ public abstract class PathView extends View {
 
     //清除画面
     public void clear() {
-        mAnimatorValue = 0;
+        mStop = 0;
         if (mDst != null) {
             mDst.reset();
         }
@@ -363,6 +371,18 @@ public abstract class PathView extends View {
             }
         }
         return true;
+    }
+
+    protected float validateProgress(float progress){
+        if (progress < 0) {
+            Log.i(TAG, "Progress is invalid!");
+            return 0;
+        }else if (progress > 1){
+            Log.i(TAG, "Progress is invalid!");
+            return 1;
+        }else {
+            return progress;
+        }
     }
 
     @Override

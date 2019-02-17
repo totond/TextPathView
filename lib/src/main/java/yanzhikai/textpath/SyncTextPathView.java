@@ -43,7 +43,7 @@ public class SyncTextPathView extends TextPathView {
 
     protected void init() {
         //关闭硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
         //初始化画笔
         initPaint();
@@ -53,11 +53,11 @@ public class SyncTextPathView extends TextPathView {
 
         //是否自动播放动画
         if (mAutoStart) {
-            startAnimation(0,1);
+            startAnimation(0, 1);
         }
 
         //是否一开始就显示出完整的文字路径
-        if (mShowInStart){
+        if (mShowInStart) {
             drawPath(1);
         }
     }
@@ -68,7 +68,7 @@ public class SyncTextPathView extends TextPathView {
         mFontPath.reset();
 
         //获取宽高
-        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
+        mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
         Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
         mTextHeight = metrics.bottom - metrics.top;
 
@@ -82,26 +82,20 @@ public class SyncTextPathView extends TextPathView {
 
     }
 
-
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
     public void drawPath(float progress) {
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
-        mAnimatorValue = progress;
-        mStop = mLengthSum * progress;
+        drawPath(0, progress);
+    }
 
+    @Override
+    public void drawPath(float start, float stop) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(stop);
 
-        Log.i(TAG, "drawPath mStart: " + mStart);
-        checkFill(progress);
+        mStartValue = mLengthSum * mStart;
+        mStopValue = mLengthSum * mStop;
+
+        checkFill(stop);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);
@@ -112,22 +106,22 @@ public class SyncTextPathView extends TextPathView {
         float segmentLength = mPathMeasure.getLength();
         //是否已经确定起点位置
         boolean findStart = false;
-        if (mStop <= segmentLength) {
-            mPathMeasure.getSegment(mStart, mStop, mDst, true);
-        }else {
-            while (mStop > segmentLength) {
-                mStop = mStop - segmentLength;
+        if (mStopValue <= segmentLength) {
+            mPathMeasure.getSegment(mStartValue, mStopValue, mDst, true);
+        } else {
+            while (mStopValue > segmentLength) {
+                mStopValue = mStopValue - segmentLength;
                 if (findStart) {
                     //已经确定起点
                     mPathMeasure.getSegment(0, segmentLength, mDst, true);
-                }else {
-                    if (mStart <= segmentLength) {
+                } else {
+                    if (mStartValue <= segmentLength) {
                         //确定起点操作
-                        mPathMeasure.getSegment(mStart, segmentLength, mDst, true);
+                        mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
                         findStart = true;
                     } else {
                         //未确定起点
-                        mStart -= segmentLength;
+                        mStartValue -= segmentLength;
                     }
                 }
 
@@ -139,13 +133,13 @@ public class SyncTextPathView extends TextPathView {
                 }
             }
             //已经确认终点
-            mPathMeasure.getSegment(0, mStop, mDst, true);
+            mPathMeasure.getSegment(0, mStopValue, mDst, true);
         }
 
 
         //绘画画笔效果
         if (showPainterActually) {
-            mPathMeasure.getPosTan(mStop, mCurPos, null);
+            mPathMeasure.getPosTan(mStopValue, mCurPos, null);
             drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
         }
 

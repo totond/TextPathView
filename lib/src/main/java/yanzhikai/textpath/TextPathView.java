@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewGroup;
 
 /**
@@ -171,7 +170,7 @@ public abstract class TextPathView extends PathView {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
-        if (mAnimatorValue >= 1) {
+        if (mStop >= 1) {
             canvas.drawPath(mFontPath, mDrawPaint);
         } else {
             canvas.drawPath(mDst, mDrawPaint);
@@ -250,18 +249,6 @@ public abstract class TextPathView extends PathView {
             mFillColor = false;
             mDrawPaint.setStyle(Paint.Style.STROKE);
         }
-    }
-
-    protected boolean isProgressValid(float progress) {
-        if (progress < 0 || progress > 1) {
-            try {
-                throw new Exception("Progress is invalid!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return true;
     }
 
 
