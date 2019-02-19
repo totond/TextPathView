@@ -101,38 +101,8 @@ public class SyncTextPathView extends TextPathView {
         float segmentLength = mPathMeasure.getLength();
         //是否已经确定起点位置
         boolean findStart = false;
-//        if (mEndValue <= segmentLength) {
-//            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
-//        } else {
-//            while (mEndValue > segmentLength) {
-//                mEndValue = mEndValue - segmentLength;
-//                if (findStart) {
-//                    //已经确定起点
-//                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
-//                } else {
-//                    if (mStartValue <= segmentLength) {
-//                        //确定起点操作
-//                        mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
-//                        findStart = true;
-//                    } else {
-//                        //未确定起点
-//                        mStartValue -= segmentLength;
-//                    }
-//                }
-//
-//                if (!mPathMeasure.nextContour()) {
-//                    break;
-//                } else {
-//                    //获取下一段path长度
-//                    segmentLength = mPathMeasure.getLength();
-//                }
-//                mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
-//            }
-        Log.i(TAG, "drawPath: start: " + mStart + " stop " + mStop);
             while (true){
-                Log.i(TAG, "drawPath: mEndValue: " + mEndValue + " segmentLength: " + segmentLength);
                 if (mEndValue <= segmentLength) {
-                    Log.i(TAG, "drawPath: 找到终点，findStart: " + findStart + " mSV: " + mStartValue);
                     if (findStart){
                         mPathMeasure.getSegment(0, mEndValue, mDst, true);
                     }else {
@@ -143,31 +113,23 @@ public class SyncTextPathView extends TextPathView {
                     mEndValue -= segmentLength;
                     if (!findStart) {
                         if (mStartValue <= segmentLength) {
-                            Log.i(TAG, "drawPath: 找到起点");
                             mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
                             findStart = true;
                         } else {
-                            Log.i(TAG, "drawPath: 下一段找起点");
                             mStartValue -= segmentLength;
                         }
                     }else {
-                        Log.i(TAG, "drawPath: 找到起点后补充");
                         mPathMeasure.getSegment(0, segmentLength, mDst, true);
                     }
                 }
                 if (!mPathMeasure.nextContour()) {
-                    Log.i(TAG, "drawPath: 出现路径计算错误：mEndValue: " + mEndValue + " segmentLength: " + segmentLength + " sum: " + mLengthSum);
+                    //todo 一些精度误差处理
                     break;
                 } else {
                     //获取下一段path长度
                     segmentLength = mPathMeasure.getLength();
                 }
             }
-//            Log.i(TAG, "drawPath: start " + mStartValue + " stop " + mEndValue);
-//            //已经确认终点
-//            mPathMeasure.getSegment(0, mEndValue, mDst, true);
-//        }
-
 
         //绘画画笔效果
         if (showPainterActually) {

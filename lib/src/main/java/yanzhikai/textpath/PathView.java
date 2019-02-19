@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import yanzhikai.textpath.calculator.AroundCalcultor;
 import yanzhikai.textpath.calculator.DefaultCalculator;
 import yanzhikai.textpath.calculator.MidCalculator;
 import yanzhikai.textpath.calculator.PathCalculator;
@@ -97,7 +98,7 @@ public abstract class PathView extends View {
 
     protected boolean nullPath = true;
 
-    protected PathCalculator mCalculator = new MidCalculator();
+    protected PathCalculator mCalculator = new AroundCalcultor();
 
 
     public PathView(Context context) {
