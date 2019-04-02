@@ -97,39 +97,7 @@ public class SyncTextPathView extends TextPathView {
         mDst.reset();
         mPaintPath.reset();
 
-        //每个片段的长度
-        float segmentLength = mPathMeasure.getLength();
-        //是否已经确定起点位置
-        boolean findStart = false;
-            while (true){
-                if (mEndValue <= segmentLength) {
-                    if (findStart){
-                        mPathMeasure.getSegment(0, mEndValue, mDst, true);
-                    }else {
-                        mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
-                    }
-                    break;
-                }else {
-                    mEndValue -= segmentLength;
-                    if (!findStart) {
-                        if (mStartValue <= segmentLength) {
-                            mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
-                            findStart = true;
-                        } else {
-                            mStartValue -= segmentLength;
-                        }
-                    }else {
-                        mPathMeasure.getSegment(0, segmentLength, mDst, true);
-                    }
-                }
-                if (!mPathMeasure.nextContour()) {
-                    //todo 一些精度误差处理
-                    break;
-                } else {
-                    //获取下一段path长度
-                    segmentLength = mPathMeasure.getLength();
-                }
-            }
+        dividePath();
 
         //绘画画笔效果
         if (showPainterActually) {
@@ -139,6 +107,42 @@ public class SyncTextPathView extends TextPathView {
 
         //绘画路径
         postInvalidate();
+    }
+
+    private void dividePath() {
+        //每个片段的长度
+        float segmentLength = mPathMeasure.getLength();
+        //是否已经确定起点位置
+        boolean findStart = false;
+        while (true) {
+            if (mEndValue <= segmentLength) {
+                if (findStart) {
+                    mPathMeasure.getSegment(0, mEndValue, mDst, true);
+                } else {
+                    mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
+                }
+                break;
+            } else {
+                mEndValue -= segmentLength;
+                if (!findStart) {
+                    if (mStartValue <= segmentLength) {
+                        mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
+                        findStart = true;
+                    } else {
+                        mStartValue -= segmentLength;
+                    }
+                } else {
+                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
+                }
+            }
+            if (!mPathMeasure.nextContour()) {
+                //todo 一些精度误差处理
+                break;
+            } else {
+                //获取下一段path长度
+                segmentLength = mPathMeasure.getLength();
+            }
+        }
     }
 
 

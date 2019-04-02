@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FifthActivity">
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:duration="12000"
+        app:paintStrokeColor="@color/colorAccent"
+        app:pathStrokeColor="@color/colorAccent"
+        app:showPainter="true"
+        app:text="新春快乐"
+        app:textInCenter="true"
+        app:textSize="55sp" />
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:duration="12000"
+        app:paintStrokeColor="@android:color/black"
+        app:pathStrokeColor="@android:color/holo_red_dark"
+        app:showPainter="true"
+        app:text="恭喜发财"
+        app:textInCenter="true"
+        app:textSize="55sp" />
+
+    <yanzhikai.textpath.SyncPathView
+        android:id="@+id/spv"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <yanzhikai.textpath.AsyncPathView
+        android:id="@+id/aspv"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stop" />
+
+
+    <SeekBar
+        android:id="@+id/sb_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" />
+
+    <SeekBar
+        android:id="@+id/sb_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" />
+</LinearLayout>

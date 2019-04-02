@@ -234,6 +234,22 @@ public abstract class PathView extends View {
     }
 
     /**
+     * 获取当前路径开头在输入路径百分比位置
+     * @return 百分比位置
+     */
+    public float getStart() {
+        return mStart;
+    }
+
+    /**
+     * 获取当前路径结尾在输入路径百分比位置
+     * @return 百分比位置
+     */
+    public float getStop() {
+        return mStop;
+    }
+
+    /**
      * 从起点开始，绘画文字路径的方法
      *
      * @param progress 绘画进度，0-1

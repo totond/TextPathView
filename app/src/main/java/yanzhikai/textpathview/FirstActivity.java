@@ -64,14 +64,14 @@ public class FirstActivity extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float pf = progress / 1000f;
-//                atpv1.drawPath(progress / 1000f);
-//                atpv2.drawPath(progress / 1000f);
-//                stpv_2017.drawPath(progress / 1000f);
-//                stpv_2018.drawPath(progress / 1000f);
-//                stpv_chicken.drawPath(progress / 1000f);
-//                stpv_dog.drawPath(progress / 1000f);
-//                stpv_wish.drawPath(progress / 1000f);
-                stpv_fortune.drawPath(progress / 1000f);
+                atpv1.drawPath(pf);
+                atpv2.drawPath(pf);
+                stpv_2017.drawPath(pf);
+                stpv_2018.drawPath(pf);
+                stpv_chicken.drawPath(pf);
+                stpv_dog.drawPath(pf);
+                stpv_wish.drawPath(pf);
+                stpv_fortune.drawPath(pf);
 
             }
 

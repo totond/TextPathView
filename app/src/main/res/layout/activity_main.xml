@@ -30,4 +30,10 @@
         android:layout_height="wrap_content"
         android:text="Forth_Effect"
         android:id="@+id/btn_forth"/>
+
+    \<Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fifth_Effect"
+        android:id="@+id/btn_fifth"/>
 </LinearLayout>
