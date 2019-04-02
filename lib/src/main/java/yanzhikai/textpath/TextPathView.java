@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/07
  * desc   : 文字路径动画自定义View父类

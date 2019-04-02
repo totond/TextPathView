@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/14
  * desc   : 所有路径一起绘画

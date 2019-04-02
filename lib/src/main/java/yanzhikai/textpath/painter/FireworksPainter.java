@@ -9,7 +9,7 @@ import yanzhikai.textpath.SyncTextPathView;
 import yanzhikai.textpath.VelocityCalculator;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/11
  * desc   : 火花特效，根据箭头引申变化而来，根据当前点与上一个点算出的速度方向来控制火花的方向

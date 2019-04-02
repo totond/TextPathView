@@ -6,7 +6,7 @@ import yanzhikai.textpath.AsyncTextPathView;
 import yanzhikai.textpath.SyncTextPathView;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/11
  * desc   : 一支笔的画笔特效，就是在绘画点旁边画多一支笔

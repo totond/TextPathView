@@ -3,7 +3,7 @@ package yanzhikai.textpath.painter;
 import android.graphics.Path;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/14
  * desc   :

@@ -22,13 +22,11 @@ import android.view.animation.LinearInterpolator;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import yanzhikai.textpath.calculator.AroundCalcultor;
-import yanzhikai.textpath.calculator.DefaultCalculator;
-import yanzhikai.textpath.calculator.MidCalculator;
+import yanzhikai.textpath.calculator.AroundCalculator;
 import yanzhikai.textpath.calculator.PathCalculator;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
  * desc   : 所有路径动画自定义View的父类
@@ -64,6 +62,9 @@ public abstract class PathView extends View {
     //绘画部分起点
     protected float mStartValue = 0;
 
+    //For test
+    protected float currentDrawPathLength = 0;
+
 
     //是否展示画笔特效:
     //showPainter代表动画绘画时是否展示
@@ -98,7 +99,7 @@ public abstract class PathView extends View {
 
     protected boolean nullPath = true;
 
-    protected PathCalculator mCalculator = new AroundCalcultor();
+    protected PathCalculator mCalculator = new AroundCalculator();
 
 
     public PathView(Context context) {

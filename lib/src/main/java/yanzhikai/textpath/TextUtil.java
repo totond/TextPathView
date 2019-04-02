@@ -3,7 +3,7 @@ package yanzhikai.textpath;
 import android.graphics.Paint;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/09
  * desc   : 获取文字的属性工具

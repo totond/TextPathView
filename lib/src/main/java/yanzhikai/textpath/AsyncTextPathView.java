@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/01/10
  * desc   : 所有笔画异步一起绘画的TextPathView

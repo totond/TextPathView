@@ -11,7 +11,7 @@ import android.util.Log;
 import yanzhikai.textpath.painter.SyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/01/08
  * desc   : 所有笔画按顺序绘画的TextPathView

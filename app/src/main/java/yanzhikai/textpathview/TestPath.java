@@ -3,7 +3,7 @@ package yanzhikai.textpathview;
 import android.graphics.Path;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
  * desc   :

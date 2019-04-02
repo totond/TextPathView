@@ -1,6 +1,6 @@
 package yanzhikai.textpath.calculator;
 
-public class AroundCalcultor extends PathCalculator {
+public class AroundCalculator extends PathCalculator {
     @Override
     public boolean calculate(float progress) {
         boolean isEnd = false;
