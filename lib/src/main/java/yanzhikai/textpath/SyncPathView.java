@@ -52,33 +52,28 @@ public class SyncPathView extends PathView {
         mDst.reset();
         mPaintPath.reset();
 
-//每个片段的长度
+        //每个片段的长度
         float segmentLength = mPathMeasure.getLength();
         //是否已经确定起点位置
         boolean findStart = false;
-        while (true){
-            Log.i(TAG, "drawPath: mEndValue: " + mEndValue + " segmentLength: " + segmentLength);
+        while (true) {
             if (mEndValue <= segmentLength) {
-                Log.i(TAG, "drawPath: 找到终点，findStart: " + findStart + " mSV: " + mStartValue);
-                if (findStart){
+                if (findStart) {
                     mPathMeasure.getSegment(0, mEndValue, mDst, true);
-                }else {
+                } else {
                     mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
                 }
                 break;
-            }else {
+            } else {
                 mEndValue -= segmentLength;
                 if (!findStart) {
                     if (mStartValue <= segmentLength) {
-                        Log.i(TAG, "drawPath: 找到起点");
                         mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
                         findStart = true;
                     } else {
-                        Log.i(TAG, "drawPath: 下一段找起点");
                         mStartValue -= segmentLength;
                     }
-                }else {
-                    Log.i(TAG, "drawPath: 找到起点后补充");
+                } else {
                     mPathMeasure.getSegment(0, segmentLength, mDst, true);
                 }
             }

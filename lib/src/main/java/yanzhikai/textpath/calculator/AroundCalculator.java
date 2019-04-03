@@ -2,20 +2,17 @@ package yanzhikai.textpath.calculator;
 
 public class AroundCalculator extends PathCalculator {
     @Override
-    public boolean calculate(float progress) {
-        boolean isEnd = false;
+    public void calculate(float progress) {
         if (progress < 1){
-            end = progress;
+            setEnd(progress);
             if (progress < 0.75f){
-                start = progress / 3;
+                setStart(progress / 3);
             }else {
-                start = 1 - progress;
+                setStart(1 - progress);
             }
         }else {
-            start = 0;
-            end = 1;
-            isEnd = true;
+            setStart(0);
+            setEnd(1);
         }
-        return isEnd;
     }
 }

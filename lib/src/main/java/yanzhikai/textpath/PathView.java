@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import yanzhikai.textpath.calculator.AroundCalculator;
+import yanzhikai.textpath.calculator.DefaultCalculator;
 import yanzhikai.textpath.calculator.PathCalculator;
 
 /**
@@ -62,8 +63,7 @@ public abstract class PathView extends View {
     //绘画部分起点
     protected float mStartValue = 0;
 
-    //For test
-    protected float currentDrawPathLength = 0;
+
 
 
     //是否展示画笔特效:
@@ -99,7 +99,7 @@ public abstract class PathView extends View {
 
     protected boolean nullPath = true;
 
-    protected PathCalculator mCalculator = new AroundCalculator();
+    protected PathCalculator mCalculator = new DefaultCalculator();
 
 
     public PathView(Context context) {
@@ -256,7 +256,7 @@ public abstract class PathView extends View {
      */
     public void drawPath(float progress){
         mCalculator.calculate(validateProgress(progress));
-        drawPath(mCalculator.start, mCalculator.end);
+        drawPath(mCalculator.getStart(), mCalculator.getEnd());
     }
 
     /**

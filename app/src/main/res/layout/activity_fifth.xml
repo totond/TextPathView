@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:duration="12000"
+        app:duration="8000"
         app:paintStrokeColor="@color/colorAccent"
         app:pathStrokeColor="@color/colorAccent"
         app:showPainter="true"
-        app:text="新春快乐"
+        app:text="totond"
         app:textInCenter="true"
         app:textSize="55sp" />
 
@@ -25,11 +25,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:duration="12000"
+        app:duration="8000"
         app:paintStrokeColor="@android:color/black"
         app:pathStrokeColor="@android:color/holo_red_dark"
         app:showPainter="true"
-        app:text="恭喜发财"
+        app:text="totond"
         app:textInCenter="true"
         app:textSize="55sp" />
 
@@ -55,16 +55,45 @@
         android:layout_height="wrap_content"
         android:text="stop" />
 
-
-    <SeekBar
-        android:id="@+id/sb_start"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp" />
+        android:orientation="horizontal">
 
-    <SeekBar
-        android:id="@+id/sb_stop"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Start:"
+            />
+
+        <SeekBar
+            android:id="@+id/sb_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="End:"
+            />
+
+        <SeekBar
+            android:id="@+id/sb_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 </LinearLayout>

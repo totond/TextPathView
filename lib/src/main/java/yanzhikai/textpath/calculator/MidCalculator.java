@@ -2,16 +2,13 @@ package yanzhikai.textpath.calculator;
 
 public class MidCalculator extends PathCalculator {
     @Override
-    public boolean calculate(float progress) {
-        boolean isEnd = false;
+    public void calculate(float progress) {
         if (progress < 1){
-            start = 0.5f - progress / 2;
-            end = 0.5f + progress / 2;
+            setStart(0.5f - progress / 2);
+            setEnd(0.5f + progress / 2);
         }else {
-            start = 0;
-            end = 1;
-            isEnd = true;
+            setStart(0);
+            setEnd(1);
         }
-        return isEnd;
     }
 }

@@ -170,7 +170,7 @@ public abstract class TextPathView extends PathView {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
-        if (mStop >= 1) {
+        if (mStop - mStart >= 1) {
             canvas.drawPath(mFontPath, mDrawPaint);
         } else {
             canvas.drawPath(mDst, mDrawPaint);

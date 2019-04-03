@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -67,17 +68,19 @@ public class SyncTextPathView extends TextPathView {
         mDst.reset();
         mFontPath.reset();
 
-        //获取宽高
-        mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
-        mTextHeight = metrics.bottom - metrics.top;
+        if (!TextUtils.isEmpty(mText)) {
+            //获取宽高
+            mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
+            Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+            mTextHeight = metrics.bottom - metrics.top;
 
-        mTextPaint.getTextPath(mText, 0, mText.length(), 0, -metrics.ascent, mFontPath);
-        mPathMeasure.setPath(mFontPath, false);
-        mLengthSum = mPathMeasure.getLength();
-        //获取所有路径的总长度
-        while (mPathMeasure.nextContour()) {
-            mLengthSum += mPathMeasure.getLength();
+            mTextPaint.getTextPath(mText, 0, mText.length(), 0, -metrics.ascent, mFontPath);
+            mPathMeasure.setPath(mFontPath, false);
+            mLengthSum = mPathMeasure.getLength();
+            //获取所有路径的总长度
+            while (mPathMeasure.nextContour()) {
+                mLengthSum += mPathMeasure.getLength();
+            }
         }
 
     }

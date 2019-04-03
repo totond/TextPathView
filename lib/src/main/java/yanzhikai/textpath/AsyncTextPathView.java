@@ -5,7 +5,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
@@ -58,14 +60,16 @@ public class AsyncTextPathView extends TextPathView {
         mDst.reset();
         mFontPath.reset();
 
-        //获取宽高
-        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
-        mTextHeight = metrics.bottom - metrics.top;
+        if (!TextUtils.isEmpty(mText)) {
+            //获取宽高
+            mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
+            Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+            mTextHeight = metrics.bottom - metrics.top;
 
-        mTextPaint.getTextPath(mText,0,mText.length(),0f, -metrics.ascent, mFontPath);
-        mPathMeasure.setPath(mFontPath,false);
-        mLength = mPathMeasure.getLength();
+            mTextPaint.getTextPath(mText, 0, mText.length(), 0f, -metrics.ascent, mFontPath);
+            mPathMeasure.setPath(mFontPath, false);
+            mLength = mPathMeasure.getLength();
+        }
 
     }
 
@@ -94,7 +98,8 @@ public class AsyncTextPathView extends TextPathView {
             mStartValue = mLength * mStart;
             mEndValue = mLength * mStop;
 
-//            Log.d(TAG, "drawPath: stop:" + mEndValue);
+//            Log.d(TAG, "drawPath: mEndValue:" + mEndValue);
+//            Log.d(TAG, "drawPath: mLength:" + mLength);
 //            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
             mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
 
