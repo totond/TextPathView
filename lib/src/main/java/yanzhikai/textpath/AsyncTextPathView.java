@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
+import yanzhikai.textpath.path.AsyncTextDrawingPath;
 
 /**
  * author : totond
@@ -41,7 +42,8 @@ public class AsyncTextPathView extends TextPathView {
     }
 
     protected void init(){
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
+
+        mDrawingPath = new AsyncTextDrawingPath();
 
         initPaint();
         initPath();

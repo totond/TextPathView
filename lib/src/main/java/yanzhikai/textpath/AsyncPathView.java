@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
+import yanzhikai.textpath.path.AsyncDrawingPath;
+import yanzhikai.textpath.path.AsyncTextDrawingPath;
 
 /**
  * author : totond
@@ -37,6 +39,7 @@ public class AsyncPathView extends PathView {
     }
 
     protected void init(){
+        mDrawingPath = new AsyncDrawingPath();
         initPaint();
         try {
             initPath();

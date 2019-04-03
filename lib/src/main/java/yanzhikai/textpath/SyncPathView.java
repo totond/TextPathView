@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import yanzhikai.textpath.painter.SyncPathPainter;
+import yanzhikai.textpath.path.AsyncTextDrawingPath;
+import yanzhikai.textpath.path.SyncDrawingPath;
 
 /**
  * author : totond
@@ -42,10 +44,10 @@ public class SyncPathView extends PathView {
         mStart = validateProgress(start);
         mStop = validateProgress(end);
 
+        checkFill(end);
+
         mStartValue = mLengthSum * mStart;
         mEndValue = mLengthSum * mStop;
-
-        checkFill(end);
 
         //重置路径
         mPathMeasure.setPath(mPath, false);
@@ -123,7 +125,7 @@ public class SyncPathView extends PathView {
 
         //初始化画笔
         initPaint();
-
+        mDrawingPath = new SyncDrawingPath();
         //初始化路径
 //        initPath();
 

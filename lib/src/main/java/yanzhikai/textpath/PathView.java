@@ -25,6 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import yanzhikai.textpath.calculator.AroundCalculator;
 import yanzhikai.textpath.calculator.DefaultCalculator;
 import yanzhikai.textpath.calculator.PathCalculator;
+import yanzhikai.textpath.path.DrawingPath;
 
 /**
  * author : totond
@@ -52,8 +53,6 @@ public abstract class PathView extends View {
     protected Paint mPaint;
     //文字装载路径、文字绘画路径、画笔特效路径
     protected Path mDst = new Path(), mPaintPath = new Path();
-    //属性动画
-    protected ValueAnimator mAnimator;
     //路径开始、结束百分比
     protected float mStart = 0, mStop = 0;
 
@@ -62,9 +61,8 @@ public abstract class PathView extends View {
 
     //绘画部分起点
     protected float mStartValue = 0;
-
-
-
+    //属性动画
+    protected ValueAnimator mAnimator;
 
     //是否展示画笔特效:
     //showPainter代表动画绘画时是否展示
@@ -100,6 +98,8 @@ public abstract class PathView extends View {
     protected boolean nullPath = true;
 
     protected PathCalculator mCalculator = new DefaultCalculator();
+
+    protected DrawingPath mDrawingPath;
 
 
     public PathView(Context context) {

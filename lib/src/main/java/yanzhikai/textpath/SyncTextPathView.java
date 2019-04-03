@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import yanzhikai.textpath.painter.SyncPathPainter;
+import yanzhikai.textpath.path.AsyncTextDrawingPath;
+import yanzhikai.textpath.path.SyncTextDrawingPath;
 
 /**
  * author : totond
@@ -43,9 +45,7 @@ public class SyncTextPathView extends TextPathView {
     }
 
     protected void init() {
-        //关闭硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
-
+        mDrawingPath = new SyncTextDrawingPath();
         //初始化画笔
         initPaint();
 
@@ -76,8 +76,8 @@ public class SyncTextPathView extends TextPathView {
 
             mTextPaint.getTextPath(mText, 0, mText.length(), 0, -metrics.ascent, mFontPath);
             mPathMeasure.setPath(mFontPath, false);
-            mLengthSum = mPathMeasure.getLength();
             //获取所有路径的总长度
+            mLengthSum = mPathMeasure.getLength();
             while (mPathMeasure.nextContour()) {
                 mLengthSum += mPathMeasure.getLength();
             }
@@ -90,10 +90,10 @@ public class SyncTextPathView extends TextPathView {
         mStart = validateProgress(start);
         mStop = validateProgress(end);
 
+        checkFill(end);
+
         mStartValue = mLengthSum * mStart;
         mEndValue = mLengthSum * mStop;
-
-        checkFill(end);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);
