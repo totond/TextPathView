@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FifthActivity">
+
+    <yanzhikai.textpath.AsyncTextPathView
+        android:id="@+id/atpv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:duration="6000"
+        app:paintStrokeColor="@color/colorAccent"
+        app:pathStrokeColor="@color/colorAccent"
+        app:showPainter="true"
+        app:text="totond"
+        app:textInCenter="true"
+        app:textSize="55sp" />
+
+    <yanzhikai.textpath.SyncTextPathView
+        android:id="@+id/stpv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:duration="6000"
+        app:paintStrokeColor="@android:color/black"
+        app:pathStrokeColor="@android:color/holo_red_dark"
+        app:showPainter="true"
+        app:text="totond"
+        app:textInCenter="true"
+        app:textSize="55sp" />
+
+    <yanzhikai.textpath.SyncPathView
+        android:id="@+id/spv"
+        app:duration="6000"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <yanzhikai.textpath.AsyncPathView
+        android:id="@+id/aspv"
+        app:duration="6000"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Start:"
+            />
+
+        <SeekBar
+            android:id="@+id/sb_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="End:"
+            />
+
+        <SeekBar
+            android:id="@+id/sb_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+</LinearLayout>

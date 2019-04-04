@@ -14,6 +14,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -21,8 +22,12 @@ import android.view.animation.LinearInterpolator;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import yanzhikai.textpath.calculator.AroundCalculator;
+import yanzhikai.textpath.calculator.DefaultCalculator;
+import yanzhikai.textpath.calculator.PathCalculator;
+
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
  * desc   : 所有路径动画自定义View的父类
@@ -37,7 +42,9 @@ public abstract class PathView extends View {
 
     @IntDef({NONE, RESTART, REVERSE})
     @Retention(RetentionPolicy.SOURCE)
-    public  @interface Repeat {}
+    public @interface Repeat {
+    }
+
     @Repeat
     protected int mRepeatStyle = NONE;
 
@@ -49,11 +56,16 @@ public abstract class PathView extends View {
     protected Path mDst = new Path(), mPaintPath = new Path();
     //属性动画
     protected ValueAnimator mAnimator;
-    //动画进度值
-    protected float mAnimatorValue = 0;
+    //路径开始、结束百分比
+    protected float mStart = 0, mStop = 0;
 
-    //绘画部分长度
-    protected float mStop = 0;
+    //绘画部分终点
+    protected float mEndValue = 0;
+
+    //绘画部分起点
+    protected float mStartValue = 0;
+
+
     //是否展示画笔特效:
     //showPainter代表动画绘画时是否展示
     //showPainterActually代表所有时候是否展示，由于动画绘画完毕应该将画笔特效消失，所以每次执行完动画都会自动设置为false
@@ -86,6 +98,8 @@ public abstract class PathView extends View {
     protected PathAnimatorListener mAnimatorListener;
 
     protected boolean nullPath = true;
+
+    protected PathCalculator mCalculator = new DefaultCalculator();
 
 
     public PathView(Context context) {
@@ -139,11 +153,11 @@ public abstract class PathView extends View {
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mAnimatorValue = (float) valueAnimator.getAnimatedValue();
-                drawPath(mAnimatorValue);
+                mStop = (float) valueAnimator.getAnimatedValue();
+                drawPath(mStop);
             }
         });
-        if (mAnimatorListener == null){
+        if (mAnimatorListener == null) {
             mAnimatorListener = new PathAnimatorListener();
             mAnimatorListener.setTarget(this);
         }
@@ -220,13 +234,42 @@ public abstract class PathView extends View {
     }
 
     /**
-     * 绘画文字路径的方法
+     * 获取当前路径开头在输入路径百分比位置
+     *
+     * @return 百分比位置
+     */
+    public float getStart() {
+        return mStart;
+    }
+
+    /**
+     * 获取当前路径结尾在输入路径百分比位置
+     *
+     * @return 百分比位置
+     */
+    public float getStop() {
+        return mStop;
+    }
+
+    /**
+     * 从起点开始，绘画文字路径的方法
      *
      * @param progress 绘画进度，0-1
      */
-    public abstract void drawPath(float progress);
+    public void drawPath(float progress) {
+        mCalculator.calculate(validateProgress(progress));
+        drawPath(0, mCalculator.getEnd());
+    }
 
-    protected abstract void initPath() throws Exception;
+    /**
+     * 绘画文字路径的方法
+     *
+     * @param start 路径开始点百分比
+     * @param end   路径结束点百分比
+     */
+    public abstract void drawPath(float start, float end);
+
+    protected abstract void initPath();
 
     /**
      * 重写onMeasure方法使得WRAP_CONTENT生效，未成功
@@ -273,27 +316,27 @@ public abstract class PathView extends View {
     }
 
     /**
-     * 设置路径，必须先设置好路径在startAnimation()，不然会报错！
+     * 设置路径，必须先设置好路径再startAnimation()，不然会报错！
      */
     public void setPath(Path path) {
         this.mPath = path;
-        try {
+        if (mPath != null){
             initPath();
             //ToDo 这里的设置只能获取Path非空白部分的宽高，不能获取整个Path的宽高，后面再寻找方法
             RectF rectF = new RectF();
-            mPath.computeBounds(rectF,false);
+            mPath.computeBounds(rectF, false);
             mPathWidth = rectF.width();
             mPathHeight = rectF.height();
             nullPath = false;
-        } catch (Exception e) {
+        }else {
             nullPath = true;
-            e.printStackTrace();
         }
+
     }
 
     //清除画面
     public void clear() {
-        mAnimatorValue = 0;
+        mStop = 0;
         if (mDst != null) {
             mDst.reset();
         }
@@ -328,7 +371,7 @@ public abstract class PathView extends View {
     public void showFillColorText() {
         mShouldFill = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawPath(1);
+        drawPath(0,1);
     }
 
     //设置动画持续时间
@@ -339,6 +382,11 @@ public abstract class PathView extends View {
     //设置重复方式
     public void setRepeatStyle(int repeatStyle) {
         this.mRepeatStyle = repeatStyle;
+    }
+
+    //设置Path开始结束取值的计算器
+    public void setCalculator(PathCalculator calculator) {
+        mCalculator = calculator;
     }
 
     protected void checkFill(float progress) {
@@ -358,6 +406,18 @@ public abstract class PathView extends View {
             }
         }
         return true;
+    }
+
+    protected float validateProgress(float progress) {
+        if (progress < 0) {
+            Log.i(TAG, "Progress is invalid!");
+            return 0;
+        } else if (progress > 1) {
+            Log.i(TAG, "Progress is invalid!");
+            return 1;
+        } else {
+            return progress;
+        }
     }
 
     @Override

@@ -67,6 +67,9 @@ public class SecondActivity extends Activity {
                 public void onClick(View v) {
                     stpv_laugh.pauseAnimation();
                     atpv_totond.pauseAnimation();
+                    atpv_type1.pauseAnimation();
+                    atpv_type2.pauseAnimation();
+                    stpv_type3.pauseAnimation();
                 }
             });
             btn_resume.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,9 @@ public class SecondActivity extends Activity {
                 public void onClick(View v) {
                     stpv_laugh.resumeAnimation();
                     atpv_totond.resumeAnimation();
+                    atpv_type1.resumeAnimation();
+                    atpv_type2.resumeAnimation();
+                    stpv_type3.resumeAnimation();
                 }
             });
         } else {

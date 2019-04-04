@@ -6,7 +6,7 @@ import yanzhikai.textpath.SyncTextPathView;
 import yanzhikai.textpath.VelocityCalculator;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/09
  * desc   : 箭头画笔特效，根据传入的当前点与上一个点之间的速度方向，来调整箭头方向

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/14
  * desc   : 所有路径一起绘画
@@ -38,59 +38,45 @@ public class AsyncPathView extends PathView {
 
     protected void init(){
         initPaint();
-        try {
-            initPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     //初始化文字路径
     @Override
-    protected void initPath() throws Exception {
+    protected void initPath(){
         if (mPath == null){
-            throw new Exception("PathView can't work without setting a path!");
+            throw new RuntimeException("PathView can't work without setting a path!");
         }
         mDst.reset();
         mPathMeasure.setPath(mPath, false);
     }
 
 
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
-    public void drawPath(float progress){
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
+    public void drawPath(float start, float end) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(end);
 
-        checkFill(progress);
-
-        mAnimatorValue = progress;
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mPath,false);
         mDst.reset();
         mPaintPath.reset();
 
+        boolean hasMore = true;
         //根据进度获取路径
-        while (mPathMeasure.nextContour()) {
+        while (hasMore) {
             mLength = mPathMeasure.getLength();
-            mStop = mLength * mAnimatorValue;
-            mPathMeasure.getSegment(0, mStop, mDst, true);
+            mStartValue = mLength * mStart;
+            mEndValue = mLength * mStop;
+            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {
-                mPathMeasure.getPosTan(mStop, mCurPos, null);
+                mPathMeasure.getPosTan(mEndValue, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
+            hasMore = mPathMeasure.nextContour();
         }
 
         //绘画路径

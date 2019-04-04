@@ -10,11 +10,10 @@ import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewGroup;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/07
  * desc   : 文字路径动画自定义View父类
@@ -106,6 +105,9 @@ public abstract class TextPathView extends PathView {
 
     }
 
+    public void setFillColor(boolean fillColor) {
+        mFillColor = fillColor;
+    }
 
     /**
      * 重写onMeasure方法使得WRAP_CONTENT生效
@@ -171,7 +173,10 @@ public abstract class TextPathView extends PathView {
             canvas.drawPath(mPaintPath, mPaint);
         }
         //文字路径绘制
-        if (mAnimatorValue >= 1) {
+        if (mStop - mStart >= 1) {
+            if (mFillColor){
+                mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            }
             canvas.drawPath(mFontPath, mDrawPaint);
         } else {
             canvas.drawPath(mDst, mDrawPaint);
@@ -238,7 +243,7 @@ public abstract class TextPathView extends PathView {
     public void showFillColorText() {
         mFillColor = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawPath(1);
+        drawPath(0,1);
     }
 
     /**
@@ -247,21 +252,8 @@ public abstract class TextPathView extends PathView {
      */
     protected void checkFill(float progress) {
         if (progress != 1 && mFillColor) {
-            mFillColor = false;
             mDrawPaint.setStyle(Paint.Style.STROKE);
         }
-    }
-
-    protected boolean isProgressValid(float progress) {
-        if (progress < 0 || progress > 1) {
-            try {
-                throw new Exception("Progress is invalid!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return true;
     }
 
 

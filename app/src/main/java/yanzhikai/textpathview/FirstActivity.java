@@ -21,7 +21,7 @@ public class FirstActivity extends Activity {
     private SeekBar sb_progress;
     private AsyncTextPathView atpv1,atpv2;
     private SyncTextPathView stpv_2017,stpv_2018,stpv_wish,stpv_chicken,stpv_dog,stpv_fortune;
-    private Button btn_start, btn_stop, btn_pause, btn_resume;
+    private Button btn_start, btn_stop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,6 @@ public class FirstActivity extends Activity {
         stpv_fortune = findViewById(R.id.stpv_fortune);
         btn_start = findViewById(R.id.btn_start);
         btn_stop = findViewById(R.id.btn_stop);
-        btn_pause = findViewById(R.id.btn_pause);
-        btn_resume = findViewById(R.id.btn_resume);
 
 
         //设置画笔特效
@@ -63,14 +61,15 @@ public class FirstActivity extends Activity {
         sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                atpv1.drawPath(progress / 1000f);
-                atpv2.drawPath(progress / 1000f);
-                stpv_2017.drawPath(progress / 1000f);
-                stpv_2018.drawPath(progress / 1000f);
-                stpv_chicken.drawPath(progress / 1000f);
-                stpv_dog.drawPath(progress / 1000f);
-                stpv_wish.drawPath(progress / 1000f);
-                stpv_fortune.drawPath(progress / 1000f);
+                float pf = progress / 1000f;
+                atpv1.drawPath(pf);
+                atpv2.drawPath(pf);
+                stpv_2017.drawPath(pf);
+                stpv_2018.drawPath(pf);
+                stpv_chicken.drawPath(pf);
+                stpv_dog.drawPath(pf);
+                stpv_wish.drawPath(pf);
+                stpv_fortune.drawPath(pf);
 
             }
 
@@ -87,15 +86,8 @@ public class FirstActivity extends Activity {
         });
 
         //设置动画播放完后填充颜色
-        stpv_fortune.setAnimatorListener(new PathAnimatorListener(){
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                if (!isCancel) {
-                    stpv_fortune.showFillColorText();
-                }
-            }
-        });
+        stpv_fortune.setFillColor(true);
+        stpv_wish.setFillColor(true);
 
 
         //设置点击开始播放动画

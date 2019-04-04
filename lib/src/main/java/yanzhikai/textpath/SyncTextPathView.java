@@ -5,13 +5,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 
 import yanzhikai.textpath.painter.SyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/01/08
  * desc   : 所有笔画按顺序绘画的TextPathView
@@ -43,7 +44,7 @@ public class SyncTextPathView extends TextPathView {
 
     protected void init() {
         //关闭硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
         //初始化画笔
         initPaint();
@@ -53,12 +54,12 @@ public class SyncTextPathView extends TextPathView {
 
         //是否自动播放动画
         if (mAutoStart) {
-            startAnimation(0,1);
+            startAnimation(0, 1);
         }
 
         //是否一开始就显示出完整的文字路径
-        if (mShowInStart){
-            drawPath(1);
+        if (mShowInStart) {
+            drawPath(0,1);
         }
     }
 
@@ -67,64 +68,84 @@ public class SyncTextPathView extends TextPathView {
         mDst.reset();
         mFontPath.reset();
 
-        //获取宽高
-        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
-        mTextHeight = metrics.bottom - metrics.top;
+        if (!TextUtils.isEmpty(mText)) {
+            //获取宽高
+            mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
+            Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+            mTextHeight = metrics.bottom - metrics.top;
 
-        mTextPaint.getTextPath(mText, 0, mText.length(), 0, -metrics.ascent, mFontPath);
-        mPathMeasure.setPath(mFontPath, false);
-        mLengthSum = mPathMeasure.getLength();
-        //获取所有路径的总长度
-        while (mPathMeasure.nextContour()) {
-            mLengthSum += mPathMeasure.getLength();
+            mTextPaint.getTextPath(mText, 0, mText.length(), 0, -metrics.ascent, mFontPath);
+            mPathMeasure.setPath(mFontPath, false);
+            mLengthSum = mPathMeasure.getLength();
+            //获取所有路径的总长度
+            while (mPathMeasure.nextContour()) {
+                mLengthSum += mPathMeasure.getLength();
+            }
         }
 
     }
 
-
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
-    public void drawPath(float progress) {
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
-        mAnimatorValue = progress;
-        mStop = mLengthSum * progress;
+    public void drawPath(float start, float end) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(end);
 
-        checkFill(progress);
+        mStartValue = mLengthSum * mStart;
+        mEndValue = mLengthSum * mStop;
+
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);
         mDst.reset();
         mPaintPath.reset();
 
-        //根据进度获取路径
-        while (mStop > mPathMeasure.getLength()) {
-            mStop = mStop - mPathMeasure.getLength();
-            mPathMeasure.getSegment(0, mPathMeasure.getLength(), mDst, true);
-            if (!mPathMeasure.nextContour()) {
-                break;
-            }
-        }
-        mPathMeasure.getSegment(0, mStop, mDst, true);
-
+        dividePath();
 
         //绘画画笔效果
         if (showPainterActually) {
-            mPathMeasure.getPosTan(mStop, mCurPos, null);
+            mPathMeasure.getPosTan(mEndValue, mCurPos, null);
             drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
         }
 
         //绘画路径
         postInvalidate();
+    }
+
+    private void dividePath() {
+        //每个片段的长度
+        float segmentLength = mPathMeasure.getLength();
+        //是否已经确定起点位置
+        boolean findStart = false;
+        while (true) {
+            if (mEndValue <= segmentLength) {
+                if (findStart) {
+                    mPathMeasure.getSegment(0, mEndValue, mDst, true);
+                } else {
+                    mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
+                }
+                break;
+            } else {
+                mEndValue -= segmentLength;
+                if (!findStart) {
+                    if (mStartValue <= segmentLength) {
+                        mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
+                        findStart = true;
+                    } else {
+                        mStartValue -= segmentLength;
+                    }
+                } else {
+                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
+                }
+            }
+            if (!mPathMeasure.nextContour()) {
+                //todo 一些精度误差处理
+                break;
+            } else {
+                //获取下一段path长度
+                segmentLength = mPathMeasure.getLength();
+            }
+        }
     }
 
 

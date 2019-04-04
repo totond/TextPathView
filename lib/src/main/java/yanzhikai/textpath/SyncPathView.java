@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import yanzhikai.textpath.painter.SyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/13
  * desc   : 所有路径按顺序绘画
@@ -20,6 +21,7 @@ public class SyncPathView extends PathView {
 
     //路径长度总数
     private float mLengthSum = 0;
+
     public SyncPathView(Context context) {
         super(context);
         init();
@@ -36,38 +38,58 @@ public class SyncPathView extends PathView {
     }
 
     @Override
-    public void drawPath(float progress) {
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
-        mAnimatorValue = progress;
-        mStop = mLengthSum * progress;
+    public void drawPath(float start, float end) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(end);
 
-        checkFill(progress);
+        mStartValue = mLengthSum * mStart;
+        mEndValue = mLengthSum * mStop;
+
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mPath, false);
         mDst.reset();
         mPaintPath.reset();
 
-        //根据进度获取路径
-        while (mStop > mPathMeasure.getLength()) {
-            mStop = mStop - mPathMeasure.getLength();
-            mPathMeasure.getSegment(0, mPathMeasure.getLength(), mDst, true);
-            if (!mPathMeasure.nextContour()) {
+        //每个片段的长度
+        float segmentLength = mPathMeasure.getLength();
+        //是否已经确定起点位置
+        boolean findStart = false;
+        while (true) {
+            if (mEndValue <= segmentLength) {
+                if (findStart) {
+                    mPathMeasure.getSegment(0, mEndValue, mDst, true);
+                } else {
+                    mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
+                }
                 break;
+            } else {
+                mEndValue -= segmentLength;
+                if (!findStart) {
+                    if (mStartValue <= segmentLength) {
+                        mPathMeasure.getSegment(mStartValue, segmentLength, mDst, true);
+                        findStart = true;
+                    } else {
+                        mStartValue -= segmentLength;
+                    }
+                } else {
+                    mPathMeasure.getSegment(0, segmentLength, mDst, true);
+                }
+            }
+            if (!mPathMeasure.nextContour()) {
+                //todo 一些精度误差处理
+                break;
+            } else {
+                //获取下一段path长度
+                segmentLength = mPathMeasure.getLength();
             }
         }
-        mPathMeasure.getSegment(0, mStop, mDst, true);
 
 
         //绘画画笔效果
         if (showPainterActually) {
-            mPathMeasure.getPosTan(mStop, mCurPos, null);
+            mPathMeasure.getPosTan(mEndValue, mCurPos, null);
             drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
         }
 
@@ -82,13 +104,11 @@ public class SyncPathView extends PathView {
     }
 
     @Override
-    protected void initPath() throws Exception {
+    protected void initPath(){
         if (mPath == null){
-            throw new Exception("PathView can't work without setting a path!");
+            throw new RuntimeException("PathView can't work without setting a path!");
         }
         mDst.reset();
-
-
         mPathMeasure.setPath(mPath, false);
         mLengthSum = mPathMeasure.getLength();
         //获取所有路径的总长度
@@ -102,8 +122,6 @@ public class SyncPathView extends PathView {
         //初始化画笔
         initPaint();
 
-        //初始化路径
-//        initPath();
 
     }
 

@@ -5,7 +5,7 @@ import android.graphics.Path;
 import yanzhikai.textpath.PathView;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/03/14
  * desc   :

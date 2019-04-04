@@ -1,7 +1,7 @@
 package yanzhikai.textpath;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/02/08
  * desc   : 计算传入的当前点与上一个点之间的速度

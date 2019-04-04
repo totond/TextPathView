@@ -5,15 +5,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-
-import java.util.LinkedList;
 
 import yanzhikai.textpath.painter.AsyncPathPainter;
 
 /**
- * author : yany
+ * author : totond
  * e-mail : yanzhikai_yjk@qq.com
  * time   : 2018/01/10
  * desc   : 所有笔画异步一起绘画的TextPathView
@@ -41,75 +40,76 @@ public class AsyncTextPathView extends TextPathView {
         init();
     }
 
-    protected void init(){
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
+    protected void init() {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
         initPaint();
         initPath();
         if (mAutoStart) {
-            startAnimation(0,1);
+            startAnimation(0, 1);
         }
-        if (mShowInStart){
-            drawPath(1);
+        if (mShowInStart) {
+            drawPath(0,1);
         }
 
     }
 
     //初始化文字路径
     @Override
-    protected void initPath(){
+    protected void initPath() {
         mDst.reset();
         mFontPath.reset();
 
-        //获取宽高
-        mTextWidth = Layout.getDesiredWidth(mText,mTextPaint);
-        Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
-        mTextHeight = metrics.bottom - metrics.top;
+        if (!TextUtils.isEmpty(mText)) {
+            //获取宽高
+            mTextWidth = Layout.getDesiredWidth(mText, mTextPaint);
+            Paint.FontMetrics metrics = mTextPaint.getFontMetrics();
+            mTextHeight = metrics.bottom - metrics.top;
 
-        mTextPaint.getTextPath(mText,0,mText.length(),0f, -metrics.ascent, mFontPath);
-        mPathMeasure.setPath(mFontPath,false);
-        mLength = mPathMeasure.getLength();
+            mTextPaint.getTextPath(mText, 0, mText.length(), 0f, -metrics.ascent, mFontPath);
+            mPathMeasure.setPath(mFontPath, false);
+            mLength = mPathMeasure.getLength();
+        }
 
     }
 
-
-    /**
-     * 绘画文字路径的方法
-     * @param progress 绘画进度，0-1
-     */
     @Override
-    public void drawPath(float progress){
-        if (!isProgressValid(progress)){
-            if (progress > 1){
-                progress = 1;
-            }else {
-                return;
-            }
-        }
+    public void drawPath(float start, float end) {
+        mStart = validateProgress(start);
+        mStop = validateProgress(end);
 
-        checkFill(progress);
-
-        mAnimatorValue = progress;
+        checkFill(mStop - mStart);
 
         //重置路径
-        mPathMeasure.setPath(mFontPath,true);
+        mPathMeasure.setPath(mFontPath, false);
         mDst.reset();
         mPaintPath.reset();
 
+        //重置路径
+        mPathMeasure.setPath(mFontPath, true);
+        mDst.reset();
+        mPaintPath.reset();
+
+        boolean hasMore = true;
         //根据进度获取路径
-        while (mPathMeasure.nextContour()) {
+        while (hasMore) {
             mLength = mPathMeasure.getLength();
 //            Log.d(TAG, "drawPath: length:" + mLength);
-            mStop = mLength * mAnimatorValue;
-//            Log.d(TAG, "drawPath: stop:" + mStop);
+
+            mStartValue = mLength * mStart;
+            mEndValue = mLength * mStop;
+
+//            Log.d(TAG, "drawPath: mEndValue:" + mEndValue);
+//            Log.d(TAG, "drawPath: mLength:" + mLength);
 //            Log.d(TAG, "drawPath: close? " + mPathMeasure.isClosed());
-            mPathMeasure.getSegment(0, mStop, mDst, true);
+            mPathMeasure.getSegment(mStartValue, mEndValue, mDst, true);
 
             //绘画画笔效果
             if (showPainterActually) {
-                mPathMeasure.getPosTan(mStop, mCurPos, null);
-                drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
+                mPathMeasure.getPosTan(mEndValue, mCurPos, null);
+                drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
             }
+            hasMore = mPathMeasure.nextContour();
         }
 
         //绘画路径
@@ -117,8 +117,8 @@ public class AsyncTextPathView extends TextPathView {
     }
 
     private void drawPaintPath(float x, float y, Path paintPath) {
-        if (mPainter != null){
-            mPainter.onDrawPaintPath(x,y,paintPath);
+        if (mPainter != null) {
+            mPainter.onDrawPaintPath(x, y, paintPath);
         }
     }
 
