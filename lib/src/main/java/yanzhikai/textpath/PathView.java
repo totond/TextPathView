@@ -42,7 +42,9 @@ public abstract class PathView extends View {
 
     @IntDef({NONE, RESTART, REVERSE})
     @Retention(RetentionPolicy.SOURCE)
-    public  @interface Repeat {}
+    public @interface Repeat {
+    }
+
     @Repeat
     protected int mRepeatStyle = NONE;
 
@@ -62,8 +64,6 @@ public abstract class PathView extends View {
 
     //绘画部分起点
     protected float mStartValue = 0;
-
-
 
 
     //是否展示画笔特效:
@@ -157,7 +157,7 @@ public abstract class PathView extends View {
                 drawPath(mStop);
             }
         });
-        if (mAnimatorListener == null){
+        if (mAnimatorListener == null) {
             mAnimatorListener = new PathAnimatorListener();
             mAnimatorListener.setTarget(this);
         }
@@ -235,6 +235,7 @@ public abstract class PathView extends View {
 
     /**
      * 获取当前路径开头在输入路径百分比位置
+     *
      * @return 百分比位置
      */
     public float getStart() {
@@ -243,6 +244,7 @@ public abstract class PathView extends View {
 
     /**
      * 获取当前路径结尾在输入路径百分比位置
+     *
      * @return 百分比位置
      */
     public float getStop() {
@@ -254,19 +256,20 @@ public abstract class PathView extends View {
      *
      * @param progress 绘画进度，0-1
      */
-    public void drawPath(float progress){
+    public void drawPath(float progress) {
         mCalculator.calculate(validateProgress(progress));
         drawPath(mCalculator.getStart(), mCalculator.getEnd());
     }
 
     /**
      * 绘画文字路径的方法
+     *
      * @param start 路径开始点百分比
-     * @param end 路径结束点百分比
+     * @param end   路径结束点百分比
      */
     public abstract void drawPath(float start, float end);
 
-    protected abstract void initPath() throws Exception;
+    protected abstract void initPath();
 
     /**
      * 重写onMeasure方法使得WRAP_CONTENT生效，未成功
@@ -313,22 +316,22 @@ public abstract class PathView extends View {
     }
 
     /**
-     * 设置路径，必须先设置好路径在startAnimation()，不然会报错！
+     * 设置路径，必须先设置好路径再startAnimation()，不然会报错！
      */
     public void setPath(Path path) {
         this.mPath = path;
-        try {
+        if (mPath != null){
             initPath();
             //ToDo 这里的设置只能获取Path非空白部分的宽高，不能获取整个Path的宽高，后面再寻找方法
             RectF rectF = new RectF();
-            mPath.computeBounds(rectF,false);
+            mPath.computeBounds(rectF, false);
             mPathWidth = rectF.width();
             mPathHeight = rectF.height();
             nullPath = false;
-        } catch (Exception e) {
+        }else {
             nullPath = true;
-            e.printStackTrace();
         }
+
     }
 
     //清除画面
@@ -405,14 +408,14 @@ public abstract class PathView extends View {
         return true;
     }
 
-    protected float validateProgress(float progress){
+    protected float validateProgress(float progress) {
         if (progress < 0) {
             Log.i(TAG, "Progress is invalid!");
             return 0;
-        }else if (progress > 1){
+        } else if (progress > 1) {
             Log.i(TAG, "Progress is invalid!");
             return 1;
-        }else {
+        } else {
             return progress;
         }
     }

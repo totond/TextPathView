@@ -104,13 +104,11 @@ public class SyncPathView extends PathView {
     }
 
     @Override
-    protected void initPath() throws Exception {
-        if (mPath == null) {
-            throw new Exception("PathView can't work without setting a path!");
+    protected void initPath(){
+        if (mPath == null){
+            throw new RuntimeException("PathView can't work without setting a path!");
         }
         mDst.reset();
-
-
         mPathMeasure.setPath(mPath, false);
         mLengthSum = mPathMeasure.getLength();
         //获取所有路径的总长度
@@ -124,8 +122,6 @@ public class SyncPathView extends PathView {
         //初始化画笔
         initPaint();
 
-        //初始化路径
-//        initPath();
 
     }
 

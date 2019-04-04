@@ -40,15 +40,15 @@ public class AsyncTextPathView extends TextPathView {
         init();
     }
 
-    protected void init(){
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
+    protected void init() {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
         initPaint();
         initPath();
         if (mAutoStart) {
-            startAnimation(0,1);
+            startAnimation(0, 1);
         }
-        if (mShowInStart){
+        if (mShowInStart) {
             drawPath(1);
         }
 
@@ -56,7 +56,7 @@ public class AsyncTextPathView extends TextPathView {
 
     //初始化文字路径
     @Override
-    protected void initPath(){
+    protected void initPath() {
         mDst.reset();
         mFontPath.reset();
 
@@ -86,12 +86,13 @@ public class AsyncTextPathView extends TextPathView {
         mPaintPath.reset();
 
         //重置路径
-        mPathMeasure.setPath(mFontPath,true);
+        mPathMeasure.setPath(mFontPath, true);
         mDst.reset();
         mPaintPath.reset();
 
+        boolean hasMore = true;
         //根据进度获取路径
-        while (mPathMeasure.nextContour()) {
+        while (hasMore) {
             mLength = mPathMeasure.getLength();
 //            Log.d(TAG, "drawPath: length:" + mLength);
 
@@ -106,8 +107,9 @@ public class AsyncTextPathView extends TextPathView {
             //绘画画笔效果
             if (showPainterActually) {
                 mPathMeasure.getPosTan(mEndValue, mCurPos, null);
-                drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
+                drawPaintPath(mCurPos[0], mCurPos[1], mPaintPath);
             }
+            hasMore = mPathMeasure.nextContour();
         }
 
         //绘画路径
@@ -115,8 +117,8 @@ public class AsyncTextPathView extends TextPathView {
     }
 
     private void drawPaintPath(float x, float y, Path paintPath) {
-        if (mPainter != null){
-            mPainter.onDrawPaintPath(x,y,paintPath);
+        if (mPainter != null) {
+            mPainter.onDrawPaintPath(x, y, paintPath);
         }
     }
 

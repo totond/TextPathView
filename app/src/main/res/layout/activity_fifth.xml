@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:duration="8000"
+        app:duration="6000"
         app:paintStrokeColor="@color/colorAccent"
         app:pathStrokeColor="@color/colorAccent"
         app:showPainter="true"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:duration="8000"
+        app:duration="6000"
         app:paintStrokeColor="@android:color/black"
         app:pathStrokeColor="@android:color/holo_red_dark"
         app:showPainter="true"
@@ -35,11 +35,13 @@
 
     <yanzhikai.textpath.SyncPathView
         android:id="@+id/spv"
+        app:duration="6000"
         android:layout_width="match_parent"
         android:layout_height="130dp" />
 
     <yanzhikai.textpath.AsyncPathView
         android:id="@+id/aspv"
+        app:duration="6000"
         android:layout_width="match_parent"
         android:layout_height="130dp" />
 
@@ -80,7 +82,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"

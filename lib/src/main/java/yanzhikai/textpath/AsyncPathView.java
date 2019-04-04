@@ -38,19 +38,13 @@ public class AsyncPathView extends PathView {
 
     protected void init(){
         initPaint();
-        try {
-            initPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     //初始化文字路径
     @Override
-    protected void initPath() throws Exception {
+    protected void initPath(){
         if (mPath == null){
-            throw new Exception("PathView can't work without setting a path!");
+            throw new RuntimeException("PathView can't work without setting a path!");
         }
         mDst.reset();
         mPathMeasure.setPath(mPath, false);
@@ -69,8 +63,9 @@ public class AsyncPathView extends PathView {
         mDst.reset();
         mPaintPath.reset();
 
+        boolean hasMore = true;
         //根据进度获取路径
-        while (mPathMeasure.nextContour()) {
+        while (hasMore) {
             mLength = mPathMeasure.getLength();
             mStartValue = mLength * mStart;
             mEndValue = mLength * mStop;
@@ -81,6 +76,7 @@ public class AsyncPathView extends PathView {
                 mPathMeasure.getPosTan(mEndValue, mCurPos, null);
                 drawPaintPath(mCurPos[0],mCurPos[1],mPaintPath);
             }
+            hasMore = mPathMeasure.nextContour();
         }
 
         //绘画路径

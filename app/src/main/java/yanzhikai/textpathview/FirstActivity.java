@@ -21,7 +21,7 @@ public class FirstActivity extends Activity {
     private SeekBar sb_progress;
     private AsyncTextPathView atpv1,atpv2;
     private SyncTextPathView stpv_2017,stpv_2018,stpv_wish,stpv_chicken,stpv_dog,stpv_fortune;
-    private Button btn_start, btn_stop, btn_pause, btn_resume;
+    private Button btn_start, btn_stop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,6 @@ public class FirstActivity extends Activity {
         stpv_fortune = findViewById(R.id.stpv_fortune);
         btn_start = findViewById(R.id.btn_start);
         btn_stop = findViewById(R.id.btn_stop);
-        btn_pause = findViewById(R.id.btn_pause);
-        btn_resume = findViewById(R.id.btn_resume);
 
 
         //设置画笔特效
