@@ -1,19 +1,22 @@
 # TextPathView
-　　
-![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
 
-![](https://i.imgur.com/kiXquFj.gif)
+![](https://img.shields.io/badge/JCenter-0.2.1-brightgreen.svg)
+
+<figure class="half">
+    <img src="https://github.com/totond/MyTUKU/blob/master/textdemo1.gif?raw=true">
+    <img src="https://github.com/totond/MyTUKU/blob/master/text1.gif?raw=true">
+</figure>
 
 
 ## Introduction
 　　TextPathView is a view with text path animation!
 
 ## Get started
-　　
+
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.1.3'
+compile 'com.yanzhikai:TextPathView:0.2.1'
 ```
 
  > minSdkVersion 16
@@ -106,7 +109,7 @@ public class TestPath extends Path {
         aspv.setPath(new TestPath());
         aspv.startAnimation(0,1);
 ```
-![](https://i.imgur.com/YQMVBwz.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo2.gif?raw=true)
 
 ### Attributes
 
@@ -173,7 +176,7 @@ public class TestPath extends Path {
     }
 ```
 　　You can extend one of these PathPainter to draw your custom paint effects.
- 
+
 　　There are three paint effects in TextPathView's code:
 
 ```
@@ -202,7 +205,7 @@ public class FireworksPainter implements SyncPathPainter {
             }
         });
 ```
-![](https://i.imgur.com/fPeYF8f.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo3.gif?raw=true)
 
 #### AnimatorListener
 
@@ -280,7 +283,25 @@ public class FireworksPainter implements SyncPathPainter {
         });
         stpv_wish.setCanShowPainter(true);
 ```
-![](https://i.imgur.com/Ziovoic.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo4.gif?raw=true)
+
+#### 取值计算器
+
+​	TextPathView add PathCalculator from v0.2.+. We can use `setCalculator(PathCalculator calculator)`to set it. PathCalculator can control the value of the start and end attributes of the path corresponding to different progress. There is some subclass of PathCalculator :
+
+- **MidCalculator**
+
+![MidCalculator](https://github.com/totond/MyTUKU/blob/master/text4.gif?raw=true)
+
+- **AroundCalculator**
+
+![AroundCalculator](https://github.com/totond/MyTUKU/blob/master/text5.gif?raw=true)
+
+- **BlinkCalculator**
+
+![BlinkCalculator](https://github.com/totond/MyTUKU/blob/master/text2.gif?raw=true)
+
+- **Custom PathCalculator：**We can make a custom PathCalculator with `setStart(float start)` and`setEnd(float end)`.
 
 #### Else
 
@@ -341,13 +362,13 @@ public class FireworksPainter implements SyncPathPainter {
      - TextPathView can use `setTypeface()` now.
      - Suppurted word wrap.
 
-![](https://i.imgur.com/5wHvQvD.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo5.gif?raw=true)
 
  - 2018/09/09 **version 0.1.3**:
      - Turn off the hardware acceleration by default
      - Avoided memory leaks
 
-
+![TextPathView v0.2.+](https://raw.githubusercontent.com/totond/MyTUKU/master/textpathnew1.png)
 
 
 ### To do：

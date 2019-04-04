@@ -258,7 +258,7 @@ public abstract class PathView extends View {
      */
     public void drawPath(float progress) {
         mCalculator.calculate(validateProgress(progress));
-        drawPath(0, mCalculator.getEnd());
+        drawPath(mCalculator.getStart(), mCalculator.getEnd());
     }
 
     /**
@@ -317,6 +317,7 @@ public abstract class PathView extends View {
 
     /**
      * 设置路径，必须先设置好路径再startAnimation()，不然会报错！
+     * @param path 路径
      */
     public void setPath(Path path) {
         this.mPath = path;

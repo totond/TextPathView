@@ -2,7 +2,16 @@
 
 ![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
 
-![](https://i.imgur.com/kiXquFj.gif)
+```
+[![Download](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg) ](https://bintray.com/yanzhikaijky/CustomViewRepository/TextPathView/_latestVersion)
+```
+
+
+
+<figure class="half">
+    <img src="https://github.com/totond/MyTUKU/blob/master/textdemo1.gif?raw=true">
+    <img src="https://github.com/totond/MyTUKU/blob/master/text1.gif?raw=true">
+</figure>
 
  > [Go to the English README](https://github.com/totond/TextPathView/blob/master/README-en.md)
 
@@ -11,6 +20,14 @@
 　　TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图。
 
  > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
+ >
+ > ### v0.2.+重要更新
+ >
+ > - 现在不但可以控制文字路径结束位置end，还可以控制开始位置start，如上图二
+ > - 可以通过PathCalculator的子类来控制实现一些字路径变化，如下面的MidCalculator、AroundCalculator、BlinkCalculator
+ > - 可以通知直接设置FillColor属性来控制结束时是否填充颜色
+ >
+ > ![TextPathView v0.2.+](https://raw.githubusercontent.com/totond/MyTUKU/master/textpathnew1.png)
 
 ## 使用
 　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。想要自己控制绘画的进度也可以，详情见下面。
@@ -18,7 +35,7 @@
 ### Gradle
 
 ```
-compile 'com.yanzhikai:TextPathView:0.1.3'
+compile 'com.yanzhikai:TextPathView:0.2.1'
 ```
 
  > minSdkVersion 16
@@ -110,7 +127,7 @@ public class TestPath extends Path {
         aspv.startAnimation(0,1);
 ```
 
-![](https://i.imgur.com/YQMVBwz.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo2.gif?raw=true)
 　　（录屏可能有些问题，实际上是没有背景色的）上面就是SyncPathView和AsyncPathView效果，区别和文字路径是一样的。
 
 ### 属性
@@ -130,6 +147,7 @@ public class TestPath extends Path {
 |paintStrokeWidth | 画笔特效刻画的线条粗细    | dimension| 3px|
 |paintStrokeColor | 画笔特效刻画的线条颜色   | color| Color.black|
 |repeat| 是否重复播放动画，重复类型| enum | NONE|
+|fillColor| 文字动画结束时是否填充颜色 | boolean | false |
 
 |**repeat属性值**|**意义**|
 |--|--|
@@ -207,7 +225,7 @@ public class FireworksPainter implements SyncPathPainter {
             }
         });
 ```
-![](https://i.imgur.com/fPeYF8f.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo3.gif?raw=true)
 
 #### 动画监听
 
@@ -235,6 +253,14 @@ public class FireworksPainter implements SyncPathPainter {
 #### 控制绘画
 
 ```
+    /**
+     * 绘画文字路径的方法
+     *
+     * @param start 路径开始点百分比
+     * @param end   路径结束点百分比
+     */
+    public abstract void drawPath(float start, float end);
+    
     /**
      * 开始绘制路径动画
      * @param start 路径比例，范围0-1
@@ -271,21 +297,41 @@ public class FireworksPainter implements SyncPathPainter {
 ```
     //直接显示填充好颜色了的全部文字
     public void showFillColorText();
+    
+    //设置动画播放完后是否填充颜色
+    public void setFillColor(boolean fillColor)
 ```
-　　由于正在绘画的时候文字路径不是封闭的，填充颜色会变得很混乱，所以这里给出`showFillColorText()`来设置直接显示填充好颜色了的全部文字，一般可以在动画结束后文字完全显示后过渡填充，如Demo里面的：
+　　由于正在绘画的时候文字路径不是封闭的，填充颜色会变得很混乱，所以这里给出`showFillColorText()`来设置直接显示填充好颜色了的全部文字，一般可以在动画结束后文字完全显示后过渡填充
 
-```
-        //设置动画播放完后填充颜色
-        stpv_fortune.setAnimatorListener(new PathAnimatorListener(stpv_fortune){
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                stpv_fortune.showFillColorText();
-            }
-        });
-        stpv_wish.setCanShowPainter(true);
-```
-![](https://i.imgur.com/Ziovoic.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo4.gif?raw=true)
+
+
+
+
+
+#### 取值计算器
+
+​	0.2.+版本开始，加入了取值计算器PathCalculator，可以通过`setCalculator(PathCalculator calculator)`方法设置。PathCalculator可以控制路径的起点start和终点end属性在不同progress对应的取值。TextPathView自带一些PathCalculator子类：
+
+- **MidCalculator**
+
+  start和end从0.5开始往两边扩展：
+
+![MidCalculator](https://github.com/totond/MyTUKU/blob/master/text4.gif?raw=true)
+
+- **AroundCalculator**
+
+  start会跟着end增长，end增长到0.75后start会反向增长
+
+![AroundCalculator](https://github.com/totond/MyTUKU/blob/master/text5.gif?raw=true)
+
+- **BlinkCalculator**
+
+  start一直为0，end自然增长，但是每增加几次会有一次end=1，造成闪烁
+
+![BlinkCalculator](https://github.com/totond/MyTUKU/blob/master/text2.gif?raw=true)
+
+- **自定义PathCalculator：**用户可以通过继承抽象类PathCalculator，通过里面的`setStart(float start)`和`setEnd(float end)`，具体可以参考上面几个自带的PathCalculator实现代码。
 
 #### 其他
 
@@ -313,6 +359,9 @@ public class FireworksPainter implements SyncPathPainter {
 
     //设置重复方式
     public void setRepeatStyle(int repeatStyle);
+    
+    //设置Path开始结束取值的计算器
+    public void setCalculator(PathCalculator calculator)
 
 ```
 
@@ -345,12 +394,18 @@ public class FireworksPainter implements SyncPathPainter {
      - 增加字体设置
      - 支持自动换行
 
-![](https://i.imgur.com/5wHvQvD.gif)
+![](https://github.com/totond/MyTUKU/blob/master/textdemo5.gif?raw=true)
 
  - 2018/09/09 **version 0.1.3**:
      - 默认关闭此控件的硬件加速
      - 加入内存泄漏控制
      - 准备后续优化
+- 2019/04/04 **version 0.2.1**:
+     - 现在不但可以控制文字路径结束位置end，还可以控制开始位置start
+     - 可以通过PathCalculator的子类来控制实现一些字路径变化，如上面的MidCalculator、AroundCalculator、BlinkCalculator
+     - 可以通知直接设置FillColor属性来控制结束时是否填充颜色
+     - 硬件加速问题解决，默认打开
+     - 去除无用log和报错
 
 
 #### 后续将会往下面的方向努力：
@@ -366,6 +421,7 @@ public class FireworksPainter implements SyncPathPainter {
  - 首先请创建一个分支branch。
  - 如果加入新的功能或者效果，请不要覆盖demo里面原来用于演示Activity代码，如FristActivity里面的实例，可以选择新增一个Activity做演示测试，或者不添加演示代码。
  - 如果修改某些功能或者代码，请附上合理的依据和想法。
+ - 翻译成English版README（暂时没空更新英文版）
 
 ## 开源协议
 　　TextPathView遵循MIT协议。
