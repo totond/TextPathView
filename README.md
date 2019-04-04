@@ -1,12 +1,6 @@
 # TextPathView
 
-![](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg)
-
-```
-[![Download](https://img.shields.io/badge/JCenter-0.1.3-brightgreen.svg) ](https://bintray.com/yanzhikaijky/CustomViewRepository/TextPathView/_latestVersion)
-```
-
-
+![](https://img.shields.io/badge/JCenter-0.2.1-brightgreen.svg)
 
 <figure class="half">
     <img src="https://github.com/totond/MyTUKU/blob/master/textdemo1.gif?raw=true">
