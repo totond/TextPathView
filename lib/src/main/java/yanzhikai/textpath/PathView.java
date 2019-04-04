@@ -258,7 +258,7 @@ public abstract class PathView extends View {
      */
     public void drawPath(float progress) {
         mCalculator.calculate(validateProgress(progress));
-        drawPath(mCalculator.getStart(), mCalculator.getEnd());
+        drawPath(0, mCalculator.getEnd());
     }
 
     /**
@@ -371,7 +371,7 @@ public abstract class PathView extends View {
     public void showFillColorText() {
         mShouldFill = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawPath(1);
+        drawPath(0,1);
     }
 
     //设置动画持续时间

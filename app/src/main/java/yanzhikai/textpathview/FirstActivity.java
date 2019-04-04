@@ -86,15 +86,8 @@ public class FirstActivity extends Activity {
         });
 
         //设置动画播放完后填充颜色
-        stpv_fortune.setAnimatorListener(new PathAnimatorListener(){
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                if (!isCancel) {
-                    stpv_fortune.showFillColorText();
-                }
-            }
-        });
+        stpv_fortune.setFillColor(true);
+        stpv_wish.setFillColor(true);
 
 
         //设置点击开始播放动画

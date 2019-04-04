@@ -59,7 +59,7 @@ public class SyncTextPathView extends TextPathView {
 
         //是否一开始就显示出完整的文字路径
         if (mShowInStart) {
-            drawPath(1);
+            drawPath(0,1);
         }
     }
 
@@ -93,7 +93,7 @@ public class SyncTextPathView extends TextPathView {
         mStartValue = mLengthSum * mStart;
         mEndValue = mLengthSum * mStop;
 
-        checkFill(end);
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);

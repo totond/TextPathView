@@ -45,7 +45,7 @@ public class SyncPathView extends PathView {
         mStartValue = mLengthSum * mStart;
         mEndValue = mLengthSum * mStop;
 
-        checkFill(end);
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mPath, false);

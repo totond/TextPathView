@@ -10,6 +10,9 @@ import yanzhikai.textpath.AsyncPathView;
 import yanzhikai.textpath.AsyncTextPathView;
 import yanzhikai.textpath.SyncPathView;
 import yanzhikai.textpath.SyncTextPathView;
+import yanzhikai.textpath.calculator.AroundCalculator;
+import yanzhikai.textpath.calculator.BlinkCalculator;
+import yanzhikai.textpath.calculator.MidCalculator;
 import yanzhikai.textpath.painter.FireworksPainter;
 
 public class FifthActivity extends AppCompatActivity implements View.OnClickListener {
@@ -41,6 +44,10 @@ public class FifthActivity extends AppCompatActivity implements View.OnClickList
 
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
+
+        atpv.setCalculator(new BlinkCalculator());
+        stpv.setCalculator(new AroundCalculator());
+        stpv.setFillColor(true);
 
         aspv.setPath(new TestPath());
 

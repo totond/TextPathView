@@ -49,7 +49,7 @@ public class AsyncTextPathView extends TextPathView {
             startAnimation(0, 1);
         }
         if (mShowInStart) {
-            drawPath(1);
+            drawPath(0,1);
         }
 
     }
@@ -78,7 +78,7 @@ public class AsyncTextPathView extends TextPathView {
         mStart = validateProgress(start);
         mStop = validateProgress(end);
 
-        checkFill(end);
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mFontPath, false);

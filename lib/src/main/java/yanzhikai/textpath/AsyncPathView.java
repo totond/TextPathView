@@ -56,7 +56,7 @@ public class AsyncPathView extends PathView {
         mStart = validateProgress(start);
         mStop = validateProgress(end);
 
-        checkFill(end);
+        checkFill(mStop - mStart);
 
         //重置路径
         mPathMeasure.setPath(mPath,false);

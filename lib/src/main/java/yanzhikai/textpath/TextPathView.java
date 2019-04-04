@@ -105,6 +105,9 @@ public abstract class TextPathView extends PathView {
 
     }
 
+    public void setFillColor(boolean fillColor) {
+        mFillColor = fillColor;
+    }
 
     /**
      * 重写onMeasure方法使得WRAP_CONTENT生效
@@ -171,6 +174,9 @@ public abstract class TextPathView extends PathView {
         }
         //文字路径绘制
         if (mStop - mStart >= 1) {
+            if (mFillColor){
+                mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            }
             canvas.drawPath(mFontPath, mDrawPaint);
         } else {
             canvas.drawPath(mDst, mDrawPaint);
@@ -237,7 +243,7 @@ public abstract class TextPathView extends PathView {
     public void showFillColorText() {
         mFillColor = true;
         mDrawPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawPath(1);
+        drawPath(0,1);
     }
 
     /**
@@ -246,7 +252,6 @@ public abstract class TextPathView extends PathView {
      */
     protected void checkFill(float progress) {
         if (progress != 1 && mFillColor) {
-            mFillColor = false;
             mDrawPaint.setStyle(Paint.Style.STROKE);
         }
     }
