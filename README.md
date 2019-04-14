@@ -14,14 +14,14 @@
 　　TextPathView是一个把文字转化为路径动画然后展现出来的自定义控件。效果如上图。
 
  > 这里有[原理解析！](https://juejin.im/post/5a9677b16fb9a063375765ad)
- >
- > ### v0.2.+重要更新
- >
- > - 现在不但可以控制文字路径结束位置end，还可以控制开始位置start，如上图二
- > - 可以通过PathCalculator的子类来控制实现一些字路径变化，如下面的MidCalculator、AroundCalculator、BlinkCalculator
- > - 可以通知直接设置FillColor属性来控制结束时是否填充颜色
- >
- > ![TextPathView v0.2.+](https://raw.githubusercontent.com/totond/MyTUKU/master/textpathnew1.png)
+
+### v0.2.+重要更新
+
+ - 现在不但可以控制文字路径结束位置end，还可以控制开始位置start，如上图二
+ - 可以通过PathCalculator的子类来控制实现一些字路径变化，如下面的MidCalculator、AroundCalculator、BlinkCalculator
+ - 可以通知直接设置FillColor属性来控制结束时是否填充颜色
+
+ ![TextPathView v0.2.+](https://raw.githubusercontent.com/totond/MyTUKU/master/textpathnew1.png)
 
 ## 使用
 　　主要的使用流程就是输入文字，然后设置一些动画的属性，还有画笔特效，最后启动就行了。想要自己控制绘画的进度也可以，详情见下面。
